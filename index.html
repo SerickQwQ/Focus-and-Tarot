@@ -4,12 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Focus & Tarot · 专注小站</title>
-
-<!-- ============================================================
-     【第 1 段：CSS 样式】
-     位置：<head> 里面的 <style> 标签中
-     作用：控制整个网站的颜色、圆角、布局、手机/电脑适配
-     ============================================================ -->
 <style>
   :root {
     --bg: #F7F3EE;
@@ -43,7 +37,7 @@
   h2 { font-size: 17px; margin-bottom: 12px; }
   button { font-family: inherit; }
 
-  /* 顶部栏 */
+  /* ---------- 顶部栏 ---------- */
   .topbar {
     position: sticky; top: 0; z-index: 50;
     background: rgba(247,243,238,.88);
@@ -58,24 +52,41 @@
   }
   .logo { font-weight: 800; font-size: 17px; letter-spacing: .3px; white-space: nowrap; }
   .logo span { color: var(--primary); }
-  .desktop-nav { display: flex; gap: 4px; }
+  .desktop-nav { display: flex; gap: 4px; flex-wrap: wrap; }
   .desktop-nav button {
     border: 0; background: none; padding: 8px 14px; border-radius: 999px;
     font-size: 15px; color: var(--muted); cursor: pointer;
-    transition: background .2s, color .2s;
+    transition: background .2s, color .2s, transform .15s;
   }
+  .desktop-nav button:hover { color: var(--text); }
   .desktop-nav button.active { background: var(--primary); color: #fff; }
+  .desktop-nav button:active { transform: scale(.96); }
 
-  /* 主体 */
+  /* ---------- 主体 ---------- */
   .app { max-width: var(--maxw); margin: 0 auto; padding: 20px 16px 96px; }
   .page { display: none; }
-  .page.active { display: block; animation: fadeIn .25s ease; }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
+  .page.active { display: block; }
+
+  /* 页面进入动画 */
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateY(14px) scale(.995); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
   }
+  .page.active { animation: pageIn .38s cubic-bezier(.22,.9,.3,1) both; }
+
+  /* 卡片交错入场 */
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .page.active .card,
+  .page.active .overview-card {
+    animation: cardIn .5s cubic-bezier(.22,.9,.3,1) both;
+  }
+
   .page-head { margin-bottom: 16px; }
   .page-head .sub { color: var(--muted); font-size: 14px; margin-top: 2px; }
+
   .card {
     background: var(--card); border-radius: var(--radius);
     box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px;
@@ -84,27 +95,138 @@
   .grid-2 > .card { margin-bottom: 0; }
   @media (min-width: 769px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
 
-  /* 按钮 / 输入 */
+  /* ---------- 按钮 / 输入 ---------- */
   .btn {
     min-height: 44px; padding: 0 22px; border: 0; border-radius: 999px;
     background: var(--primary); color: #fff; font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: transform .15s, filter .15s;
+    cursor: pointer;
+    transition: transform .15s, filter .15s, box-shadow .2s;
   }
+  .btn:hover { filter: brightness(1.06); box-shadow: 0 6px 18px rgba(228,87,46,.25); }
   .btn:active { transform: scale(.97); }
-  .btn:hover { filter: brightness(1.05); }
   .btn.secondary { background: var(--track); color: var(--text); }
-  .btn:disabled { opacity: .55; cursor: default; }
+  .btn.secondary:hover { box-shadow: none; filter: none; background: #EBE4DC; }
+  .btn:disabled { opacity: .55; cursor: default; box-shadow: none; }
+
   .input, .select {
     width: 100%; min-height: 44px; border: 1px solid var(--line);
     border-radius: 12px; padding: 0 14px; font-size: 15px; font-family: inherit;
     background: #fff; color: var(--text); outline: none;
-    transition: border-color .2s;
+    transition: border-color .2s, box-shadow .2s;
   }
-  .input:focus, .select:focus { border-color: var(--primary); }
+  .input:focus, .select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(228,87,46,.12);
+  }
   .field-label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
   .hint { font-size: 13px; color: var(--muted); margin-top: 14px; }
 
-  /* 番茄钟 */
+  /* ---------- 首页概览卡片 ---------- */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 769px) {
+    .overview-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+  }
+
+  .overview-card {
+    display: flex; flex-direction: column; gap: 14px;
+    text-align: left; border: 0;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    cursor: pointer;
+    font-family: inherit; color: var(--text);
+    position: relative; overflow: hidden;
+    transition: transform .22s ease, box-shadow .22s ease;
+  }
+
+  .overview-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1.5px rgba(228,87,46,0);
+    transition: box-shadow .22s ease;
+    pointer-events: none;
+  }
+
+  .overview-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(0,0,0,.10);
+  }
+  .overview-card:hover::after {
+    box-shadow: inset 0 0 0 1.5px rgba(228,87,46,.35);
+  }
+  .overview-card:active {
+    transform: translateY(-1px) scale(.995);
+  }
+
+  .ov-head {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 15px; font-weight: 600;
+  }
+  .ov-icon { font-size: 22px; line-height: 1; }
+  .ov-title { flex: 1; }
+  .ov-arrow {
+    color: var(--muted); font-size: 18px;
+    transition: transform .22s ease, color .22s ease;
+  }
+  .overview-card:hover .ov-arrow {
+    transform: translateX(4px);
+    color: var(--primary);
+  }
+
+  .ov-body { display: flex; flex-direction: column; gap: 8px; }
+
+  .ov-big {
+    font-size: 32px; font-weight: 800;
+    color: var(--primary); line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .ov-big small {
+    font-size: 13px; font-weight: 500;
+    color: var(--muted); margin-left: 4px;
+  }
+  .ov-meta { font-size: 13px; color: var(--muted); }
+
+  .ov-progress {
+    height: 8px; border-radius: 999px;
+    background: var(--track); overflow: hidden;
+  }
+  .ov-progress > div {
+    height: 100%; width: 0; border-radius: 999px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+    transition: width .6s cubic-bezier(.22,.9,.3,1);
+  }
+
+  .ov-tarot { display: flex; align-items: center; gap: 12px; }
+  .ov-tarot-symbol {
+    font-size: 30px; line-height: 1;
+    width: 52px; height: 52px; border-radius: 14px;
+    background: linear-gradient(160deg, #7C6BA6, #52447A);
+    color: #fff;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    transition: transform .3s;
+  }
+  .overview-card:hover .ov-tarot-symbol { transform: rotate(-6deg) scale(1.06); }
+  .ov-tarot-name { font-size: 17px; font-weight: 700; }
+  .ov-tarot-key { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .ov-mini-chart {
+    display: flex; align-items: flex-end;
+    gap: 6px; height: 52px;
+  }
+  .ov-mini-bar {
+    flex: 1; min-height: 6px; border-radius: 4px;
+    background: linear-gradient(180deg, var(--primary-soft), var(--primary));
+    transition: height .5s cubic-bezier(.22,.9,.3,1);
+  }
+
+  /* ---------- 番茄钟 ---------- */
   .mode-tabs {
     display: flex; gap: 6px; background: var(--track);
     border-radius: 999px; padding: 4px; margin-bottom: 20px;
@@ -112,12 +234,13 @@
   .mode-tab {
     flex: 1; border: 0; background: none; padding: 9px 0;
     border-radius: 999px; font-size: 14px; color: var(--muted);
-    cursor: pointer; transition: background .2s, color .2s;
+    cursor: pointer; transition: background .2s, color .2s, box-shadow .2s;
   }
   .mode-tab.active {
     background: #fff; color: var(--primary);
     font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,.06);
   }
+
   .timer-card { text-align: center; }
   .timer-wrap {
     position: relative; width: min(64vw, 240px);
@@ -132,8 +255,9 @@
     transition: stroke-dashoffset .4s linear, stroke .3s;
   }
   .timer-text {
-    position: absolute; inset: 0; display: flex;
-    flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px;
   }
   #timer-display {
     font-size: clamp(34px, 9vw, 46px); font-weight: 800;
@@ -142,6 +266,7 @@
   #timer-label { font-size: 13px; color: var(--muted); }
   .timer-actions { display: flex; gap: 10px; justify-content: center; }
   .timer-actions .btn { flex: 1; max-width: 140px; }
+
   .today-pill {
     display: flex; align-items: center; justify-content: space-between;
     background: var(--track); border-radius: 12px;
@@ -150,11 +275,13 @@
   }
   .today-pill strong { color: var(--primary); font-size: 16px; }
 
-  /* 塔罗 */
+  /* ---------- 塔罗 ---------- */
   .tarot-card-wrap { text-align: center; }
   .tarot-wrap {
-    perspective: 1000px; width: min(62vw, 240px);
-    aspect-ratio: 2 / 3; margin: 8px auto 20px;
+    perspective: 1000px;
+    width: min(62vw, 240px);
+    aspect-ratio: 2 / 3;
+    margin: 8px auto 20px;
   }
   .tarot-card {
     position: relative; width: 100%; height: 100%;
@@ -166,12 +293,15 @@
   .tarot-face {
     position: absolute; inset: 0;
     backface-visibility: hidden; -webkit-backface-visibility: hidden;
-    border-radius: 18px; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 8px; padding: 16px;
+    border-radius: 18px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 8px; padding: 16px;
   }
   .tarot-back {
     background: linear-gradient(160deg, #7C6BA6, #52447A);
-    color: rgba(255,255,255,.85); font-size: 22px; letter-spacing: 6px;
+    color: rgba(255,255,255,.85);
+    font-size: 22px; letter-spacing: 6px;
     box-shadow: inset 0 0 0 1px rgba(255,255,255,.15);
   }
   .tarot-back span { display: block; line-height: 1; }
@@ -185,16 +315,16 @@
     font-size: 12px; color: var(--muted);
     letter-spacing: 1px; text-transform: uppercase;
   }
-  .reading-card { transition: opacity .3s; }
   .reading-card .keywords {
     color: var(--accent); font-weight: 600;
     font-size: 15px; margin-bottom: 8px;
   }
   .reading-card .reading { color: var(--text); font-size: 15px; line-height: 1.8; }
 
-  /* 待办 */
+  /* ---------- 待办 ---------- */
   .todo-input-row { display: flex; gap: 10px; margin-bottom: 16px; }
   .todo-input-row .btn { flex-shrink: 0; }
+
   .progress-line { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
   .progress-track {
     flex: 1; height: 8px; border-radius: 999px;
@@ -203,13 +333,14 @@
   .progress-fill {
     height: 100%; width: 0; border-radius: 999px;
     background: linear-gradient(90deg, var(--primary), var(--primary-soft));
-    transition: width .35s ease;
+    transition: width .5s cubic-bezier(.22,.9,.3,1);
   }
   #todo-progress-text {
     font-size: 13px; color: var(--muted);
     min-width: 38px; text-align: right;
     font-variant-numeric: tabular-nums;
   }
+
   .todo-list {
     list-style: none; margin: 0; padding: 0;
     display: flex; flex-direction: column; gap: 8px;
@@ -217,19 +348,24 @@
   .todo-item {
     display: flex; align-items: center; gap: 10px;
     padding: 10px 12px; border-radius: 12px;
-    background: #FBF8F4; transition: opacity .2s;
+    background: #FBF8F4;
+    transition: opacity .2s, transform .2s, background .2s;
   }
+  .todo-item:hover { background: #F6F0E9; }
   .todo-item.done { opacity: .55; }
   .todo-item.done .todo-text { text-decoration: line-through; color: var(--muted); }
+
   .todo-check {
     flex-shrink: 0; width: 24px; height: 24px;
     border-radius: 8px; border: 2px solid #D8D0C8;
     background: #fff; color: #fff; font-size: 13px;
     line-height: 1; cursor: pointer;
     display: grid; place-items: center; padding: 0;
-    transition: background .2s, border-color .2s;
+    transition: background .2s, border-color .2s, transform .15s;
   }
+  .todo-check:active { transform: scale(.9); }
   .todo-item.done .todo-check { background: var(--success); border-color: var(--success); }
+
   .todo-text { flex: 1; font-size: 15px; word-break: break-word; }
   .todo-tomato {
     flex-shrink: 0; font-size: 12px; color: var(--muted);
@@ -240,19 +376,22 @@
     border: 0; border-radius: 50%; background: none;
     color: #B9B0A8; font-size: 20px; line-height: 1;
     cursor: pointer; padding: 0;
+    transition: color .2s, background .2s, transform .15s;
   }
   .todo-del:hover { color: var(--primary); background: var(--track); }
+  .todo-del:active { transform: scale(.9); }
   .empty {
     text-align: center; color: var(--muted);
     font-size: 14px; padding: 24px 0; display: none;
   }
 
-  /* 统计 */
+  /* ---------- 统计 ---------- */
   .stat-grid {
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 12px; margin-bottom: 16px;
   }
   @media (min-width: 769px) { .stat-grid { grid-template-columns: repeat(3, 1fr); } }
+
   .stat-card { margin-bottom: 0; text-align: center; padding: 18px 12px; }
   .stat-label { font-size: 13px; color: var(--muted); display: block; }
   .stat-card strong {
@@ -260,7 +399,11 @@
     color: var(--primary); line-height: 1.3;
     font-variant-numeric: tabular-nums;
   }
-  .stat-card strong small { font-size: 13px; font-weight: 500; color: var(--muted); margin-left: 2px; }
+  .stat-card strong small {
+    font-size: 13px; font-weight: 500;
+    color: var(--muted); margin-left: 2px;
+  }
+
   .bar-chart {
     display: flex; align-items: flex-end;
     gap: 8px; height: 150px; padding-top: 8px;
@@ -277,42 +420,55 @@
   .bar-fill {
     width: 100%; min-height: 3px; border-radius: 8px;
     background: linear-gradient(180deg, var(--primary-soft), var(--primary));
-    transition: height .4s ease;
+    transition: height .6s cubic-bezier(.22,.9,.3,1);
   }
   .bar-label { font-size: 12px; color: var(--muted); }
+
   .donut-card { display: flex; flex-direction: column; align-items: center; }
   .donut {
     width: 140px; height: 140px; border-radius: 50%;
     display: grid; place-items: center; margin: 12px 0 4px;
     background: conic-gradient(var(--success) calc(var(--p) * 1%), var(--track) 0);
+    transition: background .5s ease;
   }
   .donut-inner {
     width: 100px; height: 100px; border-radius: 50%;
-    background: var(--card); display: grid; place-items: center;
+    background: var(--card);
+    display: grid; place-items: center;
     font-size: 20px; font-weight: 800; color: var(--success);
+    font-variant-numeric: tabular-nums;
   }
 
-  /* 手机底部导航 */
+  /* ---------- 手机底部导航 ---------- */
   .mobile-nav { display: none; }
   @media (max-width: 768px) {
     .desktop-nav { display: none; }
     .mobile-nav {
-      display: flex; position: fixed; bottom: 0; left: 0; right: 0;
+      display: flex;
+      position: fixed; bottom: 0; left: 0; right: 0;
       background: #fff; border-top: 1px solid var(--line);
       padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
-      z-index: 100; box-shadow: 0 -4px 16px rgba(0,0,0,.04);
+      z-index: 100;
+      box-shadow: 0 -4px 16px rgba(0,0,0,.04);
     }
     .mobile-nav button {
-      flex: 1; border: 0; background: none; padding: 4px 0;
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      font-size: 11px; color: var(--muted); cursor: pointer;
+      flex: 1; border: 0; background: none;
+      padding: 4px 0;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 2px;
+      font-size: 10px; color: var(--muted);
+      cursor: pointer;
       min-height: 48px; justify-content: center;
+      min-width: 0;
+      transition: color .2s, transform .15s;
     }
-    .mobile-nav button .ico { font-size: 20px; line-height: 1; }
+    .mobile-nav button .ico { font-size: 19px; line-height: 1; transition: transform .2s; }
+    .mobile-nav button:active { transform: scale(.94); }
     .mobile-nav button.active { color: var(--primary); font-weight: 600; }
+    .mobile-nav button.active .ico { transform: translateY(-1px) scale(1.08); }
   }
 
-  /* 提示条 */
+  /* ---------- 提示条 ---------- */
   .toast {
     position: fixed; left: 50%; bottom: 92px;
     transform: translateX(-50%) translateY(16px);
@@ -323,23 +479,72 @@
     z-index: 200; max-width: 84vw; text-align: center;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ---------- 桌面端放大增强 ---------- */
+  @media (min-width: 900px) {
+    .topbar-inner, .app { max-width: 1280px; }
+    .topbar-inner { padding: 16px 32px; }
+    .logo { font-size: 19px; }
+    .desktop-nav button { font-size: 15px; padding: 10px 18px; }
+
+    .app { padding: 36px 32px 72px; }
+    .page-head { margin-bottom: 24px; }
+    h1 { font-size: 30px; }
+    .page-head .sub { font-size: 15px; }
+
+    .card { padding: 28px; margin-bottom: 24px; }
+    h2 { font-size: 19px; margin-bottom: 16px; }
+    .grid-2 { gap: 24px; }
+
+    .overview-grid { gap: 24px; }
+    .overview-card { padding: 28px; gap: 18px; }
+    .ov-head { font-size: 16px; }
+    .ov-icon { font-size: 26px; }
+    .ov-big { font-size: 40px; }
+    .ov-tarot-symbol { width: 60px; height: 60px; font-size: 34px; }
+    .ov-mini-chart { height: 64px; }
+
+    .mode-tabs { margin-bottom: 28px; }
+    .mode-tab { font-size: 15px; padding: 11px 0; }
+    .timer-wrap { width: 300px; margin-bottom: 28px; }
+    #timer-display { font-size: 56px; }
+    #timer-label { font-size: 15px; }
+
+    .btn { min-height: 48px; font-size: 16px; padding: 0 28px; }
+    .input, .select { min-height: 48px; font-size: 16px; }
+
+    .tarot-wrap { width: 280px; margin: 12px auto 28px; }
+    .tarot-symbol { font-size: 52px; }
+    .tarot-front-name { font-size: 24px; }
+    .reading-card .reading { font-size: 16px; line-height: 1.9; }
+
+    .stat-grid { gap: 24px; margin-bottom: 24px; }
+    .stat-card { padding: 28px 20px; }
+    .stat-card strong { font-size: 40px; }
+    .stat-label { font-size: 14px; }
+
+    .bar-chart { height: 220px; gap: 12px; }
+    .donut { width: 180px; height: 180px; }
+    .donut-inner { width: 130px; height: 130px; font-size: 26px; }
+  }
+
+  /* 减少动态偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      transition-duration: .001ms !important;
+    }
+  }
 </style>
 </head>
 <body>
 
-<!-- ============================================================
-     【第 2 段：HTML 结构】
-     位置：<body> 里面
-     作用：页面上所有看得见的东西——导航、四个板块、按钮、输入框
-     顺序：顶部导航 → 四个 section（每个 section 是一个板块）→ 手机底部导航 → 提示条
-     ============================================================ -->
-
-<!-- 顶部导航（电脑端显示） -->
 <header class="topbar">
   <div class="topbar-inner">
     <div class="logo">Focus <span>&</span> Tarot</div>
     <nav class="desktop-nav">
-      <button data-page="pomodoro" class="active">🍅 番茄钟</button>
+      <button data-page="home" class="active">🏠 首页</button>
+      <button data-page="pomodoro">🍅 番茄钟</button>
       <button data-page="fortune">🔮 今日运势</button>
       <button data-page="todos">✅ 待办</button>
       <button data-page="stats">📊 统计</button>
@@ -349,12 +554,83 @@
 
 <main class="app">
 
-  <!-- 板块 1：番茄钟 -->
-  <section id="pomodoro" class="page active">
+  <!-- ========== 首页：四板块概况 ========== -->
+  <section id="home" class="page active">
+    <div class="page-head">
+      <h1>今天也专注一点</h1>
+      <p class="sub">四个板块的概况，点卡片进入详情</p>
+    </div>
+
+    <div class="overview-grid">
+
+      <!-- 番茄钟概况 -->
+      <button class="overview-card" data-page="pomodoro">
+        <div class="ov-head">
+          <span class="ov-icon">🍅</span>
+          <span class="ov-title">番茄钟</span>
+          <span class="ov-arrow">→</span>
+        </div>
+        <div class="ov-body">
+          <div class="ov-big"><span id="ov-tomatoes">0</span><small>个番茄</small></div>
+          <div class="ov-meta">今日专注 <strong id="ov-minutes">0</strong> 分钟</div>
+        </div>
+      </button>
+
+      <!-- 今日运势概况 -->
+      <button class="overview-card" data-page="fortune">
+        <div class="ov-head">
+          <span class="ov-icon">🔮</span>
+          <span class="ov-title">今日运势</span>
+          <span class="ov-arrow">→</span>
+        </div>
+        <div class="ov-body">
+          <div class="ov-tarot">
+            <span class="ov-tarot-symbol" id="ov-tarot-symbol">✦</span>
+            <div>
+              <div class="ov-tarot-name" id="ov-tarot-name">还没抽牌</div>
+              <div class="ov-tarot-key" id="ov-tarot-key">点进去抽一张</div>
+            </div>
+          </div>
+        </div>
+      </button>
+
+      <!-- 待办概况 -->
+      <button class="overview-card" data-page="todos">
+        <div class="ov-head">
+          <span class="ov-icon">✅</span>
+          <span class="ov-title">待办清单</span>
+          <span class="ov-arrow">→</span>
+        </div>
+        <div class="ov-body">
+          <div class="ov-big"><span id="ov-rate">0</span><small>% 完成</small></div>
+          <div class="ov-progress"><div id="ov-progress-fill"></div></div>
+          <div class="ov-meta" id="ov-todo-meta">0 / 0 已完成</div>
+        </div>
+      </button>
+
+      <!-- 统计概况 -->
+      <button class="overview-card" data-page="stats">
+        <div class="ov-head">
+          <span class="ov-icon">📊</span>
+          <span class="ov-title">统计看板</span>
+          <span class="ov-arrow">→</span>
+        </div>
+        <div class="ov-body">
+          <div class="ov-mini-chart" id="ov-mini-chart"></div>
+          <div class="ov-meta">最近 7 天专注时长</div>
+        </div>
+      </button>
+
+    </div>
+  </section>
+
+  <!-- ========== 番茄钟 ========== -->
+  <section id="pomodoro" class="page">
     <div class="page-head">
       <h1>番茄钟</h1>
       <p class="sub">25 分钟专注，5 分钟休息，慢慢进入状态</p>
     </div>
+
     <div class="grid-2">
       <div class="card timer-card">
         <div class="mode-tabs">
@@ -362,6 +638,7 @@
           <button class="mode-tab" data-mode="short">短休息</button>
           <button class="mode-tab" data-mode="long">长休息</button>
         </div>
+
         <div class="timer-wrap">
           <svg class="timer-ring" viewBox="0 0 200 200" aria-hidden="true">
             <circle class="ring-bg" cx="100" cy="100" r="90"></circle>
@@ -372,32 +649,37 @@
             <div id="timer-label">专注中</div>
           </div>
         </div>
+
         <div class="timer-actions">
           <button class="btn" id="btn-start">开始</button>
           <button class="btn secondary" id="btn-reset">重置</button>
         </div>
       </div>
+
       <div class="card">
         <h2>本次专注</h2>
         <label class="field-label" for="todo-select">关联待办（可选）</label>
         <select class="select" id="todo-select">
           <option value="">不关联</option>
         </select>
+
         <div class="today-pill">
           <span>今日已完成</span>
           <strong><span id="today-count">0</span> 个番茄</strong>
         </div>
+
         <p class="hint">专注结束后会自动记录到统计页，并给关联的待办 +1 🍅</p>
       </div>
     </div>
   </section>
 
-  <!-- 板块 2：今日运势 -->
+  <!-- ========== 今日运势 ========== -->
   <section id="fortune" class="page">
     <div class="page-head">
       <h1>今日运势</h1>
-      <p class="sub">抽一张塔罗牌，看看今天的能量</p>
+      <p class="sub">每天抽一张塔罗牌，看看今天的能量</p>
     </div>
+
     <div class="card tarot-card-wrap">
       <div class="tarot-wrap">
         <div class="tarot-card" id="tarot-card">
@@ -413,6 +695,7 @@
       </div>
       <button class="btn" id="btn-draw">抽一张牌</button>
     </div>
+
     <div class="card reading-card">
       <h2>牌义解读</h2>
       <p class="keywords" id="tarot-keywords">点击上方按钮，抽一张属于今天的牌</p>
@@ -420,34 +703,38 @@
     </div>
   </section>
 
-  <!-- 板块 3：待办清单 -->
+  <!-- ========== 待办清单 ========== -->
   <section id="todos" class="page">
     <div class="page-head">
       <h1>待办清单</h1>
       <p class="sub">把要做的事写下来，专注时关联它</p>
     </div>
+
     <div class="card">
       <div class="todo-input-row">
         <input class="input" id="todo-input" type="text" maxlength="60" placeholder="写一件要完成的事…">
         <button class="btn" id="btn-add">添加</button>
       </div>
+
       <div class="progress-line">
         <div class="progress-track">
           <div class="progress-fill" id="todo-progress-fill"></div>
         </div>
         <span id="todo-progress-text">0%</span>
       </div>
+
       <ul class="todo-list" id="todo-list"></ul>
       <p class="empty" id="todo-empty">还没有待办，先添加一条吧。</p>
     </div>
   </section>
 
-  <!-- 板块 4：统计看板 -->
+  <!-- ========== 统计看板 ========== -->
   <section id="stats" class="page">
     <div class="page-head">
       <h1>今日概览</h1>
       <p class="sub">专注与完成情况一目了然</p>
     </div>
+
     <div class="stat-grid">
       <div class="card stat-card">
         <span class="stat-label">今日专注</span>
@@ -462,11 +749,13 @@
         <strong><span id="stat-rate">0</span><small>%</small></strong>
       </div>
     </div>
+
     <div class="grid-2">
       <div class="card">
         <h2>最近 7 天专注</h2>
         <div class="bar-chart" id="bar-chart"></div>
       </div>
+
       <div class="card donut-card">
         <h2>待办完成情况</h2>
         <div class="donut" id="donut-rate" style="--p:0">
@@ -478,22 +767,16 @@
 
 </main>
 
-<!-- 手机底部导航（只在手机宽度显示） -->
 <nav class="mobile-nav">
-  <button data-page="pomodoro" class="active"><span class="ico">🍅</span>番茄</button>
+  <button data-page="home" class="active"><span class="ico">🏠</span>首页</button>
+  <button data-page="pomodoro"><span class="ico">🍅</span>番茄</button>
   <button data-page="fortune"><span class="ico">🔮</span>运势</button>
   <button data-page="todos"><span class="ico">✅</span>待办</button>
   <button data-page="stats"><span class="ico">📊</span>统计</button>
 </nav>
 
-<!-- 操作提示条 -->
 <div class="toast" id="toast"></div>
 
-<!-- ============================================================
-     【第 3 段：JavaScript 逻辑】
-     位置：<body> 末尾的 <script> 标签中（放在最后，保证页面元素已加载）
-     作用：切换板块、番茄钟计时、抽塔罗、增删待办、读写 localStorage、渲染统计
-     ============================================================ -->
 <script>
 (function () {
   'use strict';
@@ -507,24 +790,52 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2200);
   }
+
   function todayStr() {
     var d = new Date();
     return d.getFullYear() + '-' +
       String(d.getMonth() + 1).padStart(2, '0') + '-' +
       String(d.getDate()).padStart(2, '0');
   }
+
   function dateStr(d) {
     return d.getFullYear() + '-' +
       String(d.getMonth() + 1).padStart(2, '0') + '-' +
       String(d.getDate()).padStart(2, '0');
   }
+
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
 
-  /* ---------- 页面切换 ---------- */
+  function countUp(el, to, duration) {
+    if (!el) return;
+    duration = duration || 550;
+    var from = parseInt(el.textContent, 10) || 0;
+    to = Number(to) || 0;
+    if (from === to) { el.textContent = to; return; }
+    var start = performance.now();
+    function step(now) {
+      var t = Math.min((now - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(from + (to - from) * eased);
+      if (t < 1) requestAnimationFrame(step);
+      else el.textContent = to;
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ---------- 页面切换 + 动画 ---------- */
+  function applyStagger(pageEl) {
+    if (!pageEl) return;
+    var items = pageEl.querySelectorAll('.card, .overview-card');
+    items.forEach(function (el, i) {
+      el.style.animationDelay = (i * 60) + 'ms';
+    });
+  }
+
   function switchPage(id) {
     document.querySelectorAll('.page').forEach(function (p) {
       p.classList.toggle('active', p.id === id);
@@ -532,29 +843,115 @@
     document.querySelectorAll('[data-page]').forEach(function (b) {
       b.classList.toggle('active', b.dataset.page === id);
     });
-    if (id === 'stats') renderStats();
+
+    var pageEl = document.getElementById(id);
+    applyStagger(pageEl);
+
+    if (id === 'home') renderHome();
     if (id === 'todos') renderTodos();
+    if (id === 'stats') renderStats();
+    if (id === 'fortune') syncFortunePage();
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
   document.querySelectorAll('[data-page]').forEach(function (btn) {
-    btn.addEventListener('click', function () { switchPage(btn.dataset.page); });
+    btn.addEventListener('click', function () {
+      switchPage(btn.dataset.page);
+    });
   });
 
   /* ---------- 数据层 ---------- */
   var TODO_KEY = 'ft_todos';
   var RECORD_KEY = 'ft_records';
+  var DAILY_TAROT_KEY = 'ft_daily_tarot';
+
   var todos = [];
   var focusRecords = [];
+  var dailyTarot = null;
+
   try {
     todos = JSON.parse(localStorage.getItem(TODO_KEY) || '[]');
     if (!Array.isArray(todos)) todos = [];
   } catch (e) { todos = []; }
+
   try {
     focusRecords = JSON.parse(localStorage.getItem(RECORD_KEY) || '[]');
     if (!Array.isArray(focusRecords)) focusRecords = [];
   } catch (e) { focusRecords = []; }
+
+  try {
+    dailyTarot = JSON.parse(localStorage.getItem(DAILY_TAROT_KEY) || 'null');
+    if (!dailyTarot || dailyTarot.date !== todayStr()) dailyTarot = null;
+  } catch (e) { dailyTarot = null; }
+
   function saveTodos() { localStorage.setItem(TODO_KEY, JSON.stringify(todos)); }
   function saveRecords() { localStorage.setItem(RECORD_KEY, JSON.stringify(focusRecords)); }
+  function saveDailyTarot() {
+    if (dailyTarot) {
+      localStorage.setItem(DAILY_TAROT_KEY, JSON.stringify(dailyTarot));
+    } else {
+      localStorage.removeItem(DAILY_TAROT_KEY);
+    }
+  }
+
+  /* ---------- 首页概况 ---------- */
+  function renderHome() {
+    var today = todayStr();
+
+    var todayRecords = focusRecords.filter(function (r) { return r.date === today; });
+    var todayMinutes = todayRecords.reduce(function (s, r) {
+      return s + (Number(r.minutes) || 0);
+    }, 0);
+
+    countUp(document.getElementById('ov-tomatoes'), todayRecords.length);
+    countUp(document.getElementById('ov-minutes'), todayMinutes);
+
+    var doneCount = todos.filter(function (t) { return t.done; }).length;
+    var rate = todos.length ? Math.round(doneCount / todos.length * 100) : 0;
+
+    countUp(document.getElementById('ov-rate'), rate);
+    var fill = document.getElementById('ov-progress-fill');
+    if (fill) fill.style.width = rate + '%';
+    document.getElementById('ov-todo-meta').textContent =
+      doneCount + ' / ' + todos.length + ' 已完成';
+
+    if (dailyTarot && TAROT[dailyTarot.index]) {
+      var card = TAROT[dailyTarot.index];
+      document.getElementById('ov-tarot-symbol').textContent = card.symbol;
+      document.getElementById('ov-tarot-name').textContent = card.name;
+      document.getElementById('ov-tarot-key').textContent = card.keywords;
+    } else {
+      document.getElementById('ov-tarot-symbol').textContent = '✦';
+      document.getElementById('ov-tarot-name').textContent = '还没抽牌';
+      document.getElementById('ov-tarot-key').textContent = '点进去抽一张';
+    }
+
+    renderMiniChart();
+  }
+
+  function renderMiniChart() {
+    var chart = document.getElementById('ov-mini-chart');
+    if (!chart) return;
+    chart.innerHTML = '';
+    var values = [];
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date();
+      d.setDate(d.getDate() - i);
+      var ds = dateStr(d);
+      var m = focusRecords
+        .filter(function (r) { return r.date === ds; })
+        .reduce(function (s, r) { return s + (Number(r.minutes) || 0); }, 0);
+      values.push(m);
+    }
+    var max = Math.max.apply(null, values.concat([1]));
+    values.forEach(function (v) {
+      var bar = document.createElement('div');
+      bar.className = 'ov-mini-bar';
+      bar.style.height = Math.max(8, Math.round(v / max * 100)) + '%';
+      chart.appendChild(bar);
+    });
+  }
 
   /* ---------- 待办清单 ---------- */
   function renderTodos() {
@@ -596,6 +993,7 @@
     select.value = stillExists ? currentSelectValue : '';
 
     renderStats();
+    renderHome();
   }
 
   function addTodo() {
@@ -608,18 +1006,22 @@
     renderTodos();
     toast('已添加');
   }
+
   document.getElementById('btn-add').addEventListener('click', addTodo);
   document.getElementById('todo-input').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') addTodo();
   });
+
   document.getElementById('todo-list').addEventListener('click', function (e) {
     var check = e.target.closest('.todo-check');
     var del = e.target.closest('.todo-del');
+
     if (check) {
       var id = Number(check.dataset.id);
       var t = todos.find(function (x) { return x.id === id; });
       if (t) { t.done = !t.done; saveTodos(); renderTodos(); }
     }
+
     if (del) {
       var did = Number(del.dataset.id);
       todos = todos.filter(function (x) { return x.id !== did; });
@@ -635,6 +1037,7 @@
     long:  { minutes: 15, label: '长休息', color: '#6B5B95' }
   };
   var CIRCUMFERENCE = 565.49;
+
   var mode = 'focus';
   var totalSeconds = MODES.focus.minutes * 60;
   var remaining = totalSeconds;
@@ -650,12 +1053,14 @@
   function updateTimerUI() {
     var m = Math.floor(remaining / 60);
     var s = remaining % 60;
-    displayEl.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    displayEl.textContent =
+      String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
     var ratio = totalSeconds > 0 ? remaining / totalSeconds : 0;
     ringEl.style.strokeDashoffset = CIRCUMFERENCE * (1 - ratio);
     ringEl.style.stroke = MODES[mode].color;
     labelEl.textContent = MODES[mode].label;
   }
+
   function tick() {
     remaining -= 1;
     if (remaining <= 0) {
@@ -666,23 +1071,28 @@
     }
     updateTimerUI();
   }
+
   function finishTimer() {
     clearInterval(timerId);
     timerId = null;
     running = false;
     startBtn.textContent = '开始';
+
     if (mode === 'focus') {
       addFocusRecord();
       toast('专注完成！休息一下吧 🎉');
     } else {
       toast('休息结束，继续专注吧 💪');
     }
+
     remaining = totalSeconds;
     updateTimerUI();
   }
+
   function addFocusRecord() {
     var select = document.getElementById('todo-select');
     var todoId = select.value ? Number(select.value) : null;
+
     focusRecords.push({
       id: Date.now(),
       date: todayStr(),
@@ -690,12 +1100,15 @@
       todoId: todoId
     });
     saveRecords();
+
     if (todoId) {
       var t = todos.find(function (x) { return x.id === todoId; });
       if (t) { t.tomatoes = (t.tomatoes || 0) + 1; saveTodos(); }
     }
+
     renderTodos();
     renderStats();
+    renderHome();
   }
 
   startBtn.addEventListener('click', function () {
@@ -711,6 +1124,7 @@
       timerId = setInterval(tick, 1000);
     }
   });
+
   resetBtn.addEventListener('click', function () {
     clearInterval(timerId);
     timerId = null;
@@ -719,6 +1133,7 @@
     startBtn.textContent = '开始';
     updateTimerUI();
   });
+
   document.querySelectorAll('.mode-tab').forEach(function (tab) {
     tab.addEventListener('click', function () {
       if (running) { toast('先暂停或重置再切换模式'); return; }
@@ -764,55 +1179,86 @@
     { name: '世界', en: 'The World', symbol: '🌍', keywords: '完成 · 圆满 · 旅程',
       reading: '适合收尾。把拖着没结束的小事做完，给自己一个明确的结束感。完成本身，就是最好的奖励。' }
   ];
+
+  function renderTarotCard(card) {
+    document.getElementById('tarot-symbol').textContent = card.symbol;
+    document.getElementById('tarot-name').textContent = card.name;
+    document.getElementById('tarot-en').textContent = card.en;
+    document.getElementById('tarot-keywords').textContent = card.keywords;
+    document.getElementById('tarot-reading').textContent = card.reading;
+  }
+
+  function syncFortunePage() {
+    if (!dailyTarot || !TAROT[dailyTarot.index]) return;
+    var card = TAROT[dailyTarot.index];
+    renderTarotCard(card);
+    var cardEl = document.getElementById('tarot-card');
+    cardEl.classList.add('flipped');
+    document.getElementById('btn-draw').textContent = '再抽一张';
+  }
+
   var drawing = false;
   document.getElementById('btn-draw').addEventListener('click', function () {
     if (drawing) return;
     drawing = true;
+
     var cardEl = document.getElementById('tarot-card');
     var btn = document.getElementById('btn-draw');
     var wasFlipped = cardEl.classList.contains('flipped');
+
     cardEl.classList.remove('flipped');
     btn.disabled = true;
+
     setTimeout(function () {
-      var card = TAROT[Math.floor(Math.random() * TAROT.length)];
-      document.getElementById('tarot-symbol').textContent = card.symbol;
-      document.getElementById('tarot-name').textContent = card.name;
-      document.getElementById('tarot-en').textContent = card.en;
-      document.getElementById('tarot-keywords').textContent = card.keywords;
-      document.getElementById('tarot-reading').textContent = card.reading;
+      var index = Math.floor(Math.random() * TAROT.length);
+      var card = TAROT[index];
+
+      dailyTarot = { date: todayStr(), index: index };
+      saveDailyTarot();
+
+      renderTarotCard(card);
       cardEl.classList.add('flipped');
+
       btn.textContent = '再抽一张';
       btn.disabled = false;
       drawing = false;
-    }, wasFlipped ? 700 : 80);
+
+      renderHome();
+    }, wasFlipped ? 680 : 120);
   });
 
   /* ---------- 统计 ---------- */
   function renderStats() {
     var today = todayStr();
     var todayRecords = focusRecords.filter(function (r) { return r.date === today; });
-    var todayMinutes = todayRecords.reduce(function (sum, r) { return sum + (Number(r.minutes) || 0); }, 0);
-    var todayCount = todayRecords.length;
+    var todayMinutes = todayRecords.reduce(function (sum, r) {
+      return sum + (Number(r.minutes) || 0);
+    }, 0);
 
-    document.getElementById('stat-minutes').textContent = todayMinutes;
-    document.getElementById('stat-tomatoes').textContent = todayCount;
-    document.getElementById('today-count').textContent = todayCount;
+    countUp(document.getElementById('stat-minutes'), todayMinutes);
+    countUp(document.getElementById('stat-tomatoes'), todayRecords.length);
 
     var doneCount = todos.filter(function (t) { return t.done; }).length;
     var rate = todos.length ? Math.round(doneCount / todos.length * 100) : 0;
-    document.getElementById('stat-rate').textContent = rate;
+    countUp(document.getElementById('stat-rate'), rate);
 
     var donut = document.getElementById('donut-rate');
     donut.style.setProperty('--p', rate);
     document.getElementById('donut-rate-text').textContent = rate + '%';
 
+    var tc = document.getElementById('today-count');
+    if (tc) tc.textContent = todayRecords.length;
+
     renderBarChart();
   }
+
   function renderBarChart() {
     var chart = document.getElementById('bar-chart');
     chart.innerHTML = '';
+
     var weekLabels = ['日', '一', '二', '三', '四', '五', '六'];
     var values = [];
+
     for (var i = 6; i >= 0; i--) {
       var d = new Date();
       d.setDate(d.getDate() - i);
@@ -822,31 +1268,49 @@
         .reduce(function (sum, r) { return sum + (Number(r.minutes) || 0); }, 0);
       values.push({ label: weekLabels[d.getDay()], minutes: minutes });
     }
-    var max = Math.max.apply(null, values.map(function (v) { return v.minutes; }).concat([1]));
+
+    var max = Math.max.apply(null, values.map(function (v) {
+      return v.minutes;
+    }).concat([1]));
+
     values.forEach(function (v) {
       var item = document.createElement('div');
       item.className = 'bar-item';
+
       var track = document.createElement('div');
       track.className = 'bar-track';
+
       var fill = document.createElement('div');
       fill.className = 'bar-fill';
-      fill.style.height = (v.minutes / max * 100) + '%';
+      fill.style.height = '0%';
       track.appendChild(fill);
+
       var label = document.createElement('span');
       label.className = 'bar-label';
       label.textContent = v.label;
+
       item.appendChild(track);
       item.appendChild(label);
       chart.appendChild(item);
+
+      requestAnimationFrame(function () {
+        fill.style.height = (v.minutes / max * 100) + '%';
+      });
     });
   }
 
   /* ---------- 初始化 ---------- */
   renderTodos();
   renderStats();
+  renderHome();
   updateTimerUI();
+
+  var activePage = document.querySelector('.page.active');
+  if (activePage) applyStagger(activePage);
+
+  syncFortunePage();
+
 })();
 </script>
-
 </body>
 </html>
