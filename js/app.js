@@ -1,6 +1,49 @@
 (function() {
     'use strict';
+    /* ============ 开屏 ============ */
+    (function initSplash() {
+        var splash = document.getElementById('splash');
+        if (!splash) return;
 
+        // 同一标签页会话内只显示一次，刷新不会再出现
+        if (sessionStorage.getItem('ft_splash_seen') === '1') {
+            splash.remove();
+            return;
+        }
+
+        document.body.classList.add('splash-lock');
+
+        var startTime = performance.now();
+        var minShow = 900; // 至少显示 0.9 秒，避免一闪而过
+        var maxShow = 2600; // 最多等 2.6 秒，就算资源没加载完也放行
+        var done = false;
+
+        function hideSplash() {
+            if (done) return;
+            done = true;
+            splash.classList.add('hide');
+            document.body.classList.remove('splash-lock');
+            sessionStorage.setItem('ft_splash_seen', '1');
+            setTimeout(function() {
+                if (splash.parentNode) splash.parentNode.removeChild(splash);
+            }, 700);
+        }
+
+        function hideAfterMin() {
+            var elapsed = performance.now() - startTime;
+            var wait = Math.max(0, minShow - elapsed);
+            setTimeout(hideSplash, wait);
+        }
+
+        if (document.readyState === 'complete') {
+            hideAfterMin();
+        } else {
+            window.addEventListener('load', hideAfterMin);
+        }
+
+        // 兜底：就算 load 迟迟不触发，也不会卡住页面
+        setTimeout(hideSplash, maxShow);
+    })();
     /* ============ 提示音（MP3） ============ */
     var SOUND_KEY = 'ft_sound';
     var soundMuted = localStorage.getItem(SOUND_KEY) === 'off';
@@ -382,8 +425,10 @@
         if (id === 'home') renderHome();
         if (id === 'todos') renderTodos();
         if (id === 'stats') renderStats();
-        if (id === 'fortune') { ensureDailyTarotFresh();
-            syncFortunePage(); }
+        if (id === 'fortune') {
+            ensureDailyTarotFresh();
+            syncFortunePage();
+        }
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -860,8 +905,11 @@
     function addTodo() {
         var input = document.getElementById('todo-input');
         var text = input.value.trim();
-        if (!text) { toast(t('pleaseEnter'));
-            input.focus(); return; }
+        if (!text) {
+            toast(t('pleaseEnter'));
+            input.focus();
+            return;
+        }
         todos.push({ id: Date.now(), text: text, done: false, tomatoes: 0 });
         input.value = '';
         saveTodos();
@@ -880,9 +928,11 @@
         if (check) {
             var id = Number(check.dataset.id);
             var td = todos.find(function(x) { return x.id === id; });
-            if (td) { td.done = !td.done;
+            if (td) {
+                td.done = !td.done;
                 saveTodos();
-                renderTodos(); }
+                renderTodos();
+            }
         }
         if (del) {
             var did = Number(del.dataset.id);
@@ -913,8 +963,10 @@
 
     function updateStartBtn() { startBtn.textContent = t(startBtnState); }
 
-    function setStartBtn(state) { startBtnState = state;
-        updateStartBtn(); }
+    function setStartBtn(state) {
+        startBtnState = state;
+        updateStartBtn();
+    }
 
     function updateTimerUI() {
         var m = Math.floor(remaining / 60);
@@ -971,8 +1023,10 @@
         saveRecords();
         if (todoId) {
             var td = todos.find(function(x) { return x.id === todoId; });
-            if (td) { td.tomatoes = (td.tomatoes || 0) + 1;
-                saveTodos(); }
+            if (td) {
+                td.tomatoes = (td.tomatoes || 0) + 1;
+                saveTodos();
+            }
         }
         renderTodos();
         renderStats();
@@ -1173,9 +1227,7 @@
     function renderBarChart() {
         var chart = document.getElementById('bar-chart');
         chart.innerHTML = '';
-        var weekLabels = lang === 'en' ?
-            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] :
-            ['日', '一', '二', '三', '四', '五', '六'];
+        var weekLabels = lang === 'en' ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : ['日', '一', '二', '三', '四', '五', '六'];
         var values = [];
         for (var i = 6; i >= 0; i--) {
             var d = new Date();
