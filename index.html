@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Focus & Tarot · 专注小站</title>
 
-<!-- 网站图标：番茄红圆角方块 + 白色五角星 -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23E4572E'/%3E%3Cpath d='M50 14 L58 39 L84 39 L63 54 L71 79 L50 64 L29 79 L37 54 L16 39 L42 39 Z' fill='%23FFF7F2'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23E4572E'/%3E%3Cpath d='M50 14 L58 39 L84 39 L63 54 L71 79 L50 64 L29 79 L37 54 L16 39 L42 39 Z' fill='%23FFF7F2'/%3E%3C/svg%3E">
 
@@ -66,7 +65,8 @@
   .mobile-nav button,
   .desktop-nav button,
   .input,
-  .select {
+  .select,
+  .lang-toggle {
     touch-action: manipulation;
   }
 
@@ -77,7 +77,8 @@
   .todo-del,
   .mode-tab,
   .mobile-nav button,
-  .desktop-nav button {
+  .desktop-nav button,
+  .lang-toggle {
     -webkit-user-select: none;
     user-select: none;
   }
@@ -93,7 +94,12 @@
   .topbar-inner {
     max-width: var(--maxw); margin: 0 auto;
     padding: 12px 16px;
-    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+
+  .topbar-right {
+    display: flex; align-items: center; gap: 8px;
+    min-width: 0;
   }
 
   .logo {
@@ -117,6 +123,22 @@
   }
   .desktop-nav button.active { background: var(--primary); color: #fff; }
   .desktop-nav button:active { transform: scale(.96); }
+
+  .lang-toggle {
+    min-width: 48px; height: 36px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background .2s, color .2s, transform .15s, border-color .2s;
+  }
+  .lang-toggle:active { transform: scale(.94); }
 
   /* ---------- 主体 ---------- */
   .app { max-width: var(--maxw); margin: 0 auto; padding: 20px 16px 96px; }
@@ -241,6 +263,7 @@
     color: var(--muted); margin-left: 4px;
   }
   .ov-meta { font-size: 13px; color: var(--muted); }
+  .ov-meta strong { color: var(--primary); font-weight: 700; }
 
   .ov-progress {
     height: 8px; border-radius: 999px;
@@ -373,7 +396,6 @@
   }
   .reading-card .reading { color: var(--text); font-size: 15px; line-height: 1.8; }
 
-  /* 今日已抽提示 */
   .tarot-daily-hint {
     margin-top: 14px;
     font-size: 13px;
@@ -554,6 +576,10 @@
 
     .todo-item:hover { background: #F6F0E9; }
     .todo-del:hover { color: var(--primary); background: var(--track); }
+    .lang-toggle:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
   }
 
   /* ============================================================
@@ -634,6 +660,7 @@
 
     .logo { font-size: 15px; gap: 6px; }
     .logo-icon { width: 22px; height: 22px; border-radius: 6px; }
+    .lang-toggle { height: 32px; min-width: 42px; padding: 0 10px; font-size: 12px; }
 
     #timer-display { font-size: 32px; }
     .mode-tab { font-size: 13px; }
@@ -659,6 +686,7 @@
     .logo { font-size: 19px; gap: 10px; }
     .logo-icon { width: 30px; height: 30px; border-radius: 8px; }
     .desktop-nav button { font-size: 15px; padding: 10px 18px; }
+    .lang-toggle { height: 40px; padding: 0 16px; font-size: 14px; }
 
     .app { padding: 36px 32px 72px; }
     .page-head { margin-bottom: 24px; }
@@ -717,20 +745,22 @@
 <header class="topbar">
   <div class="topbar-inner">
     <div class="logo">
-      <!-- Logo 图标：与 favicon 同一设计，番茄红圆角底 + 白色五角星 -->
       <svg class="logo-icon" viewBox="0 0 100 100" aria-hidden="true">
         <rect width="100" height="100" rx="24" fill="#E4572E"/>
         <path d="M50 14 L58 39 L84 39 L63 54 L71 79 L50 64 L29 79 L37 54 L16 39 L42 39 Z" fill="#FFF7F2"/>
       </svg>
       <span class="logo-text">Focus <span>&</span> Tarot</span>
     </div>
-    <nav class="desktop-nav">
-      <button data-page="home" class="active">🏠 首页</button>
-      <button data-page="pomodoro">🍅 番茄钟</button>
-      <button data-page="fortune">🔮 今日运势</button>
-      <button data-page="todos">✅ 待办</button>
-      <button data-page="stats">📊 统计</button>
-    </nav>
+    <div class="topbar-right">
+      <nav class="desktop-nav">
+        <button data-page="home" class="active" data-i18n="navHome">🏠 首页</button>
+        <button data-page="pomodoro" data-i18n="navPomodoro">🍅 番茄钟</button>
+        <button data-page="fortune" data-i18n="navFortune">🔮 今日运势</button>
+        <button data-page="todos" data-i18n="navTodos">✅ 待办</button>
+        <button data-page="stats" data-i18n="navStats">📊 统计</button>
+      </nav>
+      <button class="lang-toggle" id="lang-toggle" type="button" aria-label="Switch language">EN</button>
+    </div>
   </div>
 </header>
 
@@ -739,27 +769,27 @@
   <!-- ========== 首页 ========== -->
   <section id="home" class="page active">
     <div class="page-head">
-      <h1>今天也专注一点</h1>
-      <p class="sub">四个板块的概况，点卡片进入详情</p>
+      <h1 data-i18n="homeTitle">今天也专注一点</h1>
+      <p class="sub" data-i18n="homeSub">四个板块的概况，点卡片进入详情</p>
     </div>
 
     <div class="overview-grid">
       <button class="overview-card" data-page="pomodoro">
         <div class="ov-head">
           <span class="ov-icon">🍅</span>
-          <span class="ov-title">番茄钟</span>
+          <span class="ov-title" data-i18n="cardPomodoro">番茄钟</span>
           <span class="ov-arrow">→</span>
         </div>
         <div class="ov-body">
-          <div class="ov-big"><span id="ov-tomatoes">0</span><small>个番茄</small></div>
-          <div class="ov-meta">今日专注 <strong id="ov-minutes">0</strong> 分钟</div>
+          <div class="ov-big"><span id="ov-tomatoes">0</span><small data-i18n="tomatoCountUnit">个番茄</small></div>
+          <div class="ov-meta"><span data-i18n="focusTodayLabel">今日专注</span> <strong id="ov-minutes">0</strong><small data-i18n="minUnit">分钟</small></div>
         </div>
       </button>
 
       <button class="overview-card" data-page="fortune">
         <div class="ov-head">
           <span class="ov-icon">🔮</span>
-          <span class="ov-title">今日运势</span>
+          <span class="ov-title" data-i18n="cardFortune">今日运势</span>
           <span class="ov-arrow">→</span>
         </div>
         <div class="ov-body">
@@ -776,11 +806,11 @@
       <button class="overview-card" data-page="todos">
         <div class="ov-head">
           <span class="ov-icon">✅</span>
-          <span class="ov-title">待办清单</span>
+          <span class="ov-title" data-i18n="cardTodos">待办清单</span>
           <span class="ov-arrow">→</span>
         </div>
         <div class="ov-body">
-          <div class="ov-big"><span id="ov-rate">0</span><small>% 完成</small></div>
+          <div class="ov-big"><span id="ov-rate">0</span><small data-i18n="percentComplete">% 完成</small></div>
           <div class="ov-progress"><div id="ov-progress-fill"></div></div>
           <div class="ov-meta" id="ov-todo-meta">0 / 0 已完成</div>
         </div>
@@ -789,12 +819,12 @@
       <button class="overview-card" data-page="stats">
         <div class="ov-head">
           <span class="ov-icon">📊</span>
-          <span class="ov-title">统计看板</span>
+          <span class="ov-title" data-i18n="cardStats">统计看板</span>
           <span class="ov-arrow">→</span>
         </div>
         <div class="ov-body">
           <div class="ov-mini-chart" id="ov-mini-chart"></div>
-          <div class="ov-meta">最近 7 天专注时长</div>
+          <div class="ov-meta" data-i18n="last7Days">最近 7 天专注时长</div>
         </div>
       </button>
     </div>
@@ -803,16 +833,16 @@
   <!-- ========== 番茄钟 ========== -->
   <section id="pomodoro" class="page">
     <div class="page-head">
-      <h1>番茄钟</h1>
-      <p class="sub">专注一段时间，然后好好休息</p>
+      <h1 data-i18n="pomodoroTitle">番茄钟</h1>
+      <p class="sub" data-i18n="pomodoroSub">专注一段时间，然后好好休息</p>
     </div>
 
     <div class="grid-2">
       <div class="card timer-card">
         <div class="mode-tabs">
-          <button class="mode-tab active" data-mode="focus">专注</button>
-          <button class="mode-tab" data-mode="short">短休息</button>
-          <button class="mode-tab" data-mode="long">长休息</button>
+          <button class="mode-tab active" data-mode="focus" data-i18n="focusMode">专注</button>
+          <button class="mode-tab" data-mode="short" data-i18n="shortMode">短休息</button>
+          <button class="mode-tab" data-mode="long" data-i18n="longMode">长休息</button>
         </div>
 
         <div class="timer-wrap">
@@ -828,55 +858,55 @@
 
         <div class="timer-actions">
           <button class="btn" id="btn-start">开始</button>
-          <button class="btn secondary" id="btn-reset">重置</button>
+          <button class="btn secondary" id="btn-reset" data-i18n="reset">重置</button>
         </div>
       </div>
 
       <div class="card">
-        <h2>本次专注</h2>
-        <label class="field-label" for="todo-select">关联待办（可选）</label>
+        <h2 data-i18n="currentFocus">本次专注</h2>
+        <label class="field-label" for="todo-select" data-i18n="linkTodo">关联待办（可选）</label>
         <select class="select" id="todo-select">
-          <option value="">不关联</option>
+          <option value="" data-i18n="noLink">不关联</option>
         </select>
 
         <div class="today-pill">
-          <span>今日已完成</span>
-          <strong><span id="today-count">0</span> 个番茄</strong>
+          <span data-i18n="todayCompleted">今日已完成</span>
+          <strong><span id="today-count">0</span><span data-i18n="tomatoUnit"> 个番茄</span></strong>
         </div>
 
-        <p class="hint">专注结束后会自动记录到统计页，并给关联的待办 +1 🍅</p>
+        <p class="hint" data-i18n="focusHint">专注结束后会自动记录到统计页，并给关联的待办 +1 🍅</p>
       </div>
     </div>
 
     <div class="card duration-card">
-      <h2>自定义时长</h2>
+      <h2 data-i18n="customDuration">自定义时长</h2>
       <div class="duration-grid">
         <label>
-          <span class="field-label">专注（分钟）</span>
+          <span class="field-label" data-i18n="durationFocus">专注（分钟）</span>
           <input class="input" type="number" id="dur-focus" min="1" max="180" step="1" value="25" inputmode="numeric">
         </label>
         <label>
-          <span class="field-label">短休息（分钟）</span>
+          <span class="field-label" data-i18n="durationShort">短休息（分钟）</span>
           <input class="input" type="number" id="dur-short" min="1" max="60" step="1" value="5" inputmode="numeric">
         </label>
         <label>
-          <span class="field-label">长休息（分钟）</span>
+          <span class="field-label" data-i18n="durationLong">长休息（分钟）</span>
           <input class="input" type="number" id="dur-long" min="1" max="60" step="1" value="15" inputmode="numeric">
         </label>
       </div>
       <div class="duration-actions">
-        <button class="btn" id="btn-save-duration">保存设置</button>
-        <button class="btn secondary" id="btn-reset-duration">恢复默认</button>
+        <button class="btn" id="btn-save-duration" data-i18n="saveSettings">保存设置</button>
+        <button class="btn secondary" id="btn-reset-duration" data-i18n="resetDefault">恢复默认</button>
       </div>
-      <p class="hint">专注范围 1–180 分钟，休息范围 1–60 分钟。保存后如果正在计时，会自动重置当前计时器。</p>
+      <p class="hint" data-i18n="durationHint">专注范围 1–180 分钟，休息范围 1–60 分钟。保存后如果正在计时，会自动重置当前计时器。</p>
     </div>
   </section>
 
   <!-- ========== 今日运势 ========== -->
   <section id="fortune" class="page">
     <div class="page-head">
-      <h1>今日运势</h1>
-      <p class="sub">每天抽一张塔罗牌，看看今天的能量</p>
+      <h1 data-i18n="fortuneTitle">今日运势</h1>
+      <p class="sub" data-i18n="fortuneSub">每天抽一张塔罗牌，看看今天的能量</p>
     </div>
 
     <div class="card tarot-card-wrap">
@@ -897,7 +927,7 @@
     </div>
 
     <div class="card reading-card">
-      <h2>牌义解读</h2>
+      <h2 data-i18n="readingTitle">牌义解读</h2>
       <p class="keywords" id="tarot-keywords">点击上方按钮，抽一张属于今天的牌</p>
       <p class="reading" id="tarot-reading"></p>
     </div>
@@ -906,14 +936,14 @@
   <!-- ========== 待办清单 ========== -->
   <section id="todos" class="page">
     <div class="page-head">
-      <h1>待办清单</h1>
-      <p class="sub">把要做的事写下来，专注时关联它</p>
+      <h1 data-i18n="todosTitle">待办清单</h1>
+      <p class="sub" data-i18n="todosSub">把要做的事写下来，专注时关联它</p>
     </div>
 
     <div class="card">
       <div class="todo-input-row">
-        <input class="input" id="todo-input" type="text" maxlength="60" placeholder="写一件要完成的事…">
-        <button class="btn" id="btn-add">添加</button>
+        <input class="input" id="todo-input" type="text" maxlength="60" data-i18n-placeholder="todoPlaceholder" placeholder="写一件要完成的事…">
+        <button class="btn" id="btn-add" data-i18n="addBtn">添加</button>
       </div>
 
       <div class="progress-line">
@@ -924,40 +954,40 @@
       </div>
 
       <ul class="todo-list" id="todo-list"></ul>
-      <p class="empty" id="todo-empty">还没有待办，先添加一条吧。</p>
+      <p class="empty" id="todo-empty" data-i18n="emptyTodo">还没有待办，先添加一条吧。</p>
     </div>
   </section>
 
   <!-- ========== 统计看板 ========== -->
   <section id="stats" class="page">
     <div class="page-head">
-      <h1>今日概览</h1>
-      <p class="sub">专注与完成情况一目了然</p>
+      <h1 data-i18n="statsTitle">今日概览</h1>
+      <p class="sub" data-i18n="statsSub">专注与完成情况一目了然</p>
     </div>
 
     <div class="stat-grid">
       <div class="card stat-card">
-        <span class="stat-label">今日专注</span>
-        <strong><span id="stat-minutes">0</span><small>分钟</small></strong>
+        <span class="stat-label" data-i18n="statFocusToday">今日专注</span>
+        <strong><span id="stat-minutes">0</span><small data-i18n="minUnit">分钟</small></strong>
       </div>
       <div class="card stat-card">
-        <span class="stat-label">今日番茄</span>
-        <strong><span id="stat-tomatoes">0</span><small>个</small></strong>
+        <span class="stat-label" data-i18n="statPomodorosToday">今日番茄</span>
+        <strong><span id="stat-tomatoes">0</span><small data-i18n="tomatoCountUnit">个</small></strong>
       </div>
       <div class="card stat-card">
-        <span class="stat-label">待办完成率</span>
+        <span class="stat-label" data-i18n="statTodoRate">待办完成率</span>
         <strong><span id="stat-rate">0</span><small>%</small></strong>
       </div>
     </div>
 
     <div class="grid-2">
       <div class="card">
-        <h2>最近 7 天专注</h2>
+        <h2 data-i18n="statLast7">最近 7 天专注</h2>
         <div class="bar-chart" id="bar-chart"></div>
       </div>
 
       <div class="card donut-card">
-        <h2>待办完成情况</h2>
+        <h2 data-i18n="statTodoStatus">待办完成情况</h2>
         <div class="donut" id="donut-rate" style="--p:0">
           <div class="donut-inner" id="donut-rate-text">0%</div>
         </div>
@@ -968,11 +998,11 @@
 </main>
 
 <nav class="mobile-nav">
-  <button data-page="home" class="active"><span class="ico">🏠</span>首页</button>
-  <button data-page="pomodoro"><span class="ico">🍅</span>番茄</button>
-  <button data-page="fortune"><span class="ico">🔮</span>运势</button>
-  <button data-page="todos"><span class="ico">✅</span>待办</button>
-  <button data-page="stats"><span class="ico">📊</span>统计</button>
+  <button data-page="home" class="active"><span class="ico">🏠</span><span data-i18n="navHomeM">首页</span></button>
+  <button data-page="pomodoro"><span class="ico">🍅</span><span data-i18n="navPomodoroM">番茄</span></button>
+  <button data-page="fortune"><span class="ico">🔮</span><span data-i18n="navFortuneM">运势</span></button>
+  <button data-page="todos"><span class="ico">✅</span><span data-i18n="navTodosM">待办</span></button>
+  <button data-page="stats"><span class="ico">📊</span><span data-i18n="navStatsM">统计</span></button>
 </nav>
 
 <div class="toast" id="toast"></div>
@@ -980,6 +1010,206 @@
 <script>
 (function () {
   'use strict';
+
+  /* ============================================================
+     语言字典
+     ============================================================ */
+  var I18N = {
+    zh: {
+      navHome: '🏠 首页',
+      navPomodoro: '🍅 番茄钟',
+      navFortune: '🔮 今日运势',
+      navTodos: '✅ 待办',
+      navStats: '📊 统计',
+      navHomeM: '首页',
+      navPomodoroM: '番茄',
+      navFortuneM: '运势',
+      navTodosM: '待办',
+      navStatsM: '统计',
+
+      homeTitle: '今天也专注一点',
+      homeSub: '四个板块的概况，点卡片进入详情',
+      pomodoroTitle: '番茄钟',
+      pomodoroSub: '专注一段时间，然后好好休息',
+      fortuneTitle: '今日运势',
+      fortuneSub: '每天抽一张塔罗牌，看看今天的能量',
+      todosTitle: '待办清单',
+      todosSub: '把要做的事写下来，专注时关联它',
+      statsTitle: '今日概览',
+      statsSub: '专注与完成情况一目了然',
+
+      cardPomodoro: '番茄钟',
+      cardFortune: '今日运势',
+      cardTodos: '待办清单',
+      cardStats: '统计看板',
+
+      tomatoCountUnit: '个番茄',
+      tomatoUnit: ' 个番茄',
+      minUnit: '分钟',
+      percentComplete: '% 完成',
+      focusTodayLabel: '今日专注',
+      last7Days: '最近 7 天专注时长',
+
+      notDrawn: '还没抽牌',
+      tapToDraw: '点进去抽一张',
+      ovTodoMetaTpl: '{d} / {t} 已完成',
+
+      focusMode: '专注',
+      shortMode: '短休息',
+      longMode: '长休息',
+      timerFocusing: '专注中',
+      timerShortBreak: '短休息',
+      timerLongBreak: '长休息',
+
+      start: '开始',
+      pause: '暂停',
+      resume: '继续',
+      reset: '重置',
+
+      currentFocus: '本次专注',
+      linkTodo: '关联待办（可选）',
+      noLink: '不关联',
+      todayCompleted: '今日已完成',
+      focusHint: '专注结束后会自动记录到统计页，并给关联的待办 +1 🍅',
+
+      customDuration: '自定义时长',
+      durationFocus: '专注（分钟）',
+      durationShort: '短休息（分钟）',
+      durationLong: '长休息（分钟）',
+      saveSettings: '保存设置',
+      resetDefault: '恢复默认',
+      durationHint: '专注范围 1–180 分钟，休息范围 1–60 分钟。保存后如果正在计时，会自动重置当前计时器。',
+
+      drawCard: '抽一张牌',
+      comeBackTomorrow: '明天再来',
+      dailyHint: '今天已经抽过啦，明天再来吧',
+      readingTitle: '牌义解读',
+      readingHint: '点击上方按钮，抽一张属于今天的牌',
+      alreadyDrawnToast: '今天已经抽过了，明天再来吧',
+
+      todoPlaceholder: '写一件要完成的事…',
+      addBtn: '添加',
+      pleaseEnter: '先写点什么吧',
+      addedToast: '已添加',
+      emptyTodo: '还没有待办，先添加一条吧。',
+
+      statFocusToday: '今日专注',
+      statPomodorosToday: '今日番茄',
+      statTodoRate: '待办完成率',
+      statLast7: '最近 7 天专注',
+      statTodoStatus: '待办完成情况',
+
+      focusDoneToast: '专注完成！休息一下吧 🎉',
+      breakDoneToast: '休息结束，继续专注吧 💪',
+      pauseFirstToast: '先暂停或重置再切换模式',
+      settingsSavedToast: '设置已保存',
+      defaultsRestoredToast: '已恢复默认时长',
+
+      langBtnText: 'EN',
+      docTitle: 'Focus & Tarot · 专注小站'
+    },
+    en: {
+      navHome: '🏠 Home',
+      navPomodoro: '🍅 Pomodoro',
+      navFortune: '🔮 Fortune',
+      navTodos: '✅ Todos',
+      navStats: '📊 Stats',
+      navHomeM: 'Home',
+      navPomodoroM: 'Pomo',
+      navFortuneM: 'Tarot',
+      navTodosM: 'Todo',
+      navStatsM: 'Stats',
+
+      homeTitle: "Stay focused today",
+      homeSub: 'A quick overview of all four sections. Tap a card to open it.',
+      pomodoroTitle: 'Pomodoro',
+      pomodoroSub: 'Focus for a while, then take a good break.',
+      fortuneTitle: "Today's Fortune",
+      fortuneSub: "Draw one tarot card a day to check today's energy.",
+      todosTitle: 'Todo List',
+      todosSub: 'Write down what you need to do and link it during focus.',
+      statsTitle: "Today's Overview",
+      statsSub: 'A clear view of focus and completion.',
+
+      cardPomodoro: 'Pomodoro',
+      cardFortune: 'Fortune',
+      cardTodos: 'Todos',
+      cardStats: 'Stats',
+
+      tomatoCountUnit: 'tomatoes',
+      tomatoUnit: ' tomatoes',
+      minUnit: 'min',
+      percentComplete: '% done',
+      focusTodayLabel: 'Focus today',
+      last7Days: 'Focus time in the last 7 days',
+
+      notDrawn: 'Not drawn yet',
+      tapToDraw: 'Tap to draw',
+      ovTodoMetaTpl: '{d} / {t} completed',
+
+      focusMode: 'Focus',
+      shortMode: 'Short break',
+      longMode: 'Long break',
+      timerFocusing: 'Focusing',
+      timerShortBreak: 'Short break',
+      timerLongBreak: 'Long break',
+
+      start: 'Start',
+      pause: 'Pause',
+      resume: 'Resume',
+      reset: 'Reset',
+
+      currentFocus: 'This session',
+      linkTodo: 'Link a todo (optional)',
+      noLink: 'None',
+      todayCompleted: 'Completed today',
+      focusHint: 'After a focus session, it will be recorded on the stats page and the linked todo gets +1 🍅',
+
+      customDuration: 'Custom durations',
+      durationFocus: 'Focus (min)',
+      durationShort: 'Short break (min)',
+      durationLong: 'Long break (min)',
+      saveSettings: 'Save',
+      resetDefault: 'Reset to defaults',
+      durationHint: "Focus 1–180 min, breaks 1–60 min. Saving will reset the current timer if it's running.",
+
+      drawCard: 'Draw a card',
+      comeBackTomorrow: 'Come back tomorrow',
+      dailyHint: "You've already drawn today. Come back tomorrow.",
+      readingTitle: 'Interpretation',
+      readingHint: "Tap the button above to draw today's card.",
+      alreadyDrawnToast: 'Already drawn today. Come back tomorrow.',
+
+      todoPlaceholder: 'What do you need to finish?',
+      addBtn: 'Add',
+      pleaseEnter: 'Please write something',
+      addedToast: 'Added',
+      emptyTodo: 'No todos yet. Add one to get started.',
+
+      statFocusToday: 'Focus today',
+      statPomodorosToday: 'Pomodoros today',
+      statTodoRate: 'Todo completion',
+      statLast7: 'Focus in last 7 days',
+      statTodoStatus: 'Todo completion',
+
+      focusDoneToast: 'Focus done! Take a break 🎉',
+      breakDoneToast: "Break's over. Time to focus 💪",
+      pauseFirstToast: 'Pause or reset first before switching modes',
+      settingsSavedToast: 'Settings saved',
+      defaultsRestoredToast: 'Defaults restored',
+
+      langBtnText: '中',
+      docTitle: 'Focus & Tarot · Focus Station'
+    }
+  };
+
+  var LANG_KEY = 'ft_lang';
+  var lang = localStorage.getItem(LANG_KEY) || 'zh';
+  if (!I18N[lang]) lang = 'zh';
+
+  function t(key) {
+    return I18N[lang][key] != null ? I18N[lang][key] : key;
+  }
 
   /* ---------- 通用工具 ---------- */
   var toastTimer = null;
@@ -1022,10 +1252,10 @@
     if (from === to) { el.textContent = to; return; }
     var start = performance.now();
     function step(now) {
-      var t = Math.min((now - start) / duration, 1);
-      var eased = 1 - Math.pow(1 - t, 3);
+      var tt = Math.min((now - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - tt, 3);
       el.textContent = Math.round(from + (to - from) * eased);
-      if (t < 1) requestAnimationFrame(step);
+      if (tt < 1) requestAnimationFrame(step);
       else el.textContent = to;
     }
     requestAnimationFrame(step);
@@ -1127,6 +1357,108 @@
     localStorage.setItem(DURATION_KEY, JSON.stringify(durations));
   }
 
+  /* ---------- 塔罗数据 ---------- */
+  var TAROT = [
+    {
+      symbol: '🃏',
+      zh: { name: '愚者', keywords: '新开始 · 冒险 · 纯真',
+        reading: '今天适合迈出一小步。不必把路想得很清楚，先出发，答案会在路上慢慢出现。放下对"必须完美"的执念，给自己一次轻松尝试的机会。' },
+      en: { name: 'The Fool', keywords: 'New Beginnings · Adventure · Innocence',
+        reading: "Take a small step today. You don't need the whole path figured out—just start, and answers will appear along the way. Let go of the need to be perfect." }
+    },
+    {
+      symbol: '✨',
+      zh: { name: '魔术师', keywords: '创造力 · 行动 · 资源',
+        reading: '你手边已有的东西，比你以为的更有用。今天适合把想法落到具体动作上，写下第一行字、发出第一条消息、开始第一个 25 分钟。' },
+      en: { name: 'The Magician', keywords: 'Creativity · Action · Resources',
+        reading: 'What you already have is more useful than you think. Put ideas into concrete action today: write the first line, send the first message, start the first 25 minutes.' }
+    },
+    {
+      symbol: '🌙',
+      zh: { name: '女祭司', keywords: '直觉 · 内省 · 静默',
+        reading: '今天不必急着表达。安静一点，听听自己真实的想法。有些答案不在搜索框里，而在你独处时冒出来的那个念头上。' },
+      en: { name: 'The High Priestess', keywords: 'Intuition · Introspection · Silence',
+        reading: "No need to rush to express. Quiet down and listen to what you really think. Some answers don't live in a search bar—they come up when you're alone." }
+    },
+    {
+      symbol: '👑',
+      zh: { name: '皇后', keywords: '丰盛 · 滋养 · 感官',
+        reading: '适合照顾自己。好好吃一顿饭，整理一下桌面，给身体一点舒展。被滋养的状态，才撑得起长时间的专注。' },
+      en: { name: 'The Empress', keywords: 'Abundance · Nurturing · Senses',
+        reading: 'Take care of yourself. Eat a proper meal, tidy your desk, stretch. Only a nourished body can hold long stretches of focus.' }
+    },
+    {
+      symbol: '🛡️',
+      zh: { name: '皇帝', keywords: '秩序 · 掌控 · 责任',
+        reading: '今天适合建立结构。列一份清单，排出优先级，把混乱的事情归位。秩序不是束缚，而是让你更省力地前进。' },
+      en: { name: 'The Emperor', keywords: 'Order · Control · Responsibility',
+        reading: 'Build structure today. Make a list, set priorities, put messy things back in order. Structure frees you up rather than tying you down.' }
+    },
+    {
+      symbol: '💞',
+      zh: { name: '恋人', keywords: '选择 · 结合 · 价值',
+        reading: '今天可能会面对一个选择。别只看哪个更容易，问问自己更在意什么。诚实的选择，后面走起来才不会拧巴。' },
+      en: { name: 'The Lovers', keywords: 'Choice · Union · Values',
+        reading: "A choice might come up. Don't just pick the easier one—ask what you actually care about. An honest choice is easier to walk with later." }
+    },
+    {
+      symbol: '🏎️',
+      zh: { name: '战车', keywords: '意志 · 前进 · 胜利',
+        reading: '今天适合推进。把注意力收拢到一件事上，哪怕只做 25 分钟，也比同时开五个头强。方向对了，速度自然会上来。' },
+      en: { name: 'The Chariot', keywords: 'Willpower · Progress · Victory',
+        reading: 'A day to push forward. Narrow your attention to one thing. Even 25 minutes beats starting five things at once. With direction, speed will follow.' }
+    },
+    {
+      symbol: '🦁',
+      zh: { name: '力量', keywords: '勇气 · 耐心 · 温柔',
+        reading: '真正的力量不一定是硬扛。今天试着用更温和的方式对待自己的拖延和情绪，先接纳，再一点点往前挪。' },
+      en: { name: 'Strength', keywords: 'Courage · Patience · Gentleness',
+        reading: "Real strength isn't always about pushing hard. Be gentler with your procrastination and feelings—first accept, then nudge forward." }
+    },
+    {
+      symbol: '🏔️',
+      zh: { name: '隐士', keywords: '独处 · 反思 · 指引',
+        reading: '今天适合关掉一些噪音。少刷一会儿，多留一点独处的时间。你会更容易听清自己真正想做的下一步。' },
+      en: { name: 'The Hermit', keywords: 'Solitude · Reflection · Guidance',
+        reading: "Turn down the noise today. Scroll less, give yourself some alone time. You'll hear your true next step more clearly." }
+    },
+    {
+      symbol: '🎡',
+      zh: { name: '命运之轮', keywords: '转机 · 周期 · 机遇',
+        reading: '事情正在转动。可能有计划外的变化，也可能是一个小小的机会。保持开放，别因为和预期不一样就急着否定。' },
+      en: { name: 'Wheel of Fortune', keywords: 'Turning Point · Cycles · Opportunity',
+        reading: "Things are turning. There may be unexpected changes, or a small opportunity. Stay open—don't dismiss things just because they differ from what you expected." }
+    },
+    {
+      symbol: '⭐',
+      zh: { name: '星星', keywords: '希望 · 疗愈 · 灵感',
+        reading: '今天适合做一点让自己恢复的事。喝口水、走两步、看看窗外。灵感往往在放松之后才来，而不是在硬撑的时候。' },
+      en: { name: 'The Star', keywords: 'Hope · Healing · Inspiration',
+        reading: "Do something restorative today. Drink water, take a short walk, look out the window. Inspiration usually comes after rest, not while you're grinding." }
+    },
+    {
+      symbol: '🌊',
+      zh: { name: '月亮', keywords: '潜意识 · 迷雾 · 情绪',
+        reading: '今天的情绪可能有点起伏，别急着下结论。给不确定留一点空间，等雾散一点再看，会比现在清楚得多。' },
+      en: { name: 'The Moon', keywords: 'Subconscious · Mystery · Emotion',
+        reading: "Your feelings may swing a bit today—don't jump to conclusions. Give uncertainty some space. It'll be clearer once the fog lifts." }
+    },
+    {
+      symbol: '☀️',
+      zh: { name: '太阳', keywords: '活力 · 成功 · 清晰',
+        reading: '状态不错的一天。适合把最重要的事放在前面做，也适合把开心分享给别人。好状态值得被好好利用。' },
+      en: { name: 'The Sun', keywords: 'Vitality · Success · Clarity',
+        reading: 'A good-energy day. Put the most important thing first, and share your joy with others. Good states deserve to be used well.' }
+    },
+    {
+      symbol: '🌍',
+      zh: { name: '世界', keywords: '完成 · 圆满 · 旅程',
+        reading: '适合收尾。把拖着没结束的小事做完，给自己一个明确的结束感。完成本身，就是最好的奖励。' },
+      en: { name: 'The World', keywords: 'Completion · Fulfillment · Journey',
+        reading: "A day for closure. Finish small tasks you've been putting off, and give yourself a clear sense of ending. Completion itself is the reward." }
+    }
+  ];
+
   /* ---------- 首页概况 ---------- */
   function renderHome() {
     var today = todayStr();
@@ -1139,24 +1471,31 @@
     countUp(document.getElementById('ov-tomatoes'), todayRecords.length);
     countUp(document.getElementById('ov-minutes'), todayMinutes);
 
-    var doneCount = todos.filter(function (t) { return t.done; }).length;
+    var doneCount = todos.filter(function (x) { return x.done; }).length;
     var rate = todos.length ? Math.round(doneCount / todos.length * 100) : 0;
 
     countUp(document.getElementById('ov-rate'), rate);
     var fill = document.getElementById('ov-progress-fill');
     if (fill) fill.style.width = rate + '%';
-    document.getElementById('ov-todo-meta').textContent =
-      doneCount + ' / ' + todos.length + ' 已完成';
+
+    var metaEl = document.getElementById('ov-todo-meta');
+    if (metaEl) {
+      var tpl = t('ovTodoMetaTpl');
+      metaEl.textContent = tpl
+        .replace('{d}', doneCount)
+        .replace('{t}', todos.length);
+    }
 
     if (dailyTarot && TAROT[dailyTarot.index]) {
       var card = TAROT[dailyTarot.index];
+      var data = card[lang] || card.zh;
       document.getElementById('ov-tarot-symbol').textContent = card.symbol;
-      document.getElementById('ov-tarot-name').textContent = card.name;
-      document.getElementById('ov-tarot-key').textContent = card.keywords;
+      document.getElementById('ov-tarot-name').textContent = data.name;
+      document.getElementById('ov-tarot-key').textContent = data.keywords;
     } else {
       document.getElementById('ov-tarot-symbol').textContent = '✦';
-      document.getElementById('ov-tarot-name').textContent = '还没抽牌';
-      document.getElementById('ov-tarot-key').textContent = '点进去抽一张';
+      document.getElementById('ov-tarot-name').textContent = t('notDrawn');
+      document.getElementById('ov-tarot-key').textContent = t('tapToDraw');
     }
 
     renderMiniChart();
@@ -1193,30 +1532,30 @@
     var currentSelectValue = select.value;
 
     list.innerHTML = '';
-    todos.forEach(function (t) {
+    todos.forEach(function (td) {
       var li = document.createElement('li');
-      li.className = 'todo-item' + (t.done ? ' done' : '');
+      li.className = 'todo-item' + (td.done ? ' done' : '');
       li.innerHTML =
-        '<button class="todo-check" data-id="' + t.id + '" aria-label="切换完成">' +
-          (t.done ? '✓' : '') +
+        '<button class="todo-check" data-id="' + td.id + '" aria-label="toggle">' +
+          (td.done ? '✓' : '') +
         '</button>' +
-        '<span class="todo-text">' + escapeHtml(t.text) + '</span>' +
-        '<span class="todo-tomato">🍅' + (t.tomatoes || 0) + '</span>' +
-        '<button class="todo-del" data-id="' + t.id + '" aria-label="删除">×</button>';
+        '<span class="todo-text">' + escapeHtml(td.text) + '</span>' +
+        '<span class="todo-tomato">🍅' + (td.tomatoes || 0) + '</span>' +
+        '<button class="todo-del" data-id="' + td.id + '" aria-label="delete">×</button>';
       list.appendChild(li);
     });
     empty.style.display = todos.length ? 'none' : 'block';
 
-    var done = todos.filter(function (t) { return t.done; }).length;
+    var done = todos.filter(function (x) { return x.done; }).length;
     var rate = todos.length ? Math.round(done / todos.length * 100) : 0;
     document.getElementById('todo-progress-fill').style.width = rate + '%';
     document.getElementById('todo-progress-text').textContent = rate + '%';
 
-    select.innerHTML = '<option value="">不关联</option>';
-    todos.filter(function (t) { return !t.done; }).forEach(function (t) {
+    select.innerHTML = '<option value="">' + t('noLink') + '</option>';
+    todos.filter(function (x) { return !x.done; }).forEach(function (x) {
       var opt = document.createElement('option');
-      opt.value = t.id;
-      opt.textContent = t.text;
+      opt.value = x.id;
+      opt.textContent = x.text;
       select.appendChild(opt);
     });
     var stillExists = Array.prototype.some.call(select.options, function (o) {
@@ -1231,12 +1570,12 @@
   function addTodo() {
     var input = document.getElementById('todo-input');
     var text = input.value.trim();
-    if (!text) { toast('先写点什么吧'); input.focus(); return; }
+    if (!text) { toast(t('pleaseEnter')); input.focus(); return; }
     todos.push({ id: Date.now(), text: text, done: false, tomatoes: 0 });
     input.value = '';
     saveTodos();
     renderTodos();
-    toast('已添加');
+    toast(t('addedToast'));
   }
 
   document.getElementById('btn-add').addEventListener('click', addTodo);
@@ -1250,8 +1589,8 @@
 
     if (check) {
       var id = Number(check.dataset.id);
-      var t = todos.find(function (x) { return x.id === id; });
-      if (t) { t.done = !t.done; saveTodos(); renderTodos(); }
+      var td = todos.find(function (x) { return x.id === id; });
+      if (td) { td.done = !td.done; saveTodos(); renderTodos(); }
     }
 
     if (del) {
@@ -1264,9 +1603,9 @@
 
   /* ---------- 番茄钟 ---------- */
   var MODES = {
-    focus: { minutes: durations.focus, label: '专注中', color: '#E4572E' },
-    short: { minutes: durations.short, label: '短休息', color: '#5B8C6E' },
-    long:  { minutes: durations.long,  label: '长休息', color: '#6B5B95' }
+    focus: { minutes: durations.focus, labelKey: 'timerFocusing', color: '#E4572E' },
+    short: { minutes: durations.short, labelKey: 'timerShortBreak', color: '#5B8C6E' },
+    long:  { minutes: durations.long,  labelKey: 'timerLongBreak',  color: '#6B5B95' }
   };
   var CIRCUMFERENCE = 565.49;
 
@@ -1275,12 +1614,21 @@
   var remaining = totalSeconds;
   var running = false;
   var timerId = null;
+  var startBtnState = 'start'; // 'start' | 'pause' | 'resume'
 
   var displayEl = document.getElementById('timer-display');
   var labelEl = document.getElementById('timer-label');
   var ringEl = document.getElementById('ring-fg');
   var startBtn = document.getElementById('btn-start');
-  var resetBtn = document.getElementById('btn-reset');
+
+  function updateStartBtn() {
+    startBtn.textContent = t(startBtnState);
+  }
+
+  function setStartBtn(state) {
+    startBtnState = state;
+    updateStartBtn();
+  }
 
   function updateTimerUI() {
     var m = Math.floor(remaining / 60);
@@ -1290,7 +1638,7 @@
     var ratio = totalSeconds > 0 ? remaining / totalSeconds : 0;
     ringEl.style.strokeDashoffset = CIRCUMFERENCE * (1 - ratio);
     ringEl.style.stroke = MODES[mode].color;
-    labelEl.textContent = MODES[mode].label;
+    labelEl.textContent = t(MODES[mode].labelKey);
   }
 
   function tick() {
@@ -1308,13 +1656,13 @@
     clearInterval(timerId);
     timerId = null;
     running = false;
-    startBtn.textContent = '开始';
+    setStartBtn('start');
 
     if (mode === 'focus') {
       addFocusRecord();
-      toast('专注完成！休息一下吧 🎉');
+      toast(t('focusDoneToast'));
     } else {
-      toast('休息结束，继续专注吧 💪');
+      toast(t('breakDoneToast'));
     }
 
     remaining = totalSeconds;
@@ -1334,8 +1682,8 @@
     saveRecords();
 
     if (todoId) {
-      var t = todos.find(function (x) { return x.id === todoId; });
-      if (t) { t.tomatoes = (t.tomatoes || 0) + 1; saveTodos(); }
+      var td = todos.find(function (x) { return x.id === todoId; });
+      if (td) { td.tomatoes = (td.tomatoes || 0) + 1; saveTodos(); }
     }
 
     renderTodos();
@@ -1347,7 +1695,7 @@
     clearInterval(timerId);
     timerId = null;
     running = false;
-    startBtn.textContent = '开始';
+    setStartBtn('start');
     totalSeconds = MODES[mode].minutes * 60;
     remaining = totalSeconds;
     updateTimerUI();
@@ -1358,29 +1706,29 @@
       clearInterval(timerId);
       timerId = null;
       running = false;
-      startBtn.textContent = '继续';
+      setStartBtn('resume');
     } else {
       if (remaining <= 0) remaining = totalSeconds;
       running = true;
-      startBtn.textContent = '暂停';
+      setStartBtn('pause');
       timerId = setInterval(tick, 1000);
     }
   });
 
-  resetBtn.addEventListener('click', function () {
+  document.getElementById('btn-reset').addEventListener('click', function () {
     stopAndResetTimer();
   });
 
   document.querySelectorAll('.mode-tab').forEach(function (tab) {
     tab.addEventListener('click', function () {
-      if (running) { toast('先暂停或重置再切换模式'); return; }
+      if (running) { toast(t('pauseFirstToast')); return; }
       mode = tab.dataset.mode;
-      document.querySelectorAll('.mode-tab').forEach(function (t) {
-        t.classList.toggle('active', t === tab);
+      document.querySelectorAll('.mode-tab').forEach(function (tb) {
+        tb.classList.toggle('active', tb === tab);
       });
       totalSeconds = MODES[mode].minutes * 60;
       remaining = totalSeconds;
-      startBtn.textContent = '开始';
+      setStartBtn('start');
       updateTimerUI();
     });
   });
@@ -1413,7 +1761,7 @@
     syncDurationInputs();
     stopAndResetTimer();
 
-    toast('设置已保存');
+    toast(t('settingsSavedToast'));
   });
 
   document.getElementById('btn-reset-duration').addEventListener('click', function () {
@@ -1427,41 +1775,10 @@
     syncDurationInputs();
     stopAndResetTimer();
 
-    toast('已恢复默认时长');
+    toast(t('defaultsRestoredToast'));
   });
 
   /* ---------- 塔罗 ---------- */
-  var TAROT = [
-    { name: '愚者', en: 'The Fool', symbol: '🃏', keywords: '新开始 · 冒险 · 纯真',
-      reading: '今天适合迈出一小步。不必把路想得很清楚，先出发，答案会在路上慢慢出现。放下对“必须完美”的执念，给自己一次轻松尝试的机会。' },
-    { name: '魔术师', en: 'The Magician', symbol: '✨', keywords: '创造力 · 行动 · 资源',
-      reading: '你手边已有的东西，比你以为的更有用。今天适合把想法落到具体动作上，写下第一行字、发出第一条消息、开始第一个 25 分钟。' },
-    { name: '女祭司', en: 'The High Priestess', symbol: '🌙', keywords: '直觉 · 内省 · 静默',
-      reading: '今天不必急着表达。安静一点，听听自己真实的想法。有些答案不在搜索框里，而在你独处时冒出来的那个念头上。' },
-    { name: '皇后', en: 'The Empress', symbol: '👑', keywords: '丰盛 · 滋养 · 感官',
-      reading: '适合照顾自己。好好吃一顿饭，整理一下桌面，给身体一点舒展。被滋养的状态，才撑得起长时间的专注。' },
-    { name: '皇帝', en: 'The Emperor', symbol: '🛡️', keywords: '秩序 · 掌控 · 责任',
-      reading: '今天适合建立结构。列一份清单，排出优先级，把混乱的事情归位。秩序不是束缚，而是让你更省力地前进。' },
-    { name: '恋人', en: 'The Lovers', symbol: '💞', keywords: '选择 · 结合 · 价值',
-      reading: '今天可能会面对一个选择。别只看哪个更容易，问问自己更在意什么。诚实的选择，后面走起来才不会拧巴。' },
-    { name: '战车', en: 'The Chariot', symbol: '🏎️', keywords: '意志 · 前进 · 胜利',
-      reading: '今天适合推进。把注意力收拢到一件事上，哪怕只做 25 分钟，也比同时开五个头强。方向对了，速度自然会上来。' },
-    { name: '力量', en: 'Strength', symbol: '🦁', keywords: '勇气 · 耐心 · 温柔',
-      reading: '真正的力量不一定是硬扛。今天试着用更温和的方式对待自己的拖延和情绪，先接纳，再一点点往前挪。' },
-    { name: '隐士', en: 'The Hermit', symbol: '🏔️', keywords: '独处 · 反思 · 指引',
-      reading: '今天适合关掉一些噪音。少刷一会儿，多留一点独处的时间。你会更容易听清自己真正想做的下一步。' },
-    { name: '命运之轮', en: 'Wheel of Fortune', symbol: '🎡', keywords: '转机 · 周期 · 机遇',
-      reading: '事情正在转动。可能有计划外的变化，也可能是一个小小的机会。保持开放，别因为和预期不一样就急着否定。' },
-    { name: '星星', en: 'The Star', symbol: '⭐', keywords: '希望 · 疗愈 · 灵感',
-      reading: '今天适合做一点让自己恢复的事。喝口水、走两步、看看窗外。灵感往往在放松之后才来，而不是在硬撑的时候。' },
-    { name: '月亮', en: 'The Moon', symbol: '🌊', keywords: '潜意识 · 迷雾 · 情绪',
-      reading: '今天的情绪可能有点起伏，别急着下结论。给不确定留一点空间，等雾散一点再看，会比现在清楚得多。' },
-    { name: '太阳', en: 'The Sun', symbol: '☀️', keywords: '活力 · 成功 · 清晰',
-      reading: '状态不错的一天。适合把最重要的事放在前面做，也适合把开心分享给别人。好状态值得被好好利用。' },
-    { name: '世界', en: 'The World', symbol: '🌍', keywords: '完成 · 圆满 · 旅程',
-      reading: '适合收尾。把拖着没结束的小事做完，给自己一个明确的结束感。完成本身，就是最好的奖励。' }
-  ];
-
   function hasDrawnToday() {
     return dailyTarot && dailyTarot.date === todayStr() &&
       typeof dailyTarot.index === 'number';
@@ -1475,23 +1792,39 @@
   }
 
   function renderTarotCard(card) {
+    var data = card[lang] || card.zh;
     document.getElementById('tarot-symbol').textContent = card.symbol;
-    document.getElementById('tarot-name').textContent = card.name;
-    document.getElementById('tarot-en').textContent = card.en;
-    document.getElementById('tarot-keywords').textContent = card.keywords;
-    document.getElementById('tarot-reading').textContent = card.reading;
+    document.getElementById('tarot-name').textContent = data.name;
+    document.getElementById('tarot-en').textContent = card.en.name;
+    document.getElementById('tarot-keywords').textContent = data.keywords;
+    document.getElementById('tarot-reading').textContent = data.reading;
+  }
+
+  function updateDrawBtn() {
+    var btn = document.getElementById('btn-draw');
+    var hint = document.getElementById('tarot-daily-hint');
+    if (hasDrawnToday()) {
+      btn.textContent = t('comeBackTomorrow');
+      btn.disabled = true;
+      hint.hidden = false;
+      hint.textContent = t('dailyHint');
+    } else {
+      btn.textContent = t('drawCard');
+      btn.disabled = false;
+      hint.hidden = true;
+    }
   }
 
   function syncFortunePage() {
-    var btn = document.getElementById('btn-draw');
-    var hint = document.getElementById('tarot-daily-hint');
     var cardEl = document.getElementById('tarot-card');
+    var keywordsEl = document.getElementById('tarot-keywords');
+    var readingEl = document.getElementById('tarot-reading');
 
     if (!hasDrawnToday()) {
       cardEl.classList.remove('flipped');
-      btn.textContent = '抽一张牌';
-      btn.disabled = false;
-      hint.hidden = true;
+      updateDrawBtn();
+      keywordsEl.textContent = t('readingHint');
+      readingEl.textContent = '';
       return;
     }
 
@@ -1499,11 +1832,8 @@
     if (!card) return;
 
     renderTarotCard(card);
-    btn.textContent = '明天再来';
-    btn.disabled = true;
-    hint.hidden = false;
+    updateDrawBtn();
 
-    // 稍微延迟，让翻转动画能被看到
     setTimeout(function () {
       cardEl.classList.add('flipped');
     }, 120);
@@ -1515,7 +1845,7 @@
     if (drawing) return;
 
     if (hasDrawnToday()) {
-      toast('今天已经抽过了，明天再来吧');
+      toast(t('alreadyDrawnToast'));
       return;
     }
 
@@ -1537,10 +1867,7 @@
       renderTarotCard(card);
       cardEl.classList.add('flipped');
 
-      btn.textContent = '明天再来';
-      btn.disabled = true;
-      document.getElementById('tarot-daily-hint').hidden = false;
-
+      updateDrawBtn();
       drawing = false;
       renderHome();
     }, wasFlipped ? 680 : 120);
@@ -1557,7 +1884,7 @@
     countUp(document.getElementById('stat-minutes'), todayMinutes);
     countUp(document.getElementById('stat-tomatoes'), todayRecords.length);
 
-    var doneCount = todos.filter(function (t) { return t.done; }).length;
+    var doneCount = todos.filter(function (x) { return x.done; }).length;
     var rate = todos.length ? Math.round(doneCount / todos.length * 100) : 0;
     countUp(document.getElementById('stat-rate'), rate);
 
@@ -1575,7 +1902,10 @@
     var chart = document.getElementById('bar-chart');
     chart.innerHTML = '';
 
-    var weekLabels = ['日', '一', '二', '三', '四', '五', '六'];
+    var weekLabels = lang === 'en'
+      ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+      : ['日', '一', '二', '三', '四', '五', '六'];
+
     var values = [];
 
     for (var i = 6; i >= 0; i--) {
@@ -1618,18 +1948,51 @@
     });
   }
 
+  /* ---------- 语言应用 ---------- */
+  function applyLang() {
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    document.title = t('docTitle');
+
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.dataset.i18n;
+      var val = I18N[lang][key];
+      if (val != null) el.textContent = val;
+    });
+
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+      var key = el.dataset.i18nPlaceholder;
+      var val = I18N[lang][key];
+      if (val != null) el.placeholder = val;
+    });
+
+    var toggleBtn = document.getElementById('lang-toggle');
+    toggleBtn.textContent = t('langBtnText');
+
+    // 动态内容重新渲染
+    updateStartBtn();
+    updateTimerUI();
+    renderTodos();
+    renderStats();
+    renderHome();
+    syncFortunePage();
+  }
+
+  document.getElementById('lang-toggle').addEventListener('click', function () {
+    lang = lang === 'zh' ? 'en' : 'zh';
+    localStorage.setItem(LANG_KEY, lang);
+    applyLang();
+    toast(lang === 'zh' ? '切换到中文' : 'Switched to English');
+  });
+
   /* ---------- 初始化 ---------- */
   syncDurationInputs();
-  renderTodos();
-  renderStats();
-  renderHome();
-  updateTimerUI();
+  syncFortunePage(); // 语言切换前先显示一次中文内容
+
+  // 应用保存的语言（会重新渲染所有动态内容）
+  applyLang();
 
   var activePage = document.querySelector('.page.active');
   if (activePage) applyStagger(activePage);
-
-  // 初始化时如果今天已抽过牌，让运势页保持锁定状态
-  syncFortunePage();
 
 })();
 </script>
