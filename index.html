@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Focus & Tarot · 专注小站</title>
+
+<!-- ============================================================
+     【第 1 段：CSS 样式】
+     位置：<head> 里面的 <style> 标签中
+     作用：控制整个网站的颜色、圆角、布局、手机/电脑适配
+     ============================================================ -->
+<style>
+  :root {
+    --bg: #F7F3EE;
+    --card: #FFFFFF;
+    --primary: #E4572E;
+    --primary-soft: #F08A5D;
+    --accent: #6B5B95;
+    --success: #5B8C6E;
+    --text: #2E2A27;
+    --muted: #7A716B;
+    --line: #EEE8E1;
+    --track: #F3EEE8;
+    --radius: 16px;
+    --shadow: 0 8px 24px rgba(0,0,0,.06);
+    --maxw: 1100px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100dvh;
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1, h2, p { margin: 0; }
+  h1 { font-size: 24px; line-height: 1.3; }
+  h2 { font-size: 17px; margin-bottom: 12px; }
+  button { font-family: inherit; }
+
+  /* 顶部栏 */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(247,243,238,.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner {
+    max-width: var(--maxw); margin: 0 auto;
+    padding: 12px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .logo { font-weight: 800; font-size: 17px; letter-spacing: .3px; white-space: nowrap; }
+  .logo span { color: var(--primary); }
+  .desktop-nav { display: flex; gap: 4px; }
+  .desktop-nav button {
+    border: 0; background: none; padding: 8px 14px; border-radius: 999px;
+    font-size: 15px; color: var(--muted); cursor: pointer;
+    transition: background .2s, color .2s;
+  }
+  .desktop-nav button.active { background: var(--primary); color: #fff; }
+
+  /* 主体 */
+  .app { max-width: var(--maxw); margin: 0 auto; padding: 20px 16px 96px; }
+  .page { display: none; }
+  .page.active { display: block; animation: fadeIn .25s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .page-head { margin-bottom: 16px; }
+  .page-head .sub { color: var(--muted); font-size: 14px; margin-top: 2px; }
+  .card {
+    background: var(--card); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px;
+  }
+  .grid-2 { display: grid; gap: 16px; }
+  .grid-2 > .card { margin-bottom: 0; }
+  @media (min-width: 769px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+  /* 按钮 / 输入 */
+  .btn {
+    min-height: 44px; padding: 0 22px; border: 0; border-radius: 999px;
+    background: var(--primary); color: #fff; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: transform .15s, filter .15s;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn:hover { filter: brightness(1.05); }
+  .btn.secondary { background: var(--track); color: var(--text); }
+  .btn:disabled { opacity: .55; cursor: default; }
+  .input, .select {
+    width: 100%; min-height: 44px; border: 1px solid var(--line);
+    border-radius: 12px; padding: 0 14px; font-size: 15px; font-family: inherit;
+    background: #fff; color: var(--text); outline: none;
+    transition: border-color .2s;
+  }
+  .input:focus, .select:focus { border-color: var(--primary); }
+  .field-label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .hint { font-size: 13px; color: var(--muted); margin-top: 14px; }
+
+  /* 番茄钟 */
+  .mode-tabs {
+    display: flex; gap: 6px; background: var(--track);
+    border-radius: 999px; padding: 4px; margin-bottom: 20px;
+  }
+  .mode-tab {
+    flex: 1; border: 0; background: none; padding: 9px 0;
+    border-radius: 999px; font-size: 14px; color: var(--muted);
+    cursor: pointer; transition: background .2s, color .2s;
+  }
+  .mode-tab.active {
+    background: #fff; color: var(--primary);
+    font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  }
+  .timer-card { text-align: center; }
+  .timer-wrap {
+    position: relative; width: min(64vw, 240px);
+    aspect-ratio: 1 / 1; margin: 0 auto 20px;
+  }
+  .timer-ring { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--track); stroke-width: 12; }
+  .ring-fg {
+    fill: none; stroke: var(--primary); stroke-width: 12;
+    stroke-linecap: round; stroke-dasharray: 565.49;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset .4s linear, stroke .3s;
+  }
+  .timer-text {
+    position: absolute; inset: 0; display: flex;
+    flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  }
+  #timer-display {
+    font-size: clamp(34px, 9vw, 46px); font-weight: 800;
+    letter-spacing: 1px; font-variant-numeric: tabular-nums;
+  }
+  #timer-label { font-size: 13px; color: var(--muted); }
+  .timer-actions { display: flex; gap: 10px; justify-content: center; }
+  .timer-actions .btn { flex: 1; max-width: 140px; }
+  .today-pill {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--track); border-radius: 12px;
+    padding: 14px 16px; margin-top: 16px;
+    font-size: 14px; color: var(--muted);
+  }
+  .today-pill strong { color: var(--primary); font-size: 16px; }
+
+  /* 塔罗 */
+  .tarot-card-wrap { text-align: center; }
+  .tarot-wrap {
+    perspective: 1000px; width: min(62vw, 240px);
+    aspect-ratio: 2 / 3; margin: 8px auto 20px;
+  }
+  .tarot-card {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform .65s cubic-bezier(.4,.2,.2,1);
+    cursor: pointer;
+  }
+  .tarot-card.flipped { transform: rotateY(180deg); }
+  .tarot-face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: 18px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 8px; padding: 16px;
+  }
+  .tarot-back {
+    background: linear-gradient(160deg, #7C6BA6, #52447A);
+    color: rgba(255,255,255,.85); font-size: 22px; letter-spacing: 6px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.15);
+  }
+  .tarot-back span { display: block; line-height: 1; }
+  .tarot-front {
+    background: #fff; border: 1px solid var(--line);
+    transform: rotateY(180deg);
+  }
+  .tarot-symbol { font-size: 40px; line-height: 1; }
+  .tarot-front-name { font-size: 20px; font-weight: 700; }
+  .tarot-front-en {
+    font-size: 12px; color: var(--muted);
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .reading-card { transition: opacity .3s; }
+  .reading-card .keywords {
+    color: var(--accent); font-weight: 600;
+    font-size: 15px; margin-bottom: 8px;
+  }
+  .reading-card .reading { color: var(--text); font-size: 15px; line-height: 1.8; }
+
+  /* 待办 */
+  .todo-input-row { display: flex; gap: 10px; margin-bottom: 16px; }
+  .todo-input-row .btn { flex-shrink: 0; }
+  .progress-line { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .progress-track {
+    flex: 1; height: 8px; border-radius: 999px;
+    background: var(--track); overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; width: 0; border-radius: 999px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+    transition: width .35s ease;
+  }
+  #todo-progress-text {
+    font-size: 13px; color: var(--muted);
+    min-width: 38px; text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .todo-list {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .todo-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 12px;
+    background: #FBF8F4; transition: opacity .2s;
+  }
+  .todo-item.done { opacity: .55; }
+  .todo-item.done .todo-text { text-decoration: line-through; color: var(--muted); }
+  .todo-check {
+    flex-shrink: 0; width: 24px; height: 24px;
+    border-radius: 8px; border: 2px solid #D8D0C8;
+    background: #fff; color: #fff; font-size: 13px;
+    line-height: 1; cursor: pointer;
+    display: grid; place-items: center; padding: 0;
+    transition: background .2s, border-color .2s;
+  }
+  .todo-item.done .todo-check { background: var(--success); border-color: var(--success); }
+  .todo-text { flex: 1; font-size: 15px; word-break: break-word; }
+  .todo-tomato {
+    flex-shrink: 0; font-size: 12px; color: var(--muted);
+    background: var(--track); border-radius: 999px; padding: 2px 8px;
+  }
+  .todo-del {
+    flex-shrink: 0; width: 32px; height: 32px;
+    border: 0; border-radius: 50%; background: none;
+    color: #B9B0A8; font-size: 20px; line-height: 1;
+    cursor: pointer; padding: 0;
+  }
+  .todo-del:hover { color: var(--primary); background: var(--track); }
+  .empty {
+    text-align: center; color: var(--muted);
+    font-size: 14px; padding: 24px 0; display: none;
+  }
+
+  /* 统计 */
+  .stat-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 12px; margin-bottom: 16px;
+  }
+  @media (min-width: 769px) { .stat-grid { grid-template-columns: repeat(3, 1fr); } }
+  .stat-card { margin-bottom: 0; text-align: center; padding: 18px 12px; }
+  .stat-label { font-size: 13px; color: var(--muted); display: block; }
+  .stat-card strong {
+    display: block; font-size: 30px; font-weight: 800;
+    color: var(--primary); line-height: 1.3;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-card strong small { font-size: 13px; font-weight: 500; color: var(--muted); margin-left: 2px; }
+  .bar-chart {
+    display: flex; align-items: flex-end;
+    gap: 8px; height: 150px; padding-top: 8px;
+  }
+  .bar-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; gap: 6px; height: 100%; min-width: 0;
+  }
+  .bar-track {
+    flex: 1; width: 100%; background: var(--track);
+    border-radius: 8px; display: flex;
+    align-items: flex-end; overflow: hidden;
+  }
+  .bar-fill {
+    width: 100%; min-height: 3px; border-radius: 8px;
+    background: linear-gradient(180deg, var(--primary-soft), var(--primary));
+    transition: height .4s ease;
+  }
+  .bar-label { font-size: 12px; color: var(--muted); }
+  .donut-card { display: flex; flex-direction: column; align-items: center; }
+  .donut {
+    width: 140px; height: 140px; border-radius: 50%;
+    display: grid; place-items: center; margin: 12px 0 4px;
+    background: conic-gradient(var(--success) calc(var(--p) * 1%), var(--track) 0);
+  }
+  .donut-inner {
+    width: 100px; height: 100px; border-radius: 50%;
+    background: var(--card); display: grid; place-items: center;
+    font-size: 20px; font-weight: 800; color: var(--success);
+  }
+
+  /* 手机底部导航 */
+  .mobile-nav { display: none; }
+  @media (max-width: 768px) {
+    .desktop-nav { display: none; }
+    .mobile-nav {
+      display: flex; position: fixed; bottom: 0; left: 0; right: 0;
+      background: #fff; border-top: 1px solid var(--line);
+      padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
+      z-index: 100; box-shadow: 0 -4px 16px rgba(0,0,0,.04);
+    }
+    .mobile-nav button {
+      flex: 1; border: 0; background: none; padding: 4px 0;
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      font-size: 11px; color: var(--muted); cursor: pointer;
+      min-height: 48px; justify-content: center;
+    }
+    .mobile-nav button .ico { font-size: 20px; line-height: 1; }
+    .mobile-nav button.active { color: var(--primary); font-weight: 600; }
+  }
+
+  /* 提示条 */
+  .toast {
+    position: fixed; left: 50%; bottom: 92px;
+    transform: translateX(-50%) translateY(16px);
+    background: var(--text); color: #fff;
+    padding: 10px 20px; border-radius: 999px;
+    font-size: 14px; opacity: 0; pointer-events: none;
+    transition: opacity .25s, transform .25s;
+    z-index: 200; max-width: 84vw; text-align: center;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     【第 2 段：HTML 结构】
+     位置：<body> 里面
+     作用：页面上所有看得见的东西——导航、四个板块、按钮、输入框
+     顺序：顶部导航 → 四个 section（每个 section 是一个板块）→ 手机底部导航 → 提示条
+     ============================================================ -->
+
+<!-- 顶部导航（电脑端显示） -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo">Focus <span>&</span> Tarot</div>
+    <nav class="desktop-nav">
+      <button data-page="pomodoro" class="active">🍅 番茄钟</button>
+      <button data-page="fortune">🔮 今日运势</button>
+      <button data-page="todos">✅ 待办</button>
+      <button data-page="stats">📊 统计</button>
+    </nav>
+  </div>
+</header>
+
+<main class="app">
+
+  <!-- 板块 1：番茄钟 -->
+  <section id="pomodoro" class="page active">
+    <div class="page-head">
+      <h1>番茄钟</h1>
+      <p class="sub">25 分钟专注，5 分钟休息，慢慢进入状态</p>
+    </div>
+    <div class="grid-2">
+      <div class="card timer-card">
+        <div class="mode-tabs">
+          <button class="mode-tab active" data-mode="focus">专注</button>
+          <button class="mode-tab" data-mode="short">短休息</button>
+          <button class="mode-tab" data-mode="long">长休息</button>
+        </div>
+        <div class="timer-wrap">
+          <svg class="timer-ring" viewBox="0 0 200 200" aria-hidden="true">
+            <circle class="ring-bg" cx="100" cy="100" r="90"></circle>
+            <circle class="ring-fg" id="ring-fg" cx="100" cy="100" r="90"></circle>
+          </svg>
+          <div class="timer-text">
+            <div id="timer-display">25:00</div>
+            <div id="timer-label">专注中</div>
+          </div>
+        </div>
+        <div class="timer-actions">
+          <button class="btn" id="btn-start">开始</button>
+          <button class="btn secondary" id="btn-reset">重置</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>本次专注</h2>
+        <label class="field-label" for="todo-select">关联待办（可选）</label>
+        <select class="select" id="todo-select">
+          <option value="">不关联</option>
+        </select>
+        <div class="today-pill">
+          <span>今日已完成</span>
+          <strong><span id="today-count">0</span> 个番茄</strong>
+        </div>
+        <p class="hint">专注结束后会自动记录到统计页，并给关联的待办 +1 🍅</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 板块 2：今日运势 -->
+  <section id="fortune" class="page">
+    <div class="page-head">
+      <h1>今日运势</h1>
+      <p class="sub">抽一张塔罗牌，看看今天的能量</p>
+    </div>
+    <div class="card tarot-card-wrap">
+      <div class="tarot-wrap">
+        <div class="tarot-card" id="tarot-card">
+          <div class="tarot-face tarot-back">
+            <span>✦</span><span>✦</span><span>✦</span>
+          </div>
+          <div class="tarot-face tarot-front">
+            <div class="tarot-symbol" id="tarot-symbol">🔮</div>
+            <div class="tarot-front-name" id="tarot-name">—</div>
+            <div class="tarot-front-en" id="tarot-en"></div>
+          </div>
+        </div>
+      </div>
+      <button class="btn" id="btn-draw">抽一张牌</button>
+    </div>
+    <div class="card reading-card">
+      <h2>牌义解读</h2>
+      <p class="keywords" id="tarot-keywords">点击上方按钮，抽一张属于今天的牌</p>
+      <p class="reading" id="tarot-reading"></p>
+    </div>
+  </section>
+
+  <!-- 板块 3：待办清单 -->
+  <section id="todos" class="page">
+    <div class="page-head">
+      <h1>待办清单</h1>
+      <p class="sub">把要做的事写下来，专注时关联它</p>
+    </div>
+    <div class="card">
+      <div class="todo-input-row">
+        <input class="input" id="todo-input" type="text" maxlength="60" placeholder="写一件要完成的事…">
+        <button class="btn" id="btn-add">添加</button>
+      </div>
+      <div class="progress-line">
+        <div class="progress-track">
+          <div class="progress-fill" id="todo-progress-fill"></div>
+        </div>
+        <span id="todo-progress-text">0%</span>
+      </div>
+      <ul class="todo-list" id="todo-list"></ul>
+      <p class="empty" id="todo-empty">还没有待办，先添加一条吧。</p>
+    </div>
+  </section>
+
+  <!-- 板块 4：统计看板 -->
+  <section id="stats" class="page">
+    <div class="page-head">
+      <h1>今日概览</h1>
+      <p class="sub">专注与完成情况一目了然</p>
+    </div>
+    <div class="stat-grid">
+      <div class="card stat-card">
+        <span class="stat-label">今日专注</span>
+        <strong><span id="stat-minutes">0</span><small>分钟</small></strong>
+      </div>
+      <div class="card stat-card">
+        <span class="stat-label">今日番茄</span>
+        <strong><span id="stat-tomatoes">0</span><small>个</small></strong>
+      </div>
+      <div class="card stat-card">
+        <span class="stat-label">待办完成率</span>
+        <strong><span id="stat-rate">0</span><small>%</small></strong>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h2>最近 7 天专注</h2>
+        <div class="bar-chart" id="bar-chart"></div>
+      </div>
+      <div class="card donut-card">
+        <h2>待办完成情况</h2>
+        <div class="donut" id="donut-rate" style="--p:0">
+          <div class="donut-inner" id="donut-rate-text">0%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- 手机底部导航（只在手机宽度显示） -->
+<nav class="mobile-nav">
+  <button data-page="pomodoro" class="active"><span class="ico">🍅</span>番茄</button>
+  <button data-page="fortune"><span class="ico">🔮</span>运势</button>
+  <button data-page="todos"><span class="ico">✅</span>待办</button>
+  <button data-page="stats"><span class="ico">📊</span>统计</button>
+</nav>
+
+<!-- 操作提示条 -->
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     【第 3 段：JavaScript 逻辑】
+     位置：<body> 末尾的 <script> 标签中（放在最后，保证页面元素已加载）
+     作用：切换板块、番茄钟计时、抽塔罗、增删待办、读写 localStorage、渲染统计
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- 通用工具 ---------- */
+  var toastTimer = null;
+  function toast(msg) {
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2200);
+  }
+  function todayStr() {
+    var d = new Date();
+    return d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+  }
+  function dateStr(d) {
+    return d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+  }
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /* ---------- 页面切换 ---------- */
+  function switchPage(id) {
+    document.querySelectorAll('.page').forEach(function (p) {
+      p.classList.toggle('active', p.id === id);
+    });
+    document.querySelectorAll('[data-page]').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.page === id);
+    });
+    if (id === 'stats') renderStats();
+    if (id === 'todos') renderTodos();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  document.querySelectorAll('[data-page]').forEach(function (btn) {
+    btn.addEventListener('click', function () { switchPage(btn.dataset.page); });
+  });
+
+  /* ---------- 数据层 ---------- */
+  var TODO_KEY = 'ft_todos';
+  var RECORD_KEY = 'ft_records';
+  var todos = [];
+  var focusRecords = [];
+  try {
+    todos = JSON.parse(localStorage.getItem(TODO_KEY) || '[]');
+    if (!Array.isArray(todos)) todos = [];
+  } catch (e) { todos = []; }
+  try {
+    focusRecords = JSON.parse(localStorage.getItem(RECORD_KEY) || '[]');
+    if (!Array.isArray(focusRecords)) focusRecords = [];
+  } catch (e) { focusRecords = []; }
+  function saveTodos() { localStorage.setItem(TODO_KEY, JSON.stringify(todos)); }
+  function saveRecords() { localStorage.setItem(RECORD_KEY, JSON.stringify(focusRecords)); }
+
+  /* ---------- 待办清单 ---------- */
+  function renderTodos() {
+    var list = document.getElementById('todo-list');
+    var empty = document.getElementById('todo-empty');
+    var select = document.getElementById('todo-select');
+    var currentSelectValue = select.value;
+
+    list.innerHTML = '';
+    todos.forEach(function (t) {
+      var li = document.createElement('li');
+      li.className = 'todo-item' + (t.done ? ' done' : '');
+      li.innerHTML =
+        '<button class="todo-check" data-id="' + t.id + '" aria-label="切换完成">' +
+          (t.done ? '✓' : '') +
+        '</button>' +
+        '<span class="todo-text">' + escapeHtml(t.text) + '</span>' +
+        '<span class="todo-tomato">🍅' + (t.tomatoes || 0) + '</span>' +
+        '<button class="todo-del" data-id="' + t.id + '" aria-label="删除">×</button>';
+      list.appendChild(li);
+    });
+    empty.style.display = todos.length ? 'none' : 'block';
+
+    var done = todos.filter(function (t) { return t.done; }).length;
+    var rate = todos.length ? Math.round(done / todos.length * 100) : 0;
+    document.getElementById('todo-progress-fill').style.width = rate + '%';
+    document.getElementById('todo-progress-text').textContent = rate + '%';
+
+    select.innerHTML = '<option value="">不关联</option>';
+    todos.filter(function (t) { return !t.done; }).forEach(function (t) {
+      var opt = document.createElement('option');
+      opt.value = t.id;
+      opt.textContent = t.text;
+      select.appendChild(opt);
+    });
+    var stillExists = Array.prototype.some.call(select.options, function (o) {
+      return o.value === currentSelectValue;
+    });
+    select.value = stillExists ? currentSelectValue : '';
+
+    renderStats();
+  }
+
+  function addTodo() {
+    var input = document.getElementById('todo-input');
+    var text = input.value.trim();
+    if (!text) { toast('先写点什么吧'); input.focus(); return; }
+    todos.push({ id: Date.now(), text: text, done: false, tomatoes: 0 });
+    input.value = '';
+    saveTodos();
+    renderTodos();
+    toast('已添加');
+  }
+  document.getElementById('btn-add').addEventListener('click', addTodo);
+  document.getElementById('todo-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') addTodo();
+  });
+  document.getElementById('todo-list').addEventListener('click', function (e) {
+    var check = e.target.closest('.todo-check');
+    var del = e.target.closest('.todo-del');
+    if (check) {
+      var id = Number(check.dataset.id);
+      var t = todos.find(function (x) { return x.id === id; });
+      if (t) { t.done = !t.done; saveTodos(); renderTodos(); }
+    }
+    if (del) {
+      var did = Number(del.dataset.id);
+      todos = todos.filter(function (x) { return x.id !== did; });
+      saveTodos();
+      renderTodos();
+    }
+  });
+
+  /* ---------- 番茄钟 ---------- */
+  var MODES = {
+    focus: { minutes: 25, label: '专注中', color: '#E4572E' },
+    short: { minutes: 5,  label: '短休息', color: '#5B8C6E' },
+    long:  { minutes: 15, label: '长休息', color: '#6B5B95' }
+  };
+  var CIRCUMFERENCE = 565.49;
+  var mode = 'focus';
+  var totalSeconds = MODES.focus.minutes * 60;
+  var remaining = totalSeconds;
+  var running = false;
+  var timerId = null;
+
+  var displayEl = document.getElementById('timer-display');
+  var labelEl = document.getElementById('timer-label');
+  var ringEl = document.getElementById('ring-fg');
+  var startBtn = document.getElementById('btn-start');
+  var resetBtn = document.getElementById('btn-reset');
+
+  function updateTimerUI() {
+    var m = Math.floor(remaining / 60);
+    var s = remaining % 60;
+    displayEl.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    var ratio = totalSeconds > 0 ? remaining / totalSeconds : 0;
+    ringEl.style.strokeDashoffset = CIRCUMFERENCE * (1 - ratio);
+    ringEl.style.stroke = MODES[mode].color;
+    labelEl.textContent = MODES[mode].label;
+  }
+  function tick() {
+    remaining -= 1;
+    if (remaining <= 0) {
+      remaining = 0;
+      updateTimerUI();
+      finishTimer();
+      return;
+    }
+    updateTimerUI();
+  }
+  function finishTimer() {
+    clearInterval(timerId);
+    timerId = null;
+    running = false;
+    startBtn.textContent = '开始';
+    if (mode === 'focus') {
+      addFocusRecord();
+      toast('专注完成！休息一下吧 🎉');
+    } else {
+      toast('休息结束，继续专注吧 💪');
+    }
+    remaining = totalSeconds;
+    updateTimerUI();
+  }
+  function addFocusRecord() {
+    var select = document.getElementById('todo-select');
+    var todoId = select.value ? Number(select.value) : null;
+    focusRecords.push({
+      id: Date.now(),
+      date: todayStr(),
+      minutes: MODES[mode].minutes,
+      todoId: todoId
+    });
+    saveRecords();
+    if (todoId) {
+      var t = todos.find(function (x) { return x.id === todoId; });
+      if (t) { t.tomatoes = (t.tomatoes || 0) + 1; saveTodos(); }
+    }
+    renderTodos();
+    renderStats();
+  }
+
+  startBtn.addEventListener('click', function () {
+    if (running) {
+      clearInterval(timerId);
+      timerId = null;
+      running = false;
+      startBtn.textContent = '继续';
+    } else {
+      if (remaining <= 0) remaining = totalSeconds;
+      running = true;
+      startBtn.textContent = '暂停';
+      timerId = setInterval(tick, 1000);
+    }
+  });
+  resetBtn.addEventListener('click', function () {
+    clearInterval(timerId);
+    timerId = null;
+    running = false;
+    remaining = totalSeconds;
+    startBtn.textContent = '开始';
+    updateTimerUI();
+  });
+  document.querySelectorAll('.mode-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      if (running) { toast('先暂停或重置再切换模式'); return; }
+      mode = tab.dataset.mode;
+      document.querySelectorAll('.mode-tab').forEach(function (t) {
+        t.classList.toggle('active', t === tab);
+      });
+      totalSeconds = MODES[mode].minutes * 60;
+      remaining = totalSeconds;
+      startBtn.textContent = '开始';
+      updateTimerUI();
+    });
+  });
+
+  /* ---------- 塔罗 ---------- */
+  var TAROT = [
+    { name: '愚者', en: 'The Fool', symbol: '🃏', keywords: '新开始 · 冒险 · 纯真',
+      reading: '今天适合迈出一小步。不必把路想得很清楚，先出发，答案会在路上慢慢出现。放下对“必须完美”的执念，给自己一次轻松尝试的机会。' },
+    { name: '魔术师', en: 'The Magician', symbol: '✨', keywords: '创造力 · 行动 · 资源',
+      reading: '你手边已有的东西，比你以为的更有用。今天适合把想法落到具体动作上，写下第一行字、发出第一条消息、开始第一个 25 分钟。' },
+    { name: '女祭司', en: 'The High Priestess', symbol: '🌙', keywords: '直觉 · 内省 · 静默',
+      reading: '今天不必急着表达。安静一点，听听自己真实的想法。有些答案不在搜索框里，而在你独处时冒出来的那个念头上。' },
+    { name: '皇后', en: 'The Empress', symbol: '👑', keywords: '丰盛 · 滋养 · 感官',
+      reading: '适合照顾自己。好好吃一顿饭，整理一下桌面，给身体一点舒展。被滋养的状态，才撑得起长时间的专注。' },
+    { name: '皇帝', en: 'The Emperor', symbol: '🛡️', keywords: '秩序 · 掌控 · 责任',
+      reading: '今天适合建立结构。列一份清单，排出优先级，把混乱的事情归位。秩序不是束缚，而是让你更省力地前进。' },
+    { name: '恋人', en: 'The Lovers', symbol: '💞', keywords: '选择 · 结合 · 价值',
+      reading: '今天可能会面对一个选择。别只看哪个更容易，问问自己更在意什么。诚实的选择，后面走起来才不会拧巴。' },
+    { name: '战车', en: 'The Chariot', symbol: '🏎️', keywords: '意志 · 前进 · 胜利',
+      reading: '今天适合推进。把注意力收拢到一件事上，哪怕只做 25 分钟，也比同时开五个头强。方向对了，速度自然会上来。' },
+    { name: '力量', en: 'Strength', symbol: '🦁', keywords: '勇气 · 耐心 · 温柔',
+      reading: '真正的力量不一定是硬扛。今天试着用更温和的方式对待自己的拖延和情绪，先接纳，再一点点往前挪。' },
+    { name: '隐士', en: 'The Hermit', symbol: '🏔️', keywords: '独处 · 反思 · 指引',
+      reading: '今天适合关掉一些噪音。少刷一会儿，多留一点独处的时间。你会更容易听清自己真正想做的下一步。' },
+    { name: '命运之轮', en: 'Wheel of Fortune', symbol: '🎡', keywords: '转机 · 周期 · 机遇',
+      reading: '事情正在转动。可能有计划外的变化，也可能是一个小小的机会。保持开放，别因为和预期不一样就急着否定。' },
+    { name: '星星', en: 'The Star', symbol: '⭐', keywords: '希望 · 疗愈 · 灵感',
+      reading: '今天适合做一点让自己恢复的事。喝口水、走两步、看看窗外。灵感往往在放松之后才来，而不是在硬撑的时候。' },
+    { name: '月亮', en: 'The Moon', symbol: '🌊', keywords: '潜意识 · 迷雾 · 情绪',
+      reading: '今天的情绪可能有点起伏，别急着下结论。给不确定留一点空间，等雾散一点再看，会比现在清楚得多。' },
+    { name: '太阳', en: 'The Sun', symbol: '☀️', keywords: '活力 · 成功 · 清晰',
+      reading: '状态不错的一天。适合把最重要的事放在前面做，也适合把开心分享给别人。好状态值得被好好利用。' },
+    { name: '世界', en: 'The World', symbol: '🌍', keywords: '完成 · 圆满 · 旅程',
+      reading: '适合收尾。把拖着没结束的小事做完，给自己一个明确的结束感。完成本身，就是最好的奖励。' }
+  ];
+  var drawing = false;
+  document.getElementById('btn-draw').addEventListener('click', function () {
+    if (drawing) return;
+    drawing = true;
+    var cardEl = document.getElementById('tarot-card');
+    var btn = document.getElementById('btn-draw');
+    var wasFlipped = cardEl.classList.contains('flipped');
+    cardEl.classList.remove('flipped');
+    btn.disabled = true;
+    setTimeout(function () {
+      var card = TAROT[Math.floor(Math.random() * TAROT.length)];
+      document.getElementById('tarot-symbol').textContent = card.symbol;
+      document.getElementById('tarot-name').textContent = card.name;
+      document.getElementById('tarot-en').textContent = card.en;
+      document.getElementById('tarot-keywords').textContent = card.keywords;
+      document.getElementById('tarot-reading').textContent = card.reading;
+      cardEl.classList.add('flipped');
+      btn.textContent = '再抽一张';
+      btn.disabled = false;
+      drawing = false;
+    }, wasFlipped ? 700 : 80);
+  });
+
+  /* ---------- 统计 ---------- */
+  function renderStats() {
+    var today = todayStr();
+    var todayRecords = focusRecords.filter(function (r) { return r.date === today; });
+    var todayMinutes = todayRecords.reduce(function (sum, r) { return sum + (Number(r.minutes) || 0); }, 0);
+    var todayCount = todayRecords.length;
+
+    document.getElementById('stat-minutes').textContent = todayMinutes;
+    document.getElementById('stat-tomatoes').textContent = todayCount;
+    document.getElementById('today-count').textContent = todayCount;
+
+    var doneCount = todos.filter(function (t) { return t.done; }).length;
+    var rate = todos.length ? Math.round(doneCount / todos.length * 100) : 0;
+    document.getElementById('stat-rate').textContent = rate;
+
+    var donut = document.getElementById('donut-rate');
+    donut.style.setProperty('--p', rate);
+    document.getElementById('donut-rate-text').textContent = rate + '%';
+
+    renderBarChart();
+  }
+  function renderBarChart() {
+    var chart = document.getElementById('bar-chart');
+    chart.innerHTML = '';
+    var weekLabels = ['日', '一', '二', '三', '四', '五', '六'];
+    var values = [];
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date();
+      d.setDate(d.getDate() - i);
+      var ds = dateStr(d);
+      var minutes = focusRecords
+        .filter(function (r) { return r.date === ds; })
+        .reduce(function (sum, r) { return sum + (Number(r.minutes) || 0); }, 0);
+      values.push({ label: weekLabels[d.getDay()], minutes: minutes });
+    }
+    var max = Math.max.apply(null, values.map(function (v) { return v.minutes; }).concat([1]));
+    values.forEach(function (v) {
+      var item = document.createElement('div');
+      item.className = 'bar-item';
+      var track = document.createElement('div');
+      track.className = 'bar-track';
+      var fill = document.createElement('div');
+      fill.className = 'bar-fill';
+      fill.style.height = (v.minutes / max * 100) + '%';
+      track.appendChild(fill);
+      var label = document.createElement('span');
+      label.className = 'bar-label';
+      label.textContent = v.label;
+      item.appendChild(track);
+      item.appendChild(label);
+      chart.appendChild(item);
+    });
+  }
+
+  /* ---------- 初始化 ---------- */
+  renderTodos();
+  renderStats();
+  updateTimerUI();
+})();
+</script>
+
+</body>
+</html>
