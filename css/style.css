@@ -1111,6 +1111,37 @@
       display: block;
       border-radius: 18px;
   }
+  /* 牌名层：叠加在牌面底部 */
+  
+  .tarot-front-label {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 36px 14px 16px;
+      background: linear-gradient(180deg, transparent, rgba(10, 11, 15, .72) 55%, rgba(10, 11, 15, .85));
+      border-radius: 0 0 18px 18px;
+      text-align: center;
+      pointer-events: none;
+  }
+  
+  .tarot-front-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: .02em;
+      line-height: 1.3;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, .6);
+  }
+  
+  .tarot-front-en {
+      font-size: 9.5px;
+      color: rgba(255, 255, 255, .68);
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      margin-top: 5px;
+      font-weight: 500;
+  }
   
   .reading-card .keywords {
       color: var(--accent-deep);
@@ -1715,6 +1746,9 @@
       .week-stat-row {
           gap: 16px;
       }
+      .tarot-front-name {
+          font-size: 15px;
+      }
   }
   
   @media (min-width: 900px) {
@@ -1847,6 +1881,12 @@
       .tarot-wrap {
           width: 280px;
           margin: 12px auto 32px;
+      }
+      .tarot-front-name {
+          font-size: 20px;
+      }
+      .tarot-front-en {
+          font-size: 10px;
       }
       .reading-card .reading {
           font-size: 15px;

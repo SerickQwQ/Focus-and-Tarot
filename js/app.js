@@ -97,6 +97,7 @@
             tomatoUnit: ' 个番茄',
             minUnit: '分钟',
             secUnit: '秒',
+            hourUnit: '小时',
             percentComplete: '% 完成',
             focusTodayLabel: '今日专注',
             last7Days: '最近 7 天专注时长',
@@ -207,6 +208,7 @@
             tomatoUnit: ' tomatoes',
             minUnit: 'min',
             secUnit: 's',
+            hourUnit: 'h',
             percentComplete: '% done',
             focusTodayLabel: 'Focus today',
             last7Days: 'Focus time in the last 7 days',
@@ -327,25 +329,30 @@
     function countUp(el, to, duration) {
         if (!el) return;
         duration = duration || 600;
-        var from = parseInt(el.textContent, 10) || 0;
+        var from = parseFloat(el.textContent) || 0;
         to = Number(to) || 0;
         if (from === to) { el.textContent = to; return; }
+        var hasDecimal = to % 1 !== 0;
         var start = performance.now();
 
         function step(now) {
             var tt = Math.min((now - start) / duration, 1);
             var eased = 1 - Math.pow(1 - tt, 3);
-            el.textContent = Math.round(from + (to - from) * eased);
+            var val = from + (to - from) * eased;
+            el.textContent = hasDecimal ? (Math.round(val * 10) / 10) : Math.round(val);
             if (tt < 1) requestAnimationFrame(step);
             else el.textContent = to;
         }
         requestAnimationFrame(step);
     }
 
+    /* 秒 → 三档显示：秒 / 分钟 / 小时（小时保留一位小数） */
     function formatDuration(seconds) {
         var s = Math.max(0, Math.round(seconds));
         if (s < 60) return { v: s, unitKey: 'secUnit' };
-        return { v: Math.round(s / 60), unitKey: 'minUnit' };
+        if (s < 3600) return { v: Math.round(s / 60), unitKey: 'minUnit' };
+        var h = Math.round(s / 360) / 10;
+        return { v: h, unitKey: 'hourUnit' };
     }
 
     function recSeconds(r) {
@@ -1073,6 +1080,10 @@
                 img.removeAttribute('src');
             }
         }
+        var nameEl = document.getElementById('tarot-name');
+        var enEl = document.getElementById('tarot-en');
+        if (nameEl) nameEl.textContent = data.name;
+        if (enEl) enEl.textContent = card.en.name;
         document.getElementById('tarot-keywords').textContent = data.keywords;
         document.getElementById('tarot-reading').textContent = data.reading;
     }
