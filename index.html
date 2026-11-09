@@ -159,7 +159,6 @@
   .page { display: none; }
   .page.active { display: block; }
 
-  /* 每个页面的最后一个元素不再带底部间距 */
   .page > :last-child { margin-bottom: 0 !important; }
 
   @keyframes pageIn {
@@ -193,7 +192,8 @@
     margin-bottom: 18px;
   }
 
-  .grid-2 { display: grid; gap: 18px; }
+  /* grid-2 容器本身也带底部间距，让后续卡片和它拉开 */
+  .grid-2 { display: grid; gap: 18px; margin-bottom: 20px; }
   .grid-2 > .card { margin-bottom: 0; }
   @media (min-width: 769px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
 
@@ -257,6 +257,9 @@
 
   .field-label { display: block; font-size: 12px; font-weight: 500; letter-spacing: .02em; color: var(--text-dim); margin-bottom: 8px; }
   .hint { font-size: 12.5px; line-height: 1.7; color: var(--text-faint); margin-top: 16px; }
+
+  /* 自定义时长卡片：间距由 .grid-2 的 margin-bottom 提供 */
+  .duration-card { margin-top: 0; }
 
   .duration-grid {
     display: grid; grid-template-columns: 1fr 1fr 1fr;
@@ -941,8 +944,11 @@
       transform: translateY(-1px) scale(1.06);
     }
 
-    /* 手机端底部只留出导航高度 + 少量安全余量 */
     .app { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+
+    /* 手机端让 grid-2 与后续卡片明确拉开 */
+    .grid-2 { margin-bottom: 24px; }
+
     .input, .select { font-size: 16px; }
     input[type="number"]::-webkit-outer-spin-button,
     input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -1005,7 +1011,7 @@
 
     .card { padding: 32px; margin-bottom: 22px; }
     h2 { font-size: 13.5px; margin-bottom: 20px; }
-    .grid-2 { gap: 22px; }
+    .grid-2 { gap: 22px; margin-bottom: 26px; }
 
     .overview-grid { gap: 22px; }
     .overview-card { padding: 32px; gap: 20px; }
@@ -1093,9 +1099,7 @@
 
 <main class="app">
 
-  <!-- ========== 首页 ========== -->
   <section id="home" class="page active">
-
     <div class="home-hero">
       <div class="hero-main">
         <p class="hero-greeting" id="hero-greeting">早上好</p>
@@ -1183,10 +1187,8 @@
         <div class="week-chart" id="week-chart"></div>
       </div>
     </div>
-
   </section>
 
-  <!-- ========== 番茄钟 ========== -->
   <section id="pomodoro" class="page">
     <div class="page-head">
       <h1 data-i18n="pomodoroTitle">番茄钟</h1>
@@ -1254,7 +1256,6 @@
     </div>
   </section>
 
-  <!-- ========== 今日运势 ========== -->
   <section id="fortune" class="page">
     <div class="page-head">
       <h1 data-i18n="fortuneTitle">今日运势</h1>
@@ -1285,7 +1286,6 @@
     </div>
   </section>
 
-  <!-- ========== 待办 ========== -->
   <section id="todos" class="page">
     <div class="page-head">
       <h1 data-i18n="todosTitle">待办清单</h1>
@@ -1308,7 +1308,6 @@
     </div>
   </section>
 
-  <!-- ========== 统计 ========== -->
   <section id="stats" class="page">
     <div class="page-head">
       <h1 data-i18n="statsTitle">今日概览</h1>
@@ -1716,7 +1715,6 @@
         reading: 'A day for closure. Completion itself is the reward.' } }
   ];
 
-  /* ---------- 首页 ---------- */
   function updateHero() {
     var now = new Date();
     var h = now.getHours();
@@ -1876,7 +1874,6 @@
     });
   }
 
-  /* ---------- 待办 ---------- */
   function renderTodos() {
     var list = document.getElementById('todo-list');
     var empty = document.getElementById('todo-empty');
@@ -1951,7 +1948,6 @@
     }
   });
 
-  /* ---------- 番茄钟 ---------- */
   var MODES = {
     focus: { minutes: durations.focus, labelKey: 'timerFocusing', color: '#E8834E' },
     short: { minutes: durations.short, labelKey: 'timerShortBreak', color: '#5BA88A' },
@@ -2102,7 +2098,6 @@
     toast(t('defaultsRestoredToast'));
   });
 
-  /* ---------- 塔罗 ---------- */
   function hasDrawnToday() {
     return dailyTarot && dailyTarot.date === todayStr() && typeof dailyTarot.index === 'number';
   }
@@ -2175,7 +2170,6 @@
     }, wasFlipped ? 720 : 120);
   });
 
-  /* ---------- 统计 ---------- */
   function renderStats() {
     var today = todayStr();
     var todayRecords = focusRecords.filter(function (r) { return r.date === today; });
@@ -2231,7 +2225,6 @@
     });
   }
 
-  /* ---------- 语言 ---------- */
   function applyLang() {
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
     document.title = t('docTitle');
