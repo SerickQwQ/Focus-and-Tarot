@@ -155,9 +155,12 @@
   .lang-toggle:active { transform: scale(.94); }
 
   /* ---------- 主体 ---------- */
-  .app { max-width: var(--maxw); margin: 0 auto; padding: 28px 20px 100px; }
+  .app { max-width: var(--maxw); margin: 0 auto; padding: 28px 20px 48px; }
   .page { display: none; }
   .page.active { display: block; }
+
+  /* 每个页面的最后一个元素不再带底部间距 */
+  .page > :last-child { margin-bottom: 0 !important; }
 
   @keyframes pageIn {
     from { opacity: 0; transform: translateY(12px); }
@@ -938,7 +941,8 @@
       transform: translateY(-1px) scale(1.06);
     }
 
-    .app { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
+    /* 手机端底部只留出导航高度 + 少量安全余量 */
+    .app { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
     .input, .select { font-size: 16px; }
     input[type="number"]::-webkit-outer-spin-button,
     input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -990,7 +994,7 @@
     .desktop-nav button { font-size: 14px; padding: 10px 16px; }
     .lang-toggle { height: 36px; padding: 0 16px; }
 
-    .app { padding: 44px 32px 80px; }
+    .app { padding: 44px 32px 56px; }
     .page-head { margin-bottom: 28px; }
     h1 { font-size: 32px; }
     .page-head .sub { font-size: 15px; }
