@@ -461,7 +461,7 @@
   /* ============================================================
      首页本周概览
      ============================================================ */
-  .week-card { padding: 22px 24px; }
+  .week-card { padding: 22px 24px; margin-top: 20px; }
   .week-strip {
     display: grid;
     grid-template-columns: 1fr;
@@ -530,7 +530,7 @@
   }
 
   @media (max-width: 768px) {
-    .week-card { padding: 18px 20px; }
+    .week-card { padding: 18px 20px; margin-top: 16px; }
     .week-stat-row { gap: 20px; }
     .week-stat-val { font-size: 24px; }
     .week-chart { height: 42px; gap: 6px; }
@@ -1012,7 +1012,7 @@
     .ov-tarot-name { font-size: 19px; }
     .ov-mini-chart { height: 66px; }
 
-    .week-card { padding: 26px 32px; }
+    .week-card { padding: 26px 32px; margin-top: 26px; }
     .week-stat-val { font-size: 32px; }
     .week-chart { height: 56px; }
 
@@ -1092,7 +1092,6 @@
   <!-- ========== 首页 ========== -->
   <section id="home" class="page active">
 
-    <!-- Hero 区：问候 + 日期 -->
     <div class="home-hero">
       <div class="hero-main">
         <p class="hero-greeting" id="hero-greeting">早上好</p>
@@ -1105,7 +1104,6 @@
       </div>
     </div>
 
-    <!-- 四张概览卡 -->
     <div class="overview-grid">
       <button class="overview-card" data-page="pomodoro">
         <div class="ov-head">
@@ -1162,7 +1160,6 @@
       </button>
     </div>
 
-    <!-- 本周概览 -->
     <div class="card week-card">
       <div class="week-strip">
         <div class="week-stat-row">
@@ -1744,7 +1741,6 @@
   }
 
   function calcStreak() {
-    // 从今天开始往前数有记录的天数；今天如果还没记录就从昨天开始
     var count = 0;
     var cursor = new Date();
     if (!focusRecords.some(function (r) { return r.date === dateStr(cursor); })) {
@@ -1762,7 +1758,6 @@
   }
 
   function calcWeekData() {
-    // 返回 [{label, minutes, isToday}] 共 7 天，从 6 天前到今天
     var arr = [];
     var weekLabelsZh = ['日', '一', '二', '三', '四', '五', '六'];
     var weekLabelsEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -1781,19 +1776,10 @@
 
   function renderWeek() {
     var weekData = calcWeekData();
-    var totalMin = 0, totalTomato = 0;
-    weekData.forEach(function (v) {
-      totalMin += v.minutes;
-      if (v.minutes > 0) totalTomato += 1; // 简化：有记录的算一个番茄日
-    });
+    var totalMin = 0;
+    weekData.forEach(function (v) { totalMin += v.minutes; });
 
-    // 更精确的：本周番茄数 = 本周所有记录条数
-    var today = new Date();
-    var weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - 6);
-    weekStart.setHours(0,0,0,0);
     var todayTomato = focusRecords.filter(function (r) {
-      // 从 6 天前到今天
       for (var i = 0; i < 7; i++) {
         var d = new Date();
         d.setDate(d.getDate() - i);
