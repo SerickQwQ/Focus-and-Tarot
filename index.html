@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Focus & Tarot · 专注小站</title>
+
+<!-- 网站图标：番茄红圆角方块 + 白色五角星 -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23E4572E'/%3E%3Cpath d='M50 14 L58 39 L84 39 L63 54 L71 79 L50 64 L29 79 L37 54 L16 39 L42 39 Z' fill='%23FFF7F2'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23E4572E'/%3E%3Cpath d='M50 14 L58 39 L84 39 L63 54 L71 79 L50 64 L29 79 L37 54 L16 39 L42 39 Z' fill='%23FFF7F2'/%3E%3C/svg%3E">
+
 <style>
   :root {
     --bg: #F7F3EE;
@@ -50,7 +55,8 @@
   h2 { font-size: 17px; margin-bottom: 12px; }
   button { font-family: inherit; }
 
-  /* 所有可点元素：去掉双击缩放延迟和长按选中 */
+  [hidden] { display: none !important; }
+
   button,
   .btn,
   .overview-card,
@@ -89,8 +95,20 @@
     padding: 12px 16px;
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
   }
-  .logo { font-weight: 800; font-size: 17px; letter-spacing: .3px; white-space: nowrap; }
+
+  .logo {
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 800; font-size: 17px;
+    letter-spacing: .3px; white-space: nowrap;
+  }
   .logo span { color: var(--primary); }
+  .logo-icon {
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    flex-shrink: 0;
+    display: block;
+  }
+
   .desktop-nav { display: flex; gap: 4px; flex-wrap: wrap; }
   .desktop-nav button {
     border: 0; background: none; padding: 8px 14px; border-radius: 999px;
@@ -140,7 +158,11 @@
   }
   .btn:active { transform: scale(.97); }
   .btn.secondary { background: var(--track); color: var(--text); }
-  .btn:disabled { opacity: .55; cursor: default; box-shadow: none; }
+  .btn:disabled {
+    opacity: .55; cursor: default;
+    box-shadow: none; filter: none;
+    transform: none;
+  }
 
   .input, .select {
     width: 100%; min-height: 44px; border: 1px solid var(--line);
@@ -158,10 +180,8 @@
 
   /* ---------- 自定义时长 ---------- */
   .duration-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px; margin-bottom: 16px;
   }
   @media (max-width: 520px) {
     .duration-grid { grid-template-columns: 1fr; }
@@ -171,9 +191,7 @@
 
   /* ---------- 首页概览卡片 ---------- */
   .overview-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
+    display: grid; grid-template-columns: 1fr; gap: 16px;
   }
   @media (min-width: 769px) {
     .overview-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -191,7 +209,6 @@
     position: relative; overflow: hidden;
     transition: transform .22s ease, box-shadow .22s ease;
   }
-
   .overview-card::after {
     content: '';
     position: absolute; inset: 0;
@@ -356,6 +373,23 @@
   }
   .reading-card .reading { color: var(--text); font-size: 15px; line-height: 1.8; }
 
+  /* 今日已抽提示 */
+  .tarot-daily-hint {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tarot-daily-hint::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
   /* ---------- 待办 ---------- */
   .todo-input-row { display: flex; gap: 10px; margin-bottom: 16px; }
   .todo-input-row .btn { flex-shrink: 0; }
@@ -487,9 +521,7 @@
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* ============================================================
-     hover 效果只在有鼠标的设备上生效，避免触摸屏“粘住”
-     ============================================================ */
+  /* hover 效果只在有鼠标的设备上生效 */
   @media (hover: hover) and (pointer: fine) {
     .desktop-nav button:hover { color: var(--text); }
 
@@ -498,9 +530,11 @@
       box-shadow: 0 6px 18px rgba(228,87,46,.25);
     }
     .btn.secondary:hover {
-      box-shadow: none;
-      filter: none;
+      box-shadow: none; filter: none;
       background: #EBE4DC;
+    }
+    .btn:disabled:hover {
+      filter: none; box-shadow: none;
     }
 
     .overview-card:hover {
@@ -555,17 +589,9 @@
     .mobile-nav button.active { color: var(--primary); font-weight: 600; }
     .mobile-nav button.active .ico { transform: translateY(-1px) scale(1.08); }
 
-    /* 底部导航 + 安全区留白 */
-    .app {
-      padding-bottom: calc(96px + env(safe-area-inset-bottom));
-    }
+    .app { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
 
-    /* 防止 iOS 聚焦输入框时页面自动放大 */
-    .input, .select {
-      font-size: 16px;
-    }
-
-    /* 去掉数字输入框在手机上的小三角 */
+    .input, .select { font-size: 16px; }
     .input {
       -webkit-appearance: none;
       appearance: none;
@@ -576,29 +602,13 @@
       margin: 0;
     }
 
-    /* 触摸目标加大 */
-    .todo-check {
-      width: 26px;
-      height: 26px;
-      font-size: 14px;
-    }
-    .todo-del {
-      width: 36px;
-      height: 36px;
-      font-size: 22px;
-    }
+    .todo-check { width: 26px; height: 26px; font-size: 14px; }
+    .todo-del { width: 36px; height: 36px; font-size: 22px; }
 
-    /* toast 放在底部导航上方 + 安全区 */
-    .toast {
-      bottom: calc(80px + env(safe-area-inset-bottom));
-    }
+    .toast { bottom: calc(80px + env(safe-area-inset-bottom)); }
 
-    /* 自定义时长在手机上单列，输入更好点 */
-    .duration-grid {
-      grid-template-columns: 1fr;
-    }
+    .duration-grid { grid-template-columns: 1fr; }
 
-    /* 触摸设备的按下反馈 */
     .overview-card:active {
       transform: scale(.98);
       box-shadow: 0 6px 18px rgba(0,0,0,.08);
@@ -608,25 +618,22 @@
     }
     .todo-item:active { background: #F6F0E9; }
 
-    /* 卡片入场动画在手机上稍快一点，减少等待感 */
     .page.active .card,
     .page.active .overview-card {
       animation-duration: .42s;
     }
   }
 
-  /* ============================================================
-     超窄屏（≤360px）
-     ============================================================ */
+  /* 超窄屏 */
   @media (max-width: 360px) {
-    .app {
-      padding-left: 12px;
-      padding-right: 12px;
-    }
+    .app { padding-left: 12px; padding-right: 12px; }
     .card { padding: 16px; }
     .overview-card { padding: 16px; }
     h1 { font-size: 22px; }
     .page-head .sub { font-size: 13px; }
+
+    .logo { font-size: 15px; gap: 6px; }
+    .logo-icon { width: 22px; height: 22px; border-radius: 6px; }
 
     #timer-display { font-size: 32px; }
     .mode-tab { font-size: 13px; }
@@ -645,13 +652,12 @@
     .donut-inner { width: 86px; height: 86px; font-size: 18px; }
   }
 
-  /* ============================================================
-     桌面端放大增强（≥900px）
-     ============================================================ */
+  /* 桌面端放大增强 */
   @media (min-width: 900px) {
     .topbar-inner, .app { max-width: 1280px; }
     .topbar-inner { padding: 16px 32px; }
-    .logo { font-size: 19px; }
+    .logo { font-size: 19px; gap: 10px; }
+    .logo-icon { width: 30px; height: 30px; border-radius: 8px; }
     .desktop-nav button { font-size: 15px; padding: 10px 18px; }
 
     .app { padding: 36px 32px 72px; }
@@ -686,6 +692,7 @@
     .tarot-symbol { font-size: 52px; }
     .tarot-front-name { font-size: 24px; }
     .reading-card .reading { font-size: 16px; line-height: 1.9; }
+    .tarot-daily-hint { font-size: 14px; margin-top: 18px; }
 
     .stat-grid { gap: 24px; margin-bottom: 24px; }
     .stat-card { padding: 28px 20px; }
@@ -697,7 +704,6 @@
     .donut-inner { width: 130px; height: 130px; font-size: 26px; }
   }
 
-  /* 减少动态偏好 */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: .001ms !important;
@@ -710,7 +716,14 @@
 
 <header class="topbar">
   <div class="topbar-inner">
-    <div class="logo">Focus <span>&</span> Tarot</div>
+    <div class="logo">
+      <!-- Logo 图标：与 favicon 同一设计，番茄红圆角底 + 白色五角星 -->
+      <svg class="logo-icon" viewBox="0 0 100 100" aria-hidden="true">
+        <rect width="100" height="100" rx="24" fill="#E4572E"/>
+        <path d="M50 14 L58 39 L84 39 L63 54 L71 79 L50 64 L29 79 L37 54 L16 39 L42 39 Z" fill="#FFF7F2"/>
+      </svg>
+      <span class="logo-text">Focus <span>&</span> Tarot</span>
+    </div>
     <nav class="desktop-nav">
       <button data-page="home" class="active">🏠 首页</button>
       <button data-page="pomodoro">🍅 番茄钟</button>
@@ -880,6 +893,7 @@
         </div>
       </div>
       <button class="btn" id="btn-draw">抽一张牌</button>
+      <p class="tarot-daily-hint" id="tarot-daily-hint" hidden>今天已经抽过啦，明天再来吧</p>
     </div>
 
     <div class="card reading-card">
@@ -1040,7 +1054,10 @@
     if (id === 'home') renderHome();
     if (id === 'todos') renderTodos();
     if (id === 'stats') renderStats();
-    if (id === 'fortune') syncFortunePage();
+    if (id === 'fortune') {
+      ensureDailyTarotFresh();
+      syncFortunePage();
+    }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -1445,6 +1462,18 @@
       reading: '适合收尾。把拖着没结束的小事做完，给自己一个明确的结束感。完成本身，就是最好的奖励。' }
   ];
 
+  function hasDrawnToday() {
+    return dailyTarot && dailyTarot.date === todayStr() &&
+      typeof dailyTarot.index === 'number';
+  }
+
+  function ensureDailyTarotFresh() {
+    if (dailyTarot && dailyTarot.date !== todayStr()) {
+      dailyTarot = null;
+      localStorage.removeItem(DAILY_TAROT_KEY);
+    }
+  }
+
   function renderTarotCard(card) {
     document.getElementById('tarot-symbol').textContent = card.symbol;
     document.getElementById('tarot-name').textContent = card.name;
@@ -1454,19 +1483,43 @@
   }
 
   function syncFortunePage() {
-    if (!dailyTarot || !TAROT[dailyTarot.index]) return;
-    var card = TAROT[dailyTarot.index];
-    renderTarotCard(card);
+    var btn = document.getElementById('btn-draw');
+    var hint = document.getElementById('tarot-daily-hint');
     var cardEl = document.getElementById('tarot-card');
-    cardEl.classList.add('flipped');
-    document.getElementById('btn-draw').textContent = '再抽一张';
+
+    if (!hasDrawnToday()) {
+      cardEl.classList.remove('flipped');
+      btn.textContent = '抽一张牌';
+      btn.disabled = false;
+      hint.hidden = true;
+      return;
+    }
+
+    var card = TAROT[dailyTarot.index];
+    if (!card) return;
+
+    renderTarotCard(card);
+    btn.textContent = '明天再来';
+    btn.disabled = true;
+    hint.hidden = false;
+
+    // 稍微延迟，让翻转动画能被看到
+    setTimeout(function () {
+      cardEl.classList.add('flipped');
+    }, 120);
   }
 
   var drawing = false;
+
   document.getElementById('btn-draw').addEventListener('click', function () {
     if (drawing) return;
-    drawing = true;
 
+    if (hasDrawnToday()) {
+      toast('今天已经抽过了，明天再来吧');
+      return;
+    }
+
+    drawing = true;
     var cardEl = document.getElementById('tarot-card');
     var btn = document.getElementById('btn-draw');
     var wasFlipped = cardEl.classList.contains('flipped');
@@ -1484,10 +1537,11 @@
       renderTarotCard(card);
       cardEl.classList.add('flipped');
 
-      btn.textContent = '再抽一张';
-      btn.disabled = false;
-      drawing = false;
+      btn.textContent = '明天再来';
+      btn.disabled = true;
+      document.getElementById('tarot-daily-hint').hidden = false;
 
+      drawing = false;
       renderHome();
     }, wasFlipped ? 680 : 120);
   });
@@ -1574,6 +1628,7 @@
   var activePage = document.querySelector('.page.active');
   if (activePage) applyStagger(activePage);
 
+  // 初始化时如果今天已抽过牌，让运势页保持锁定状态
   syncFortunePage();
 
 })();
