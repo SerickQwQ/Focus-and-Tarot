@@ -160,7 +160,8 @@
       border-radius: 9px;
       flex-shrink: 0;
       display: block;
-      filter: drop-shadow(0 2px 6px rgba(232, 131, 78, .35));
+      object-fit: cover;
+      filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .12));
   }
   
   .desktop-nav {
@@ -840,6 +841,112 @@
       }
   }
   /* ============================================================
+     数据说明折叠卡
+     ============================================================ */
+  
+  .privacy-card {
+      padding: 0;
+      overflow: hidden;
+      margin-top: 20px;
+  }
+  
+  .privacy-summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 22px;
+      cursor: pointer;
+      list-style: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-dim);
+      -webkit-user-select: none;
+      user-select: none;
+      transition: color .2s, background .2s;
+  }
+  
+  .privacy-summary::-webkit-details-marker {
+      display: none;
+  }
+  
+  .privacy-summary:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, .4);
+  }
+  
+  .privacy-ico {
+      font-size: 16px;
+      line-height: 1;
+  }
+  
+  .privacy-title {
+      flex: 1;
+  }
+  
+  .privacy-arrow {
+      font-size: 12px;
+      color: var(--text-faint);
+      transition: transform .25s;
+  }
+  
+  .privacy-card[open] .privacy-arrow {
+      transform: rotate(180deg);
+  }
+  
+  .privacy-card[open] .privacy-summary {
+      color: var(--text);
+  }
+  
+  .privacy-body {
+      padding: 0 22px 20px;
+      font-size: 13.5px;
+      line-height: 1.75;
+      color: var(--text-dim);
+  }
+  
+  .privacy-body p {
+      margin: 10px 0 6px;
+  }
+  
+  .privacy-body p:first-child {
+      margin-top: 0;
+  }
+  
+  .privacy-sub {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 16px !important;
+  }
+  
+  .privacy-body ul {
+      margin: 6px 0 0;
+      padding-left: 18px;
+  }
+  
+  .privacy-body li {
+      margin: 3px 0;
+  }
+  
+  .privacy-tip {
+      margin-top: 16px !important;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(232, 131, 78, .08);
+      border: 1px solid rgba(232, 131, 78, .16);
+      color: var(--text);
+      font-size: 12.5px;
+  }
+  /* 语言切换：只显示当前语言那一版 */
+  
+  html[lang="zh-CN"] .only-en {
+      display: none;
+  }
+  
+  html[lang="en"] .only-zh {
+      display: none;
+  }
+  /* ============================================================
      番茄钟
      ============================================================ */
   
@@ -1111,7 +1218,6 @@
       display: block;
       border-radius: 18px;
   }
-  /* 牌名层：叠加在牌面底部 */
   
   .tarot-front-label {
       position: absolute;
@@ -1649,6 +1755,12 @@
           height: 36px;
           min-width: 68px;
       }
+      .privacy-summary {
+          padding: 14px 18px;
+      }
+      .privacy-body {
+          padding: 0 18px 18px;
+      }
       .page.active .card,
       .page.active .overview-card,
       .page.active .hero-main,
@@ -1921,6 +2033,24 @@
           width: 132px;
           height: 132px;
           font-size: 26px;
+      }
+  }
+  /* ============================================================
+     PWA 主屏模式（添加到主屏幕后打开）
+     ============================================================ */
+  
+  @media (display-mode: standalone) {
+      .topbar {
+          padding-top: env(safe-area-inset-top);
+      }
+      .app {
+          padding-top: 24px;
+      }
+      .mobile-nav {
+          padding-bottom: calc(8px + env(safe-area-inset-bottom));
+      }
+      .toast {
+          bottom: calc(96px + env(safe-area-inset-bottom));
       }
   }
   

@@ -6,7 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Focus & Tarot · Focus Station</title>
 
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FFFFFF'/%3E%3Cstop offset='1' stop-color='%23E4E7EE'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)' stroke='%23FFFFFF' stroke-width='4'/%3E%3Cpath d='M50 18 L57 41 L81 41 L62 55 L69 77 L50 63 L31 77 L38 55 L19 41 L43 41 Z' fill='%23E8834E'/%3E%3C/svg%3E">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#E8834E">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Focus & Tarot">
+    <meta name="application-name" content="Focus & Tarot">
+
+    <link rel="icon" type="image/png" sizes="800x800" href="./images/icon-800.png">
+    <link rel="apple-touch-icon" sizes="800x800" href="./images/icon-800.png">
 
     <link rel="stylesheet" href="./css/style.css">
 </head>
@@ -16,16 +25,7 @@
     <header class="topbar">
         <div class="topbar-inner">
             <div class="logo">
-                <svg class="logo-icon" viewBox="0 0 100 100" aria-hidden="true">
-        <defs>
-          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#FFFFFF"/>
-            <stop offset="100%" stop-color="#E4E7EE"/>
-          </linearGradient>
-        </defs>
-        <rect width="100" height="100" rx="24" fill="url(#logoGrad)" stroke="#FFFFFF" stroke-width="4"/>
-        <path d="M50 18 L57 41 L81 41 L62 55 L69 77 L50 63 L31 77 L38 55 L19 41 L43 41 Z" fill="#E8834E"/>
-      </svg>
+                <img class="logo-icon" src="./images/icon-800.png" alt="" />
                 <span class="logo-text">Focus <span class="amp">&amp;</span> Tarot</span>
             </div>
             <div class="topbar-right">
@@ -132,6 +132,61 @@
                     <div class="week-chart" id="week-chart"></div>
                 </div>
             </div>
+
+            <details class="card privacy-card">
+                <summary class="privacy-summary">
+                    <span class="privacy-ico">💾</span>
+                    <span class="privacy-title only-zh">关于数据保存</span>
+                    <span class="privacy-title only-en">About your data</span>
+                    <span class="privacy-arrow">▾</span>
+                </summary>
+                <div class="privacy-body">
+                    <div class="only-zh">
+                        <p>本站数据全部保存在你的浏览器本地（localStorage），没有服务器，也不会上传到任何地方。</p>
+                        <p class="privacy-sub">✅ 这些操作不会清空数据</p>
+                        <ul>
+                            <li>刷新页面，关闭后再打开同一地址</li>
+                            <li>站内切换页面、切换语言、开关静音</li>
+                            <li>删除单条待办（只影响那一条）</li>
+                        </ul>
+                        <p class="privacy-sub">⚠️ 这些操作会清空待办和专注记录</p>
+                        <ul>
+                            <li>浏览器「清除浏览数据」时勾选了网站数据 / Cookie</li>
+                            <li>F12 开发者工具里删除本页的 Local Storage</li>
+                            <li>无痕 / 隐私模式，关闭窗口后数据即丢弃</li>
+                        </ul>
+                        <p class="privacy-sub">⚠️ 数据还在，但看不到</p>
+                        <ul>
+                            <li>换浏览器或换设备（各存各的，不同步）</li>
+                            <li>换访问地址：本地文件、localhost、GitHub Pages 域名互相隔离，看起来像数据没了，其实各自还在原来的地址</li>
+                            <li>仓库改名导致 GitHub Pages 地址变化，也会被视为新地址</li>
+                        </ul>
+                        <p class="privacy-tip">💡 重要数据建议定期手动备份；用同一个浏览器、同一个地址访问，数据才是连续的。</p>
+                    </div>
+                    <div class="only-en">
+                        <p>All data is stored locally in your browser (localStorage). No server, no uploads.</p>
+                        <p class="privacy-sub">✅ These won't erase your data</p>
+                        <ul>
+                            <li>Refreshing, or closing and reopening the same URL</li>
+                            <li>Switching pages, language or sound on this site</li>
+                            <li>Deleting a single todo (only removes that one)</li>
+                        </ul>
+                        <p class="privacy-sub">⚠️ These will erase your todos and focus records</p>
+                        <ul>
+                            <li>Browser "Clear browsing data" with site data / cookies checked</li>
+                            <li>Deleting this site's Local Storage via DevTools (F12)</li>
+                            <li>Using incognito mode — data is dropped when the window closes</li>
+                        </ul>
+                        <p class="privacy-sub">⚠️ Data still exists but you can't see it</p>
+                        <ul>
+                            <li>Switching to another browser or device (each keeps its own copy)</li>
+                            <li>Switching URL: file://, localhost, and the GitHub Pages domain are separate origins — it looks like data vanished, but each origin keeps its own copy</li>
+                            <li>Renaming the repo changes the Pages URL, which is also treated as a new origin</li>
+                        </ul>
+                        <p class="privacy-tip">💡 Back up important data regularly. Use the same browser and same URL for continuity.</p>
+                    </div>
+                </div>
+            </details>
 
         </section>
 
