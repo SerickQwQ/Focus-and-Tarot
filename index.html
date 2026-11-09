@@ -5,49 +5,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Focus & Tarot · 专注小站</title>
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23F2C08A'/%3E%3Cstop offset='1' stop-color='%23D98E4C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)'/%3E%3Cpath d='M50 14 L58 39 L84 39 L63 54 L71 79 L50 64 L29 79 L37 54 L16 39 L42 39 Z' fill='%231A1208'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23F2C08A'/%3E%3Cstop offset='1' stop-color='%23D98E4C'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)'/%3E%3Cpath d='M50 14 L58 39 L84 39 L63 54 L71 79 L50 64 L29 79 L37 54 L16 39 L42 39 Z' fill='%231A1208'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FFFFFF'/%3E%3Cstop offset='1' stop-color='%23E4E7EE'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)' stroke='%23FFFFFF' stroke-width='4'/%3E%3Cpath d='M50 18 L57 41 L81 41 L62 55 L69 77 L50 63 L31 77 L38 55 L19 41 L43 41 Z' fill='%23E8834E'/%3E%3C/svg%3E">
 
 <style>
   :root {
-    --bg: #0A0B0F;
-    --bg-2: #0E1015;
-    --text: #EDE9E3;
-    --text-dim: rgba(237,233,227,.58);
-    --text-faint: rgba(237,233,227,.34);
+    --text: #1C1E22;
+    --text-dim: #5F646C;
+    --text-faint: #969CA4;
 
-    --primary: #E6A15C;
-    --primary-soft: #F2C08A;
-    --primary-deep: #D98E4C;
-    --accent: #A78BFA;
-    --success: #6FBF8E;
+    --accent: #E8834E;
+    --accent-soft: #F5B48A;
+    --accent-deep: #D06F3C;
+    --violet: #8B7BC7;
+    --mint: #5BA88A;
 
-    --line: rgba(255,255,255,.065);
-    --line-strong: rgba(255,255,255,.11);
-    --track: rgba(255,255,255,.055);
+    --glass: rgba(255,255,255,.52);
+    --glass-hover: rgba(255,255,255,.64);
+    --glass-border: rgba(255,255,255,.75);
+    --glass-border-dim: rgba(255,255,255,.45);
+    --glass-inset: inset 0 1px 0 rgba(255,255,255,.95);
 
-    --card-bg: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.018));
-    --card-border: rgba(255,255,255,.07);
-    --card-shadow: 0 24px 60px -20px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.05);
+    --line: rgba(31,33,36,.06);
+    --track: rgba(31,33,36,.055);
 
-    --radius: 18px;
-    --radius-sm: 12px;
+    --shadow-card: 0 12px 40px -16px rgba(31,33,36,.16), 0 2px 8px -2px rgba(31,33,36,.06);
+    --shadow-lift: 0 24px 60px -20px rgba(31,33,36,.22), 0 6px 16px -6px rgba(31,33,36,.10);
+
+    --radius: 20px;
+    --radius-sm: 13px;
+    --blur: 28px;
     --maxw: 1120px;
   }
 
   * { box-sizing: border-box; }
-
-  html {
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-  }
-
-  html, body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    background: var(--bg);
-  }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  html, body { margin: 0; padding: 0; overflow-x: hidden; }
 
   body {
     color: var(--text);
@@ -59,98 +51,47 @@
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    position: relative;
-  }
 
-  /* 背景光晕 */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
     background:
-      radial-gradient(760px 520px at 12% -8%, rgba(230,161,92,.13), transparent 62%),
-      radial-gradient(680px 500px at 92% 4%, rgba(140,100,220,.10), transparent 62%),
-      radial-gradient(900px 700px at 50% 112%, rgba(230,161,92,.055), transparent 65%);
-  }
-
-  /* 噪点质感 */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: .022;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      radial-gradient(720px 580px at 4% -6%, rgba(255,186,148,.55), transparent 62%),
+      radial-gradient(680px 560px at 98% 0%, rgba(172,190,255,.52), transparent 62%),
+      radial-gradient(880px 700px at 50% 108%, rgba(178,238,214,.42), transparent 65%),
+      radial-gradient(500px 400px at 78% 68%, rgba(255,220,180,.35), transparent 62%),
+      linear-gradient(168deg, #F6F7FA 0%, #EDEFF4 48%, #E5E8EE 100%);
+    background-attachment: fixed;
   }
 
   h1, h2, p { margin: 0; }
-  h1 {
-    font-size: 26px;
-    line-height: 1.25;
-    font-weight: 600;
-    letter-spacing: -.015em;
-  }
-  h2 {
-    font-size: 13px;
-    margin-bottom: 16px;
-    font-weight: 600;
-    letter-spacing: .02em;
-    color: var(--text-dim);
-  }
+  h1 { font-size: 26px; line-height: 1.25; font-weight: 700; letter-spacing: -.02em; }
+  h2 { font-size: 13px; margin-bottom: 16px; font-weight: 600; letter-spacing: .02em; color: var(--text-dim); }
   button { font-family: inherit; }
-
   [hidden] { display: none !important; }
 
-  button,
-  .btn,
-  .overview-card,
-  .todo-check,
-  .todo-del,
-  .mode-tab,
-  .mobile-nav button,
-  .desktop-nav button,
-  .input,
-  .select,
-  .lang-toggle {
+  button, .btn, .overview-card, .todo-check, .todo-del, .mode-tab,
+  .mobile-nav button, .desktop-nav button, .input, .select, .lang-toggle {
     touch-action: manipulation;
-  }
-
-  button,
-  .btn,
-  .overview-card,
-  .todo-check,
-  .todo-del,
-  .mode-tab,
-  .mobile-nav button,
-  .desktop-nav button,
-  .lang-toggle {
     -webkit-user-select: none;
     user-select: none;
   }
 
-  /* ============================================================
-     顶部栏
-     ============================================================ */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .card, .overview-card, .topbar, .mobile-nav, .toast, .hero-date { background: rgba(255,255,255,.92); }
+  }
+
+  /* ---------- 顶部栏 ---------- */
   .topbar {
     position: sticky; top: 0; z-index: 50;
-    background: rgba(10,11,15,.72);
-    backdrop-filter: blur(24px) saturate(140%);
-    -webkit-backdrop-filter: blur(24px) saturate(140%);
-    border-bottom: 1px solid var(--line);
+    background: rgba(255,255,255,.55);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid var(--glass-border-dim);
   }
   .topbar-inner {
     max-width: var(--maxw); margin: 0 auto;
     padding: 14px 20px;
     display: flex; align-items: center; justify-content: space-between; gap: 14px;
   }
-
-  .topbar-right {
-    display: flex; align-items: center; gap: 10px;
-    min-width: 0;
-  }
+  .topbar-right { display: flex; align-items: center; gap: 10px; min-width: 0; }
 
   .logo {
     display: flex; align-items: center; gap: 10px;
@@ -158,13 +99,13 @@
     letter-spacing: -.01em; white-space: nowrap;
     color: var(--text);
   }
-  .logo .amp { color: var(--primary); font-weight: 500; margin: 0 1px; }
+  .logo .amp { color: var(--accent); font-weight: 500; margin: 0 1px; }
   .logo-icon {
     width: 28px; height: 28px;
-    border-radius: 8px;
+    border-radius: 9px;
     flex-shrink: 0;
     display: block;
-    box-shadow: 0 4px 14px rgba(230,161,92,.28);
+    filter: drop-shadow(0 2px 6px rgba(232,131,78,.35));
   }
 
   .desktop-nav { display: flex; gap: 2px; }
@@ -178,24 +119,31 @@
     cursor: pointer;
     transition: color .2s, background .2s, transform .15s;
   }
-  .desktop-nav button.active { color: var(--primary); }
+  .desktop-nav button.active {
+    color: var(--text);
+    background: rgba(255,255,255,.65);
+    box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 8px -2px rgba(31,33,36,.08);
+  }
   .desktop-nav button.active::after {
     content: '';
     position: absolute;
-    left: 14px; right: 14px; bottom: 2px;
-    height: 1.5px;
+    left: 50%; bottom: 4px;
+    transform: translateX(-50%);
+    width: 16px; height: 2px;
     border-radius: 2px;
-    background: linear-gradient(90deg, transparent, var(--primary), transparent);
-    opacity: .8;
+    background: var(--accent);
+    box-shadow: 0 0 8px rgba(232,131,78,.55);
   }
   .desktop-nav button:active { transform: scale(.97); }
 
   .lang-toggle {
     min-width: 46px; height: 34px;
     padding: 0 14px;
-    border: 1px solid var(--line-strong);
+    border: 1px solid var(--glass-border);
     border-radius: 999px;
-    background: rgba(255,255,255,.03);
+    background: rgba(255,255,255,.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: var(--text-dim);
     font-size: 12px;
     font-weight: 600;
@@ -206,16 +154,8 @@
   }
   .lang-toggle:active { transform: scale(.94); }
 
-  /* ============================================================
-     主体
-     ============================================================ */
-  .app {
-    position: relative;
-    z-index: 1;
-    max-width: var(--maxw);
-    margin: 0 auto;
-    padding: 28px 20px 100px;
-  }
+  /* ---------- 主体 ---------- */
+  .app { max-width: var(--maxw); margin: 0 auto; padding: 28px 20px 100px; }
   .page { display: none; }
   .page.active { display: block; }
 
@@ -230,130 +170,194 @@
     to   { opacity: 1; transform: translateY(0); }
   }
   .page.active .card,
-  .page.active .overview-card {
+  .page.active .overview-card,
+  .page.active .hero-main,
+  .page.active .hero-date {
     animation: cardIn .55s cubic-bezier(.22,.9,.3,1) both;
   }
 
   .page-head { margin-bottom: 22px; }
-  .page-head .sub {
-    color: var(--text-dim);
-    font-size: 14px;
-    margin-top: 6px;
-    font-weight: 400;
-  }
+  .page-head .sub { color: var(--text-dim); font-size: 14px; margin-top: 6px; }
 
   .card {
-    position: relative;
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
+    background: var(--glass);
+    backdrop-filter: blur(var(--blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-card), var(--glass-inset);
     border-radius: var(--radius);
-    box-shadow: var(--card-shadow);
     padding: 24px;
     margin-bottom: 18px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
   }
 
   .grid-2 { display: grid; gap: 18px; }
   .grid-2 > .card { margin-bottom: 0; }
   @media (min-width: 769px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
 
-  /* ============================================================
-     按钮 / 输入
-     ============================================================ */
+  /* ---------- 按钮 ---------- */
   .btn {
-    position: relative;
     min-height: 46px;
     padding: 0 24px;
     border: 0;
     border-radius: 999px;
-    background: linear-gradient(135deg, var(--primary-soft), var(--primary-deep));
-    color: #1A1208;
+    background: #23252A;
+    color: #FFFFFF;
     font-size: 14.5px;
-    font-weight: 700;
-    letter-spacing: .01em;
+    font-weight: 600;
+    letter-spacing: .005em;
     cursor: pointer;
-    box-shadow: 0 8px 24px -6px rgba(230,161,92,.45), inset 0 1px 0 rgba(255,255,255,.35);
+    box-shadow:
+      0 8px 20px -8px rgba(31,33,36,.45),
+      inset 0 1px 0 rgba(255,255,255,.14);
     transition: transform .15s, box-shadow .25s, filter .2s;
   }
   .btn:active { transform: scale(.975); }
   .btn.secondary {
-    background: rgba(255,255,255,.045);
+    background: rgba(255,255,255,.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: var(--text);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
-    border: 1px solid var(--line-strong);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-inset);
   }
-  .btn:disabled {
-    opacity: .38; cursor: default;
-    box-shadow: none; filter: grayscale(.4);
-    transform: none;
-  }
+  .btn:disabled { opacity: .4; cursor: default; box-shadow: none; filter: grayscale(.3); transform: none; }
 
   .input, .select {
-    width: 100%;
-    min-height: 46px;
-    border: 1px solid var(--line-strong);
+    width: 100%; min-height: 46px;
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-sm);
     padding: 0 14px;
     font-size: 14.5px;
     font-family: inherit;
-    background: rgba(255,255,255,.035);
+    background: rgba(255,255,255,.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: var(--text);
     outline: none;
+    box-shadow: var(--glass-inset);
     transition: border-color .2s, box-shadow .2s, background .2s;
   }
   .input:focus, .select:focus {
-    border-color: rgba(230,161,92,.55);
-    background: rgba(255,255,255,.055);
-    box-shadow: 0 0 0 4px rgba(230,161,92,.1);
+    background: rgba(255,255,255,.78);
+    border-color: rgba(232,131,78,.55);
+    box-shadow: 0 0 0 4px rgba(232,131,78,.13), var(--glass-inset);
   }
   .input::placeholder { color: var(--text-faint); }
-
   .select {
-    appearance: none;
-    -webkit-appearance: none;
+    appearance: none; -webkit-appearance: none;
     padding-right: 42px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23E6A15C' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235F646C' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 16px center;
   }
-  .select option {
-    background: #14161C;
-    color: var(--text);
-  }
+  .select option { background: #FFFFFF; color: var(--text); }
 
-  .field-label {
-    display: block;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: .02em;
-    color: var(--text-dim);
-    margin-bottom: 8px;
-  }
-  .hint {
-    font-size: 12.5px;
-    line-height: 1.7;
-    color: var(--text-faint);
-    margin-top: 16px;
-  }
+  .field-label { display: block; font-size: 12px; font-weight: 500; letter-spacing: .02em; color: var(--text-dim); margin-bottom: 8px; }
+  .hint { font-size: 12.5px; line-height: 1.7; color: var(--text-faint); margin-top: 16px; }
 
-  /* ============================================================
-     自定义时长
-     ============================================================ */
   .duration-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 18px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px; margin-bottom: 18px;
   }
-  @media (max-width: 520px) {
-    .duration-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 520px) { .duration-grid { grid-template-columns: 1fr; } }
   .duration-actions { display: flex; gap: 10px; flex-wrap: wrap; }
   .duration-actions .btn { flex: 1; min-width: 120px; }
 
   /* ============================================================
-     首页概览卡片
+     首页 Hero
+     ============================================================ */
+  .home-hero {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+    padding: 8px 4px 28px;
+  }
+  @media (max-width: 768px) {
+    .home-hero { grid-template-columns: 1fr; gap: 16px; padding: 4px 0 20px; }
+  }
+
+  .hero-main { min-width: 0; }
+
+  .hero-greeting {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-deep);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-greeting::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px rgba(232,131,78,.7);
+  }
+
+  .hero-title {
+    font-size: clamp(30px, 4.4vw, 42px);
+    font-weight: 700;
+    letter-spacing: -.03em;
+    line-height: 1.12;
+    color: var(--text);
+  }
+
+  .hero-sub {
+    color: var(--text-dim);
+    font-size: 14.5px;
+    margin-top: 10px;
+    max-width: 480px;
+  }
+
+  .hero-date {
+    text-align: right;
+    min-width: 108px;
+    padding: 16px 22px;
+    border-radius: var(--radius);
+    background: var(--glass);
+    backdrop-filter: blur(var(--blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-card), var(--glass-inset);
+  }
+  .hero-day {
+    font-size: 44px;
+    font-weight: 200;
+    letter-spacing: -.04em;
+    line-height: 1;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .hero-month {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-faint);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  html[lang="zh-CN"] .hero-month { letter-spacing: .08em; }
+
+  @media (max-width: 768px) {
+    .hero-date {
+      text-align: left;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 14px 18px;
+      min-width: 0;
+    }
+    .hero-day { font-size: 36px; }
+    .hero-month { margin-top: 0; }
+  }
+
+  /* ============================================================
+     首页四卡
      ============================================================ */
   .overview-grid {
     display: grid;
@@ -368,19 +372,20 @@
     position: relative;
     display: flex; flex-direction: column; gap: 16px;
     text-align: left;
-    border: 1px solid var(--card-border);
+    background: var(--glass);
+    backdrop-filter: blur(var(--blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-card), var(--glass-inset);
     border-radius: var(--radius);
-    background: var(--card-bg);
-    box-shadow: var(--card-shadow);
     padding: 24px;
     cursor: pointer;
     font-family: inherit;
     color: var(--text);
     overflow: hidden;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     transition: transform .3s cubic-bezier(.22,.9,.3,1),
                 box-shadow .3s cubic-bezier(.22,.9,.3,1),
+                background .3s,
                 border-color .3s;
   }
   .overview-card::before {
@@ -389,63 +394,41 @@
     top: -60%; right: -30%;
     width: 260px; height: 260px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(230,161,92,.16), transparent 70%);
+    background: radial-gradient(circle, rgba(232,131,78,.22), transparent 70%);
     opacity: 0;
     transition: opacity .35s;
     pointer-events: none;
   }
-
   .ov-head {
     display: flex; align-items: center; gap: 10px;
-    font-size: 13px; font-weight: 600;
-    letter-spacing: .04em;
+    font-size: 12.5px; font-weight: 600;
+    letter-spacing: .06em;
     color: var(--text-dim);
     text-transform: uppercase;
   }
-  .ov-icon {
-    font-size: 18px; line-height: 1;
-    filter: saturate(.9);
-  }
+  .ov-icon { font-size: 18px; line-height: 1; }
   .ov-title { flex: 1; }
-  .ov-arrow {
-    color: var(--text-faint); font-size: 16px;
-    transition: transform .3s cubic-bezier(.22,.9,.3,1), color .3s;
-  }
-
+  .ov-arrow { color: var(--text-faint); font-size: 16px; transition: transform .3s, color .3s; }
   .ov-body { display: flex; flex-direction: column; gap: 10px; }
-
   .ov-big {
-    font-size: 40px;
-    font-weight: 300;
-    letter-spacing: -.03em;
-    color: var(--text);
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
+    font-size: 40px; font-weight: 300;
+    letter-spacing: -.035em; color: var(--text);
+    line-height: 1; font-variant-numeric: tabular-nums;
   }
   .ov-big small {
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: .04em;
-    color: var(--text-faint);
+    font-size: 12px; font-weight: 500;
+    letter-spacing: .04em; color: var(--text-faint);
     margin-left: 8px;
   }
-  .ov-meta { font-size: 12.5px; color: var(--text-dim); font-weight: 400; }
-  .ov-meta strong { color: var(--primary); font-weight: 600; }
-  .ov-meta small {
-    color: var(--text-faint);
-    font-size: 11.5px;
-    margin-left: 3px;
-  }
+  .ov-meta { font-size: 12.5px; color: var(--text-dim); }
+  .ov-meta strong { color: var(--accent-deep); font-weight: 600; }
+  .ov-meta small { color: var(--text-faint); font-size: 11.5px; margin-left: 3px; }
 
-  .ov-progress {
-    height: 4px; border-radius: 999px;
-    background: rgba(255,255,255,.06);
-    overflow: hidden;
-  }
+  .ov-progress { height: 4px; border-radius: 999px; background: var(--track); overflow: hidden; }
   .ov-progress > div {
     height: 100%; width: 0; border-radius: 999px;
-    background: linear-gradient(90deg, var(--primary-deep), var(--primary-soft));
-    box-shadow: 0 0 12px rgba(230,161,92,.5);
+    background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+    box-shadow: 0 0 10px rgba(232,131,78,.5);
     transition: width .7s cubic-bezier(.22,.9,.3,1);
   }
 
@@ -453,30 +436,104 @@
   .ov-tarot-symbol {
     font-size: 26px; line-height: 1;
     width: 54px; height: 54px;
-    border-radius: 14px;
+    border-radius: 15px;
     background:
-      radial-gradient(circle at 50% 30%, rgba(167,139,250,.28), transparent 70%),
-      rgba(255,255,255,.03);
-    border: 1px solid rgba(167,139,250,.25);
-    color: var(--text);
+      radial-gradient(circle at 50% 30%, rgba(255,255,255,.85), transparent 70%),
+      linear-gradient(160deg, #D8D0F0, #B7ABE2);
+    border: 1px solid rgba(255,255,255,.85);
+    color: #4A4170;
     display: grid; place-items: center;
     flex-shrink: 0;
-    transition: transform .4s cubic-bezier(.22,.9,.3,1), border-color .3s;
+    box-shadow: 0 6px 18px -6px rgba(139,123,199,.45), var(--glass-inset);
+    transition: transform .4s, box-shadow .3s;
   }
   .ov-tarot-name { font-size: 17px; font-weight: 600; letter-spacing: -.01em; }
-  .ov-tarot-key {
-    font-size: 12px; color: var(--text-faint);
-    margin-top: 3px; letter-spacing: .02em;
-  }
+  .ov-tarot-key { font-size: 12px; color: var(--text-faint); margin-top: 3px; letter-spacing: .02em; }
 
-  .ov-mini-chart {
-    display: flex; align-items: flex-end;
-    gap: 5px; height: 54px;
-  }
+  .ov-mini-chart { display: flex; align-items: flex-end; gap: 5px; height: 54px; }
   .ov-mini-bar {
     flex: 1; min-height: 6px; border-radius: 3px;
-    background: linear-gradient(180deg, var(--primary-soft), rgba(217,142,76,.35));
+    background: linear-gradient(180deg, var(--accent-soft), var(--accent));
+    opacity: .85;
     transition: height .6s cubic-bezier(.22,.9,.3,1);
+  }
+
+  /* ============================================================
+     首页本周概览
+     ============================================================ */
+  .week-card { padding: 22px 24px; }
+  .week-strip {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    align-items: center;
+  }
+  @media (min-width: 769px) {
+    .week-strip { grid-template-columns: auto 1fr; gap: 32px; }
+  }
+
+  .week-stat-row {
+    display: flex;
+    gap: 26px;
+    flex-wrap: wrap;
+  }
+  .week-stat { display: flex; flex-direction: column; gap: 4px; }
+  .week-stat-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+  }
+  .week-stat-val {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -.03em;
+    color: var(--text);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .week-stat-val small {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-faint);
+    margin-left: 4px;
+    letter-spacing: .04em;
+  }
+  .week-stat-val.accent { color: var(--accent-deep); }
+
+  .week-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 48px;
+    padding: 0 2px;
+  }
+  .week-bar-wrap {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    min-width: 0;
+  }
+  .week-bar {
+    width: 100%;
+    min-height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--accent-soft), var(--accent));
+    opacity: .55;
+    transition: height .7s cubic-bezier(.22,.9,.3,1), opacity .3s;
+  }
+  .week-bar.today {
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(232,131,78,.55);
+  }
+
+  @media (max-width: 768px) {
+    .week-card { padding: 18px 20px; }
+    .week-stat-row { gap: 20px; }
+    .week-stat-val { font-size: 24px; }
+    .week-chart { height: 42px; gap: 6px; }
   }
 
   /* ============================================================
@@ -484,8 +541,7 @@
      ============================================================ */
   .mode-tabs {
     display: flex; gap: 4px;
-    background: rgba(255,255,255,.03);
-    border: 1px solid var(--line);
+    background: rgba(31,33,36,.055);
     border-radius: 999px;
     padding: 4px;
     margin-bottom: 28px;
@@ -494,18 +550,17 @@
     flex: 1; border: 0; background: none;
     padding: 9px 0;
     border-radius: 999px;
-    font-size: 13.5px;
-    font-weight: 500;
+    font-size: 13.5px; font-weight: 500;
     color: var(--text-dim);
     cursor: pointer;
     transition: background .25s, color .25s, box-shadow .25s;
     min-height: 38px;
   }
   .mode-tab.active {
-    background: rgba(255,255,255,.09);
+    background: #FFFFFF;
     color: var(--text);
     font-weight: 600;
-    box-shadow: 0 2px 10px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08);
+    box-shadow: 0 2px 8px -2px rgba(31,33,36,.12), 0 1px 0 rgba(255,255,255,.9) inset;
   }
 
   .timer-card { text-align: center; }
@@ -516,20 +571,16 @@
     margin: 0 auto 26px;
   }
   .timer-ring { width: 100%; height: 100%; transform: rotate(-90deg); }
-  .ring-bg {
-    fill: none;
-    stroke: rgba(255,255,255,.055);
-    stroke-width: 10;
-  }
+  .ring-bg { fill: none; stroke: rgba(31,33,36,.06); stroke-width: 10; }
   .ring-fg {
     fill: none;
-    stroke: var(--primary);
+    stroke: var(--accent);
     stroke-width: 10;
     stroke-linecap: round;
     stroke-dasharray: 565.49;
     stroke-dashoffset: 0;
     transition: stroke-dashoffset .5s linear, stroke .35s;
-    filter: drop-shadow(0 0 10px rgba(230,161,92,.55));
+    filter: drop-shadow(0 0 10px rgba(232,131,78,.5));
   }
   .timer-text {
     position: absolute; inset: 0;
@@ -539,46 +590,41 @@
   #timer-display {
     font-size: clamp(42px, 11vw, 54px);
     font-weight: 200;
-    letter-spacing: -.03em;
+    letter-spacing: -.035em;
     line-height: 1;
     font-variant-numeric: tabular-nums;
     color: var(--text);
   }
-  #timer-label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: .04em;
-    color: var(--text-faint);
-    margin-top: 2px;
-  }
+  #timer-label { font-size: 11px; font-weight: 500; letter-spacing: .04em; color: var(--text-faint); margin-top: 2px; }
   .timer-actions { display: flex; gap: 10px; justify-content: center; }
   .timer-actions .btn { flex: 1; max-width: 150px; }
 
+  #btn-start {
+    background: linear-gradient(135deg, var(--accent-soft), var(--accent-deep));
+    color: #FFFFFF;
+    box-shadow:
+      0 10px 26px -10px rgba(232,131,78,.7),
+      inset 0 1px 0 rgba(255,255,255,.35);
+  }
+
   .today-pill {
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(255,255,255,.03);
-    border: 1px solid var(--line);
+    background: rgba(31,33,36,.045);
     border-radius: var(--radius-sm);
     padding: 16px 18px;
     margin-top: 18px;
     font-size: 13px;
     color: var(--text-dim);
   }
-  .today-pill strong {
-    color: var(--text);
-    font-size: 15px;
-    font-weight: 600;
-  }
+  .today-pill strong { color: var(--text); font-size: 15px; font-weight: 600; }
   .today-pill strong #today-count {
-    color: var(--primary);
-    font-size: 18px;
-    font-weight: 600;
+    color: var(--accent-deep);
+    font-size: 19px;
+    font-weight: 700;
     margin-right: 2px;
   }
 
-  /* ============================================================
-     塔罗
-     ============================================================ */
+  /* ---------- 塔罗 ---------- */
   .tarot-card-wrap { text-align: center; padding: 32px 24px; }
   .tarot-wrap {
     perspective: 1200px;
@@ -598,83 +644,53 @@
   .tarot-face {
     position: absolute; inset: 0;
     backface-visibility: hidden; -webkit-backface-visibility: hidden;
-    border-radius: 16px;
+    border-radius: 18px;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     gap: 10px; padding: 20px;
     overflow: hidden;
   }
-
   .tarot-back {
     background:
-      radial-gradient(circle at 50% 28%, rgba(167,139,250,.28), transparent 65%),
-      linear-gradient(160deg, #17132A, #0C0912);
-    border: 1px solid rgba(167,139,250,.28);
-    color: rgba(230,161,92,.7);
+      radial-gradient(circle at 50% 28%, rgba(255,255,255,.55), transparent 65%),
+      linear-gradient(160deg, #D9D1F2, #B6A9E3);
+    border: 1px solid rgba(255,255,255,.9);
+    color: rgba(255,255,255,.92);
     font-size: 15px;
     letter-spacing: 14px;
-    box-shadow:
-      0 20px 50px -12px rgba(0,0,0,.8),
-      inset 0 0 40px rgba(167,139,250,.08);
+    box-shadow: 0 24px 50px -20px rgba(139,123,199,.55), inset 0 1px 0 rgba(255,255,255,.9);
   }
-  .tarot-back span { display: block; line-height: 1; }
+  .tarot-back span { display: block; line-height: 1; text-shadow: 0 2px 6px rgba(74,65,112,.35); }
   .tarot-back::before {
     content: '';
-    position: absolute;
-    inset: 10px;
-    border: 1px solid rgba(167,139,250,.15);
-    border-radius: 10px;
+    position: absolute; inset: 10px;
+    border: 1px solid rgba(255,255,255,.45);
+    border-radius: 12px;
     pointer-events: none;
   }
-
   .tarot-front {
-    background:
-      radial-gradient(circle at 50% 20%, rgba(230,161,92,.10), transparent 65%),
-      linear-gradient(180deg, #16131A, #0D0B0F);
-    border: 1px solid rgba(230,161,92,.3);
+    background: rgba(255,255,255,.82);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255,255,255,.95);
     transform: rotateY(180deg);
-    box-shadow: 0 20px 50px -12px rgba(0,0,0,.8);
+    box-shadow: 0 24px 50px -20px rgba(31,33,36,.2), inset 0 1px 0 rgba(255,255,255,.95);
   }
   .tarot-front::before {
     content: '';
-    position: absolute;
-    inset: 10px;
-    border: 1px solid rgba(230,161,92,.15);
-    border-radius: 10px;
+    position: absolute; inset: 10px;
+    border: 1px solid rgba(232,131,78,.22);
+    border-radius: 12px;
     pointer-events: none;
   }
-  .tarot-symbol {
-    font-size: 42px;
-    line-height: 1;
-    filter: drop-shadow(0 0 14px rgba(230,161,92,.4));
-  }
-  .tarot-front-name {
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: .02em;
-    color: var(--text);
-  }
+  .tarot-symbol { font-size: 42px; line-height: 1; filter: drop-shadow(0 4px 12px rgba(232,131,78,.35)); }
+  .tarot-front-name { font-size: 20px; font-weight: 700; letter-spacing: -.01em; color: var(--text); }
   .tarot-front-en {
-    font-size: 10.5px;
-    color: var(--text-faint);
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    font-weight: 500;
+    font-size: 10.5px; color: var(--text-faint);
+    letter-spacing: .18em; text-transform: uppercase; font-weight: 500;
   }
-
-  .reading-card .keywords {
-    color: var(--primary);
-    font-weight: 500;
-    font-size: 14px;
-    letter-spacing: .03em;
-    margin-bottom: 12px;
-  }
-  .reading-card .reading {
-    color: var(--text-dim);
-    font-size: 14.5px;
-    line-height: 1.85;
-  }
-
+  .reading-card .keywords { color: var(--accent-deep); font-weight: 600; font-size: 14px; letter-spacing: .02em; margin-bottom: 12px; }
+  .reading-card .reading { color: var(--text-dim); font-size: 14.5px; line-height: 1.85; }
   .tarot-daily-hint {
     margin-top: 16px;
     font-size: 12.5px;
@@ -687,91 +703,60 @@
     content: '';
     width: 5px; height: 5px;
     border-radius: 50%;
-    background: var(--primary);
-    box-shadow: 0 0 8px rgba(230,161,92,.7);
+    background: var(--accent);
+    box-shadow: 0 0 8px rgba(232,131,78,.7);
     flex-shrink: 0;
   }
 
-  /* ============================================================
-     待办
-     ============================================================ */
+  /* ---------- 待办 ---------- */
   .todo-input-row { display: flex; gap: 10px; margin-bottom: 18px; }
   .todo-input-row .btn { flex-shrink: 0; }
-
-  .progress-line {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 20px;
-  }
-  .progress-track {
-    flex: 1; height: 4px; border-radius: 999px;
-    background: rgba(255,255,255,.06);
-    overflow: hidden;
-  }
+  .progress-line { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .progress-track { flex: 1; height: 4px; border-radius: 999px; background: var(--track); overflow: hidden; }
   .progress-fill {
     height: 100%; width: 0; border-radius: 999px;
-    background: linear-gradient(90deg, var(--primary-deep), var(--primary-soft));
-    box-shadow: 0 0 12px rgba(230,161,92,.45);
+    background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+    box-shadow: 0 0 10px rgba(232,131,78,.45);
     transition: width .6s cubic-bezier(.22,.9,.3,1);
   }
   #todo-progress-text {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-dim);
-    min-width: 38px;
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: .02em;
+    font-size: 12px; font-weight: 600; color: var(--text-dim);
+    min-width: 38px; text-align: right;
+    font-variant-numeric: tabular-nums; letter-spacing: .02em;
   }
-
-  .todo-list {
-    list-style: none; margin: 0; padding: 0;
-    display: flex; flex-direction: column; gap: 8px;
-  }
+  .todo-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
   .todo-item {
     display: flex; align-items: center; gap: 12px;
     padding: 13px 14px;
     border-radius: var(--radius-sm);
-    background: rgba(255,255,255,.025);
-    border: 1px solid var(--line);
-    transition: opacity .25s, transform .2s, background .2s, border-color .2s;
+    background: rgba(255,255,255,.42);
+    border: 1px solid rgba(255,255,255,.65);
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    transition: opacity .25s, transform .2s, background .2s, border-color .2s, box-shadow .2s;
   }
-  .todo-item.done { opacity: .45; }
+  .todo-item.done { opacity: .5; }
   .todo-item.done .todo-text { text-decoration: line-through; color: var(--text-faint); }
-
   .todo-check {
     flex-shrink: 0;
     width: 22px; height: 22px;
     border-radius: 7px;
-    border: 1.5px solid rgba(255,255,255,.18);
-    background: transparent;
-    color: #0A0B0F;
-    font-size: 12px;
-    font-weight: 700;
+    border: 1.5px solid rgba(31,33,36,.22);
+    background: rgba(255,255,255,.6);
+    color: #FFFFFF;
+    font-size: 12px; font-weight: 700;
     line-height: 1;
     cursor: pointer;
     display: grid; place-items: center; padding: 0;
-    transition: background .2s, border-color .2s, transform .15s;
+    transition: background .2s, border-color .2s, transform .15s, box-shadow .2s;
   }
   .todo-check:active { transform: scale(.88); }
-  .todo-item.done .todo-check {
-    background: var(--success);
-    border-color: var(--success);
-    box-shadow: 0 0 12px rgba(111,191,142,.4);
-  }
-
-  .todo-text {
-    flex: 1;
-    font-size: 14.5px;
-    word-break: break-word;
-    color: var(--text);
-  }
+  .todo-item.done .todo-check { background: var(--mint); border-color: var(--mint); box-shadow: 0 0 10px rgba(91,168,138,.5); }
+  .todo-text { flex: 1; font-size: 14.5px; word-break: break-word; color: var(--text); }
   .todo-tomato {
-    flex-shrink: 0;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--primary);
-    background: rgba(230,161,92,.10);
-    border: 1px solid rgba(230,161,92,.18);
+    flex-shrink: 0; font-size: 11px; font-weight: 700;
+    color: var(--accent-deep);
+    background: rgba(232,131,78,.12);
+    border: 1px solid rgba(232,131,78,.22);
     border-radius: 999px;
     padding: 3px 9px;
     letter-spacing: .02em;
@@ -783,42 +768,20 @@
     border: 0; border-radius: 50%;
     background: none;
     color: var(--text-faint);
-    font-size: 18px;
-    line-height: 1;
-    cursor: pointer;
-    padding: 0;
+    font-size: 18px; line-height: 1;
+    cursor: pointer; padding: 0;
     display: grid; place-items: center;
     transition: color .2s, background .2s, transform .15s;
   }
   .todo-del:active { transform: scale(.88); }
+  .empty { text-align: center; color: var(--text-faint); font-size: 13.5px; padding: 32px 0; display: none; }
 
-  .empty {
-    text-align: center;
-    color: var(--text-faint);
-    font-size: 13.5px;
-    padding: 32px 0;
-    display: none;
-  }
-
-  /* ============================================================
-     统计
-     ============================================================ */
-  .stat-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 18px;
-  }
+  /* ---------- 统计 ---------- */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
   @media (min-width: 769px) { .stat-grid { grid-template-columns: repeat(3, 1fr); } }
-
-  .stat-card {
-    margin-bottom: 0;
-    text-align: center;
-    padding: 26px 16px;
-  }
+  .stat-card { margin-bottom: 0; text-align: center; padding: 26px 16px; }
   .stat-label {
-    font-size: 11.5px;
-    font-weight: 500;
+    font-size: 11.5px; font-weight: 600;
     letter-spacing: .06em;
     color: var(--text-faint);
     display: block;
@@ -826,192 +789,124 @@
   }
   .stat-card strong {
     display: block;
-    font-size: 40px;
-    font-weight: 300;
-    letter-spacing: -.03em;
-    color: var(--text);
+    font-size: 40px; font-weight: 300;
+    letter-spacing: -.035em; color: var(--text);
     line-height: 1.15;
     margin-top: 8px;
     font-variant-numeric: tabular-nums;
   }
   .stat-card strong small {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-faint);
-    margin-left: 4px;
-    letter-spacing: .04em;
+    font-size: 12px; font-weight: 500; color: var(--text-faint);
+    margin-left: 4px; letter-spacing: .04em;
   }
-
-  .bar-chart {
-    display: flex; align-items: flex-end;
-    gap: 10px;
-    height: 170px;
-    padding-top: 10px;
-  }
+  .bar-chart { display: flex; align-items: flex-end; gap: 10px; height: 170px; padding-top: 10px; }
   .bar-item {
-    flex: 1;
-    display: flex; flex-direction: column;
-    align-items: center; gap: 10px;
-    height: 100%; min-width: 0;
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; gap: 10px; height: 100%; min-width: 0;
   }
   .bar-track {
     flex: 1; width: 100%;
-    background: rgba(255,255,255,.035);
+    background: rgba(31,33,36,.05);
     border-radius: 6px;
     display: flex; align-items: flex-end;
     overflow: hidden;
   }
   .bar-fill {
-    width: 100%; min-height: 3px;
-    border-radius: 6px;
-    background: linear-gradient(180deg, var(--primary-soft), rgba(217,142,76,.4));
-    box-shadow: 0 0 14px rgba(230,161,92,.3);
+    width: 100%; min-height: 3px; border-radius: 6px;
+    background: linear-gradient(180deg, var(--accent-soft), var(--accent));
+    box-shadow: 0 0 12px rgba(232,131,78,.35);
     transition: height .7s cubic-bezier(.22,.9,.3,1);
   }
-  .bar-label {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text-faint);
-    letter-spacing: .04em;
-  }
-
-  .donut-card {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center;
-  }
+  .bar-label { font-size: 11px; font-weight: 500; color: var(--text-faint); letter-spacing: .04em; }
+  .donut-card { display: flex; flex-direction: column; align-items: center; justify-content: center; }
   .donut {
-    width: 152px; height: 152px;
-    border-radius: 50%;
+    width: 152px; height: 152px; border-radius: 50%;
     display: grid; place-items: center;
     margin: 14px 0 6px;
-    background: conic-gradient(
-      var(--success) calc(var(--p) * 1%),
-      rgba(255,255,255,.05) 0
-    );
+    background: conic-gradient(var(--mint) calc(var(--p) * 1%), rgba(31,33,36,.06) 0);
     transition: background .6s ease;
-    box-shadow: 0 0 30px -8px rgba(111,191,142,.3);
+    box-shadow: 0 8px 28px -10px rgba(91,168,138,.4);
   }
   .donut-inner {
-    width: 112px; height: 112px;
-    border-radius: 50%;
-    background: #101218;
+    width: 112px; height: 112px; border-radius: 50%;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.95);
     display: grid; place-items: center;
-    font-size: 22px;
-    font-weight: 300;
-    letter-spacing: -.02em;
-    color: var(--text);
+    font-size: 22px; font-weight: 300;
+    letter-spacing: -.02em; color: var(--text);
     font-variant-numeric: tabular-nums;
   }
 
-  /* ============================================================
-     手机底部导航
-     ============================================================ */
+  /* ---------- 手机底部导航 ---------- */
   .mobile-nav { display: none; }
 
-  /* ============================================================
-     提示条
-     ============================================================ */
+  /* ---------- Toast ---------- */
   .toast {
     position: fixed;
-    left: 50%;
-    bottom: 96px;
+    left: 50%; bottom: 96px;
     transform: translateX(-50%) translateY(16px);
-    background: rgba(20,22,28,.92);
-    border: 1px solid var(--line-strong);
-    color: var(--text);
+    background: rgba(35,37,42,.90);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255,255,255,.12);
+    color: #FFFFFF;
     padding: 11px 22px;
     border-radius: 999px;
-    font-size: 13.5px;
-    font-weight: 500;
-    opacity: 0;
-    pointer-events: none;
+    font-size: 13.5px; font-weight: 500;
+    opacity: 0; pointer-events: none;
     transition: opacity .3s, transform .3s;
     z-index: 200;
     max-width: 84vw;
     text-align: center;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 12px 40px -8px rgba(0,0,0,.8);
+    box-shadow: 0 16px 40px -12px rgba(31,33,36,.5);
   }
-  .toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* ============================================================
-     hover（仅桌面）
-     ============================================================ */
+  /* ---------- hover ---------- */
   @media (hover: hover) and (pointer: fine) {
-    .desktop-nav button:hover {
-      color: var(--text);
-      background: rgba(255,255,255,.03);
-    }
-    .desktop-nav button.active:hover {
-      color: var(--primary);
-      background: none;
-    }
-
-    .lang-toggle:hover {
-      color: var(--primary);
-      border-color: rgba(230,161,92,.4);
-    }
-
+    .desktop-nav button:hover { color: var(--text); background: rgba(255,255,255,.45); }
+    .desktop-nav button.active:hover { color: var(--text); background: rgba(255,255,255,.7); }
+    .lang-toggle:hover { color: var(--accent-deep); border-color: rgba(232,131,78,.35); background: rgba(255,255,255,.8); }
     .btn:hover {
-      filter: brightness(1.06);
-      box-shadow: 0 12px 30px -6px rgba(230,161,92,.55), inset 0 1px 0 rgba(255,255,255,.4);
+      filter: brightness(1.08);
+      box-shadow: 0 14px 30px -10px rgba(31,33,36,.5), inset 0 1px 0 rgba(255,255,255,.2);
     }
-    .btn.secondary:hover {
-      background: rgba(255,255,255,.075);
-      filter: none;
-      box-shadow: none;
-    }
-    .btn:disabled:hover {
-      filter: grayscale(.4);
-      box-shadow: none;
-    }
-
+    .btn.secondary:hover { background: rgba(255,255,255,.78); filter: none; box-shadow: var(--glass-inset); }
+    .btn:disabled:hover { filter: grayscale(.3); box-shadow: none; }
+    #btn-start:hover { box-shadow: 0 16px 36px -12px rgba(232,131,78,.75), inset 0 1px 0 rgba(255,255,255,.4); }
     .overview-card:hover {
       transform: translateY(-4px);
-      border-color: rgba(230,161,92,.28);
-      box-shadow:
-        0 32px 70px -20px rgba(0,0,0,.9),
-        0 0 0 1px rgba(230,161,92,.1),
-        inset 0 1px 0 rgba(255,255,255,.08);
+      background: var(--glass-hover);
+      border-color: rgba(255,255,255,.95);
+      box-shadow: var(--shadow-lift), var(--glass-inset);
     }
     .overview-card:hover::before { opacity: 1; }
-    .overview-card:hover .ov-arrow {
-      transform: translateX(5px);
-      color: var(--primary);
-    }
+    .overview-card:hover .ov-arrow { transform: translateX(5px); color: var(--accent-deep); }
     .overview-card:hover .ov-tarot-symbol {
-      transform: rotate(-5deg) scale(1.05);
-      border-color: rgba(167,139,250,.55);
+      transform: rotate(-5deg) scale(1.06);
+      box-shadow: 0 12px 26px -8px rgba(139,123,199,.6), var(--glass-inset);
     }
-
     .todo-item:hover {
-      background: rgba(255,255,255,.045);
-      border-color: rgba(255,255,255,.1);
+      background: rgba(255,255,255,.62);
+      border-color: rgba(255,255,255,.85);
+      box-shadow: 0 6px 18px -8px rgba(31,33,36,.14), var(--glass-inset);
     }
-    .todo-del:hover {
-      color: var(--primary);
-      background: rgba(230,161,92,.1);
-    }
+    .todo-del:hover { color: var(--accent-deep); background: rgba(232,131,78,.12); }
   }
 
-  /* ============================================================
-     手机端
-     ============================================================ */
+  /* ---------- 手机 ---------- */
   @media (max-width: 768px) {
     .desktop-nav { display: none; }
-
     .mobile-nav {
       display: flex;
       position: fixed;
       bottom: 0; left: 0; right: 0;
-      background: rgba(10,11,15,.82);
-      backdrop-filter: blur(24px) saturate(140%);
-      -webkit-backdrop-filter: blur(24px) saturate(140%);
-      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-top: 1px solid var(--glass-border-dim);
       padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
       z-index: 100;
     }
@@ -1021,8 +916,7 @@
       padding: 6px 0;
       display: flex; flex-direction: column;
       align-items: center; gap: 4px;
-      font-size: 10px;
-      font-weight: 500;
+      font-size: 10px; font-weight: 500;
       letter-spacing: .02em;
       color: var(--text-faint);
       cursor: pointer;
@@ -1032,83 +926,67 @@
       transition: color .25s, transform .15s;
     }
     .mobile-nav button .ico {
-      font-size: 19px;
-      line-height: 1;
+      font-size: 19px; line-height: 1;
       transition: transform .25s;
-      filter: grayscale(.3) saturate(.7);
-      opacity: .7;
+      opacity: .55;
+      filter: grayscale(.55);
     }
     .mobile-nav button:active { transform: scale(.94); }
-    .mobile-nav button.active { color: var(--primary); }
+    .mobile-nav button.active { color: var(--accent-deep); }
     .mobile-nav button.active .ico {
-      filter: none;
-      opacity: 1;
-      transform: translateY(-1px) scale(1.05);
+      filter: none; opacity: 1;
+      transform: translateY(-1px) scale(1.06);
     }
 
     .app { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
-
     .input, .select { font-size: 16px; }
     input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .todo-check { width: 24px; height: 24px; font-size: 13px; }
     .todo-del { width: 34px; height: 34px; font-size: 20px; }
-
     .toast { bottom: calc(84px + env(safe-area-inset-bottom)); }
-
     .duration-grid { grid-template-columns: 1fr; }
-
-    .overview-card:active {
-      transform: scale(.985);
-    }
-    .todo-item:active { background: rgba(255,255,255,.045); }
-
+    .overview-card:active { transform: scale(.985); }
+    .todo-item:active { background: rgba(255,255,255,.65); }
     .page.active .card,
-    .page.active .overview-card {
-      animation-duration: .45s;
-    }
+    .page.active .overview-card,
+    .page.active .hero-main,
+    .page.active .hero-date { animation-duration: .45s; }
   }
 
-  /* 超窄屏 */
   @media (max-width: 360px) {
     .app { padding-left: 14px; padding-right: 14px; }
     .card { padding: 18px; }
     .overview-card { padding: 18px; }
     h1 { font-size: 22px; }
+    .hero-title { font-size: 26px; }
+    .hero-day { font-size: 30px; }
     .page-head .sub { font-size: 13px; }
-
     .logo { font-size: 14px; gap: 8px; }
     .logo-icon { width: 24px; height: 24px; border-radius: 7px; }
     .lang-toggle { height: 30px; min-width: 40px; padding: 0 11px; font-size: 11px; }
-
     #timer-display { font-size: 38px; }
     .mode-tab { font-size: 12.5px; }
     .timer-actions .btn { padding: 0 16px; }
-
     .ov-big { font-size: 32px; }
-    .ov-head { font-size: 12px; }
+    .ov-head { font-size: 11.5px; }
     .ov-icon { font-size: 16px; }
     .ov-tarot-symbol { width: 46px; height: 46px; font-size: 22px; }
-
     .mobile-nav button { font-size: 9.5px; }
     .mobile-nav button .ico { font-size: 18px; }
-
     .stat-card strong { font-size: 32px; }
     .bar-chart { height: 140px; gap: 7px; }
     .donut { width: 128px; height: 128px; }
     .donut-inner { width: 92px; height: 92px; font-size: 18px; }
+    .week-stat-val { font-size: 22px; }
+    .week-stat-row { gap: 16px; }
   }
 
-  /* 桌面放大 */
   @media (min-width: 900px) {
     .topbar-inner, .app { max-width: 1180px; }
     .topbar-inner { padding: 16px 32px; }
     .logo { font-size: 17px; gap: 12px; }
-    .logo-icon { width: 30px; height: 30px; border-radius: 9px; }
+    .logo-icon { width: 30px; height: 30px; border-radius: 10px; }
     .desktop-nav button { font-size: 14px; padding: 10px 16px; }
     .lang-toggle { height: 36px; padding: 0 16px; }
 
@@ -1117,21 +995,28 @@
     h1 { font-size: 32px; }
     .page-head .sub { font-size: 15px; }
 
+    .home-hero { padding: 8px 4px 36px; gap: 32px; }
+    .hero-day { font-size: 52px; }
+    .hero-date { padding: 20px 26px; }
+
     .card { padding: 32px; margin-bottom: 22px; }
     h2 { font-size: 13.5px; margin-bottom: 20px; }
     .grid-2 { gap: 22px; }
 
     .overview-grid { gap: 22px; }
     .overview-card { padding: 32px; gap: 20px; }
-    .ov-head { font-size: 13.5px; }
+    .ov-head { font-size: 13px; }
     .ov-icon { font-size: 20px; }
     .ov-big { font-size: 48px; }
-    .ov-tarot-symbol { width: 60px; height: 60px; font-size: 30px; border-radius: 16px; }
+    .ov-tarot-symbol { width: 60px; height: 60px; font-size: 30px; border-radius: 17px; }
     .ov-tarot-name { font-size: 19px; }
     .ov-mini-chart { height: 66px; }
 
-    .duration-grid { gap: 18px; }
+    .week-card { padding: 26px 32px; }
+    .week-stat-val { font-size: 32px; }
+    .week-chart { height: 56px; }
 
+    .duration-grid { gap: 18px; }
     .mode-tabs { margin-bottom: 34px; }
     .mode-tab { font-size: 14px; padding: 11px 0; }
     .timer-wrap { width: 300px; margin-bottom: 32px; }
@@ -1157,19 +1042,12 @@
     .donut-inner { width: 132px; height: 132px; font-size: 26px; }
   }
 
-  /* 英文模式下标签使用字距和大小写 */
   html[lang="en"] .stat-label,
-  html[lang="en"] .ov-head {
-    letter-spacing: .12em;
-  }
-  html[lang="en"] #timer-label {
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    font-size: 10px;
-  }
-  html[lang="en"] .tarot-front-en {
-    letter-spacing: .22em;
-  }
+  html[lang="en"] .ov-head,
+  html[lang="en"] .week-stat-label { letter-spacing: .14em; }
+  html[lang="en"] #timer-label { letter-spacing: .2em; text-transform: uppercase; font-size: 10px; }
+  html[lang="en"] .tarot-front-en { letter-spacing: .22em; }
+  html[lang="en"] .hero-greeting { letter-spacing: .2em; }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -1187,12 +1065,12 @@
       <svg class="logo-icon" viewBox="0 0 100 100" aria-hidden="true">
         <defs>
           <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#F2C08A"/>
-            <stop offset="100%" stop-color="#D98E4C"/>
+            <stop offset="0%" stop-color="#FFFFFF"/>
+            <stop offset="100%" stop-color="#E4E7EE"/>
           </linearGradient>
         </defs>
-        <rect width="100" height="100" rx="24" fill="url(#logoGrad)"/>
-        <path d="M50 14 L58 39 L84 39 L63 54 L71 79 L50 64 L29 79 L37 54 L16 39 L42 39 Z" fill="#1A1208"/>
+        <rect width="100" height="100" rx="24" fill="url(#logoGrad)" stroke="#FFFFFF" stroke-width="4"/>
+        <path d="M50 18 L57 41 L81 41 L62 55 L69 77 L50 63 L31 77 L38 55 L19 41 L43 41 Z" fill="#E8834E"/>
       </svg>
       <span class="logo-text">Focus <span class="amp">&amp;</span> Tarot</span>
     </div>
@@ -1213,11 +1091,21 @@
 
   <!-- ========== 首页 ========== -->
   <section id="home" class="page active">
-    <div class="page-head">
-      <h1 data-i18n="homeTitle">今天也专注一点</h1>
-      <p class="sub" data-i18n="homeSub">四个板块的概况，点卡片进入详情</p>
+
+    <!-- Hero 区：问候 + 日期 -->
+    <div class="home-hero">
+      <div class="hero-main">
+        <p class="hero-greeting" id="hero-greeting">早上好</p>
+        <h1 class="hero-title" id="hero-title" data-i18n="homeTitle">今天也专注一点</h1>
+        <p class="hero-sub" data-i18n="homeSub">四个板块的概况，点卡片进入详情</p>
+      </div>
+      <div class="hero-date">
+        <div class="hero-day" id="hero-day">10</div>
+        <div class="hero-month" id="hero-month">NOV · MON</div>
+      </div>
     </div>
 
+    <!-- 四张概览卡 -->
     <div class="overview-grid">
       <button class="overview-card" data-page="pomodoro">
         <div class="ov-head">
@@ -1273,6 +1161,28 @@
         </div>
       </button>
     </div>
+
+    <!-- 本周概览 -->
+    <div class="card week-card">
+      <div class="week-strip">
+        <div class="week-stat-row">
+          <div class="week-stat">
+            <span class="week-stat-label" data-i18n="weekStreak">连续专注</span>
+            <span class="week-stat-val"><span id="week-streak">0</span><small data-i18n="dayUnit">天</small></span>
+          </div>
+          <div class="week-stat">
+            <span class="week-stat-label" data-i18n="weekTotal">本周专注</span>
+            <span class="week-stat-val accent"><span id="week-total">0</span><small data-i18n="minUnit">分钟</small></span>
+          </div>
+          <div class="week-stat">
+            <span class="week-stat-label" data-i18n="weekTomato">本周番茄</span>
+            <span class="week-stat-val"><span id="week-tomato">0</span><small data-i18n="countUnit">个</small></span>
+          </div>
+        </div>
+        <div class="week-chart" id="week-chart"></div>
+      </div>
+    </div>
+
   </section>
 
   <!-- ========== 番茄钟 ========== -->
@@ -1289,7 +1199,6 @@
           <button class="mode-tab" data-mode="short" data-i18n="shortMode">短休息</button>
           <button class="mode-tab" data-mode="long" data-i18n="longMode">长休息</button>
         </div>
-
         <div class="timer-wrap">
           <svg class="timer-ring" viewBox="0 0 200 200" aria-hidden="true">
             <circle class="ring-bg" cx="100" cy="100" r="90"></circle>
@@ -1300,7 +1209,6 @@
             <div id="timer-label">专注中</div>
           </div>
         </div>
-
         <div class="timer-actions">
           <button class="btn" id="btn-start">开始</button>
           <button class="btn secondary" id="btn-reset" data-i18n="reset">重置</button>
@@ -1313,12 +1221,10 @@
         <select class="select" id="todo-select">
           <option value="" data-i18n="noLink">不关联</option>
         </select>
-
         <div class="today-pill">
           <span data-i18n="todayCompleted">今日已完成</span>
           <strong><span id="today-count">0</span><span data-i18n="tomatoUnit"> 个番茄</span></strong>
         </div>
-
         <p class="hint" data-i18n="focusHint">专注结束后会自动记录到统计页，并给关联的待办 +1 🍅</p>
       </div>
     </div>
@@ -1378,7 +1284,7 @@
     </div>
   </section>
 
-  <!-- ========== 待办清单 ========== -->
+  <!-- ========== 待办 ========== -->
   <section id="todos" class="page">
     <div class="page-head">
       <h1 data-i18n="todosTitle">待办清单</h1>
@@ -1390,20 +1296,18 @@
         <input class="input" id="todo-input" type="text" maxlength="60" data-i18n-placeholder="todoPlaceholder" placeholder="写一件要完成的事…">
         <button class="btn" id="btn-add" data-i18n="addBtn">添加</button>
       </div>
-
       <div class="progress-line">
         <div class="progress-track">
           <div class="progress-fill" id="todo-progress-fill"></div>
         </div>
         <span id="todo-progress-text">0%</span>
       </div>
-
       <ul class="todo-list" id="todo-list"></ul>
       <p class="empty" id="todo-empty" data-i18n="emptyTodo">还没有待办，先添加一条吧。</p>
     </div>
   </section>
 
-  <!-- ========== 统计看板 ========== -->
+  <!-- ========== 统计 ========== -->
   <section id="stats" class="page">
     <div class="page-head">
       <h1 data-i18n="statsTitle">今日概览</h1>
@@ -1430,7 +1334,6 @@
         <h2 data-i18n="statLast7">最近 7 天专注</h2>
         <div class="bar-chart" id="bar-chart"></div>
       </div>
-
       <div class="card donut-card">
         <h2 data-i18n="statTodoStatus">待办完成情况</h2>
         <div class="donut" id="donut-rate" style="--p:0">
@@ -1456,21 +1359,12 @@
 (function () {
   'use strict';
 
-  /* ============================================================
-     语言字典
-     ============================================================ */
   var I18N = {
     zh: {
-      navHome: '🏠 首页',
-      navPomodoro: '🍅 番茄钟',
-      navFortune: '🔮 今日运势',
-      navTodos: '✅ 待办',
-      navStats: '📊 统计',
-      navHomeM: '首页',
-      navPomodoroM: '番茄',
-      navFortuneM: '运势',
-      navTodosM: '待办',
-      navStatsM: '统计',
+      navHome: '🏠 首页', navPomodoro: '🍅 番茄钟', navFortune: '🔮 今日运势',
+      navTodos: '✅ 待办', navStats: '📊 统计',
+      navHomeM: '首页', navPomodoroM: '番茄', navFortuneM: '运势',
+      navTodosM: '待办', navStatsM: '统计',
 
       homeTitle: '今天也专注一点',
       homeSub: '四个板块的概况，点卡片进入详情',
@@ -1483,33 +1377,19 @@
       statsTitle: '今日概览',
       statsSub: '专注与完成情况一目了然',
 
-      cardPomodoro: '番茄钟',
-      cardFortune: '今日运势',
-      cardTodos: '待办清单',
-      cardStats: '统计看板',
+      cardPomodoro: '番茄钟', cardFortune: '今日运势',
+      cardTodos: '待办清单', cardStats: '统计看板',
 
-      tomatoCountUnit: '个番茄',
-      tomatoUnit: ' 个番茄',
-      minUnit: '分钟',
-      percentComplete: '% 完成',
-      focusTodayLabel: '今日专注',
-      last7Days: '最近 7 天专注时长',
+      tomatoCountUnit: '个番茄', tomatoUnit: ' 个番茄',
+      minUnit: '分钟', percentComplete: '% 完成',
+      focusTodayLabel: '今日专注', last7Days: '最近 7 天专注时长',
 
-      notDrawn: '还没抽牌',
-      tapToDraw: '点进去抽一张',
+      notDrawn: '还没抽牌', tapToDraw: '点进去抽一张',
       ovTodoMetaTpl: '{d} / {t} 已完成',
 
-      focusMode: '专注',
-      shortMode: '短休息',
-      longMode: '长休息',
-      timerFocusing: '专注中',
-      timerShortBreak: '短休息',
-      timerLongBreak: '长休息',
-
-      start: '开始',
-      pause: '暂停',
-      resume: '继续',
-      reset: '重置',
+      focusMode: '专注', shortMode: '短休息', longMode: '长休息',
+      timerFocusing: '专注中', timerShortBreak: '短休息', timerLongBreak: '长休息',
+      start: '开始', pause: '暂停', resume: '继续', reset: '重置',
 
       currentFocus: '本次专注',
       linkTodo: '关联待办（可选）',
@@ -1525,24 +1405,25 @@
       resetDefault: '恢复默认',
       durationHint: '专注范围 1–180 分钟，休息范围 1–60 分钟。保存后如果正在计时，会自动重置当前计时器。',
 
-      drawCard: '抽一张牌',
-      comeBackTomorrow: '明天再来',
+      drawCard: '抽一张牌', comeBackTomorrow: '明天再来',
       dailyHint: '今天已经抽过啦，明天再来吧',
       readingTitle: '牌义解读',
       readingHint: '点击上方按钮，抽一张属于今天的牌',
       alreadyDrawnToast: '今天已经抽过了，明天再来吧',
 
       todoPlaceholder: '写一件要完成的事…',
-      addBtn: '添加',
-      pleaseEnter: '先写点什么吧',
-      addedToast: '已添加',
+      addBtn: '添加', pleaseEnter: '先写点什么吧', addedToast: '已添加',
       emptyTodo: '还没有待办，先添加一条吧。',
 
-      statFocusToday: '今日专注',
-      statPomodorosToday: '今日番茄',
-      statTodoRate: '待办完成率',
-      statLast7: '最近 7 天专注',
+      statFocusToday: '今日专注', statPomodorosToday: '今日番茄',
+      statTodoRate: '待办完成率', statLast7: '最近 7 天专注',
       statTodoStatus: '待办完成情况',
+
+      weekStreak: '连续专注', weekTotal: '本周专注', weekTomato: '本周番茄',
+      dayUnit: '天', countUnit: '个',
+
+      greetingMorning: '早上好', greetingAfternoon: '下午好', greetingEvening: '晚上好',
+      monthWeekTpl: '{m}月 · 周{d}',
 
       focusDoneToast: '专注完成！休息一下吧 🎉',
       breakDoneToast: '休息结束，继续专注吧 💪',
@@ -1554,16 +1435,10 @@
       docTitle: 'Focus & Tarot · 专注小站'
     },
     en: {
-      navHome: '🏠 Home',
-      navPomodoro: '🍅 Pomodoro',
-      navFortune: '🔮 Fortune',
-      navTodos: '✅ Todos',
-      navStats: '📊 Stats',
-      navHomeM: 'Home',
-      navPomodoroM: 'Pomo',
-      navFortuneM: 'Tarot',
-      navTodosM: 'Todo',
-      navStatsM: 'Stats',
+      navHome: '🏠 Home', navPomodoro: '🍅 Pomodoro', navFortune: '🔮 Fortune',
+      navTodos: '✅ Todos', navStats: '📊 Stats',
+      navHomeM: 'Home', navPomodoroM: 'Pomo', navFortuneM: 'Tarot',
+      navTodosM: 'Todo', navStatsM: 'Stats',
 
       homeTitle: "Stay focused today",
       homeSub: 'A quick overview of all four sections. Tap a card to open it.',
@@ -1576,33 +1451,19 @@
       statsTitle: "Today's Overview",
       statsSub: 'A clear view of focus and completion.',
 
-      cardPomodoro: 'Pomodoro',
-      cardFortune: 'Fortune',
-      cardTodos: 'Todos',
-      cardStats: 'Stats',
+      cardPomodoro: 'Pomodoro', cardFortune: 'Fortune',
+      cardTodos: 'Todos', cardStats: 'Stats',
 
-      tomatoCountUnit: 'tomatoes',
-      tomatoUnit: ' tomatoes',
-      minUnit: 'min',
-      percentComplete: '% done',
-      focusTodayLabel: 'Focus today',
-      last7Days: 'Focus time in the last 7 days',
+      tomatoCountUnit: 'tomatoes', tomatoUnit: ' tomatoes',
+      minUnit: 'min', percentComplete: '% done',
+      focusTodayLabel: 'Focus today', last7Days: 'Focus time in the last 7 days',
 
-      notDrawn: 'Not drawn yet',
-      tapToDraw: 'Tap to draw',
+      notDrawn: 'Not drawn yet', tapToDraw: 'Tap to draw',
       ovTodoMetaTpl: '{d} / {t} completed',
 
-      focusMode: 'Focus',
-      shortMode: 'Short break',
-      longMode: 'Long break',
-      timerFocusing: 'Focusing',
-      timerShortBreak: 'Short break',
-      timerLongBreak: 'Long break',
-
-      start: 'Start',
-      pause: 'Pause',
-      resume: 'Resume',
-      reset: 'Reset',
+      focusMode: 'Focus', shortMode: 'Short break', longMode: 'Long break',
+      timerFocusing: 'Focusing', timerShortBreak: 'Short break', timerLongBreak: 'Long break',
+      start: 'Start', pause: 'Pause', resume: 'Resume', reset: 'Reset',
 
       currentFocus: 'This session',
       linkTodo: 'Link a todo (optional)',
@@ -1618,17 +1479,14 @@
       resetDefault: 'Reset to defaults',
       durationHint: "Focus 1–180 min, breaks 1–60 min. Saving will reset the current timer if it's running.",
 
-      drawCard: 'Draw a card',
-      comeBackTomorrow: 'Come back tomorrow',
+      drawCard: 'Draw a card', comeBackTomorrow: 'Come back tomorrow',
       dailyHint: "You've already drawn today. Come back tomorrow.",
       readingTitle: 'Interpretation',
       readingHint: "Tap the button above to draw today's card.",
       alreadyDrawnToast: 'Already drawn today. Come back tomorrow.',
 
       todoPlaceholder: 'What do you need to finish?',
-      addBtn: 'Add',
-      pleaseEnter: 'Please write something',
-      addedToast: 'Added',
+      addBtn: 'Add', pleaseEnter: 'Please write something', addedToast: 'Added',
       emptyTodo: 'No todos yet. Add one to get started.',
 
       statFocusToday: 'Focus today',
@@ -1636,6 +1494,12 @@
       statTodoRate: 'Todo completion',
       statLast7: 'Focus in last 7 days',
       statTodoStatus: 'Todo completion',
+
+      weekStreak: 'Current streak', weekTotal: 'This week', weekTomato: 'Pomodoros',
+      dayUnit: 'days', countUnit: '',
+
+      greetingMorning: 'Good morning', greetingAfternoon: 'Good afternoon', greetingEvening: 'Good evening',
+      monthWeekTpl: '{m} · {d}',
 
       focusDoneToast: 'Focus done! Take a break 🎉',
       breakDoneToast: "Break's over. Time to focus 💪",
@@ -1652,11 +1516,8 @@
   var lang = localStorage.getItem(LANG_KEY) || 'zh';
   if (!I18N[lang]) lang = 'zh';
 
-  function t(key) {
-    return I18N[lang][key] != null ? I18N[lang][key] : key;
-  }
+  function t(key) { return I18N[lang][key] != null ? I18N[lang][key] : key; }
 
-  /* ---------- 通用工具 ---------- */
   var toastTimer = null;
   function toast(msg) {
     var el = document.getElementById('toast');
@@ -1672,22 +1533,17 @@
       String(d.getMonth() + 1).padStart(2, '0') + '-' +
       String(d.getDate()).padStart(2, '0');
   }
-
   function dateStr(d) {
     return d.getFullYear() + '-' +
       String(d.getMonth() + 1).padStart(2, '0') + '-' +
       String(d.getDate()).padStart(2, '0');
   }
-
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
-
-  function clamp(n, min, max) {
-    return Math.min(max, Math.max(min, n));
-  }
+  function clamp(n, min, max) { return Math.min(max, Math.max(min, n)); }
 
   function countUp(el, to, duration) {
     if (!el) return;
@@ -1706,10 +1562,9 @@
     requestAnimationFrame(step);
   }
 
-  /* ---------- 页面切换 ---------- */
   function applyStagger(pageEl) {
     if (!pageEl) return;
-    var items = pageEl.querySelectorAll('.card, .overview-card');
+    var items = pageEl.querySelectorAll('.card, .overview-card, .hero-main, .hero-date');
     items.forEach(function (el, i) {
       el.style.animationDelay = (i * 55) + 'ms';
     });
@@ -1722,17 +1577,13 @@
     document.querySelectorAll('[data-page]').forEach(function (b) {
       b.classList.toggle('active', b.dataset.page === id);
     });
-
     var pageEl = document.getElementById(id);
     applyStagger(pageEl);
 
     if (id === 'home') renderHome();
     if (id === 'todos') renderTodos();
     if (id === 'stats') renderStats();
-    if (id === 'fortune') {
-      ensureDailyTarotFresh();
-      syncFortunePage();
-    }
+    if (id === 'fortune') { ensureDailyTarotFresh(); syncFortunePage(); }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -1743,12 +1594,10 @@
     });
   });
 
-  /* ---------- 数据层 ---------- */
   var TODO_KEY = 'ft_todos';
   var RECORD_KEY = 'ft_records';
   var DAILY_TAROT_KEY = 'ft_daily_tarot';
   var DURATION_KEY = 'ft_durations';
-
   var DEFAULT_DURATIONS = { focus: 25, short: 5, long: 15 };
 
   var todos = [];
@@ -1781,137 +1630,206 @@
           long: clamp(Number(d.long) || DEFAULT_DURATIONS.long, 1, 60)
         };
       }
-    } catch (e) { /* ignore */ }
-    return {
-      focus: DEFAULT_DURATIONS.focus,
-      short: DEFAULT_DURATIONS.short,
-      long: DEFAULT_DURATIONS.long
-    };
+    } catch (e) {}
+    return { focus: DEFAULT_DURATIONS.focus, short: DEFAULT_DURATIONS.short, long: DEFAULT_DURATIONS.long };
   }
 
   function saveTodos() { localStorage.setItem(TODO_KEY, JSON.stringify(todos)); }
   function saveRecords() { localStorage.setItem(RECORD_KEY, JSON.stringify(focusRecords)); }
   function saveDailyTarot() {
-    if (dailyTarot) {
-      localStorage.setItem(DAILY_TAROT_KEY, JSON.stringify(dailyTarot));
-    } else {
-      localStorage.removeItem(DAILY_TAROT_KEY);
-    }
+    if (dailyTarot) localStorage.setItem(DAILY_TAROT_KEY, JSON.stringify(dailyTarot));
+    else localStorage.removeItem(DAILY_TAROT_KEY);
   }
-  function saveDurations() {
-    localStorage.setItem(DURATION_KEY, JSON.stringify(durations));
-  }
+  function saveDurations() { localStorage.setItem(DURATION_KEY, JSON.stringify(durations)); }
 
-  /* ---------- 塔罗数据 ---------- */
   var TAROT = [
-    {
-      symbol: '🃏',
+    { symbol: '🃏',
       zh: { name: '愚者', keywords: '新开始 · 冒险 · 纯真',
         reading: '今天适合迈出一小步。不必把路想得很清楚，先出发，答案会在路上慢慢出现。放下对"必须完美"的执念，给自己一次轻松尝试的机会。' },
       en: { name: 'The Fool', keywords: 'New Beginnings · Adventure · Innocence',
-        reading: "Take a small step today. You don't need the whole path figured out—just start, and answers will appear along the way. Let go of the need to be perfect." }
-    },
-    {
-      symbol: '✨',
+        reading: "Take a small step today. You don't need the whole path figured out—just start, and answers will appear along the way." } },
+    { symbol: '✨',
       zh: { name: '魔术师', keywords: '创造力 · 行动 · 资源',
         reading: '你手边已有的东西，比你以为的更有用。今天适合把想法落到具体动作上，写下第一行字、发出第一条消息、开始第一个 25 分钟。' },
       en: { name: 'The Magician', keywords: 'Creativity · Action · Resources',
-        reading: 'What you already have is more useful than you think. Put ideas into concrete action today: write the first line, send the first message, start the first 25 minutes.' }
-    },
-    {
-      symbol: '🌙',
+        reading: 'What you already have is more useful than you think. Put ideas into concrete action today.' } },
+    { symbol: '🌙',
       zh: { name: '女祭司', keywords: '直觉 · 内省 · 静默',
         reading: '今天不必急着表达。安静一点，听听自己真实的想法。有些答案不在搜索框里，而在你独处时冒出来的那个念头上。' },
       en: { name: 'The High Priestess', keywords: 'Intuition · Introspection · Silence',
-        reading: "No need to rush to express. Quiet down and listen to what you really think. Some answers don't live in a search bar—they come up when you're alone." }
-    },
-    {
-      symbol: '👑',
+        reading: "No need to rush to express. Quiet down and listen to what you really think." } },
+    { symbol: '👑',
       zh: { name: '皇后', keywords: '丰盛 · 滋养 · 感官',
         reading: '适合照顾自己。好好吃一顿饭，整理一下桌面，给身体一点舒展。被滋养的状态，才撑得起长时间的专注。' },
       en: { name: 'The Empress', keywords: 'Abundance · Nurturing · Senses',
-        reading: 'Take care of yourself. Eat a proper meal, tidy your desk, stretch. Only a nourished body can hold long stretches of focus.' }
-    },
-    {
-      symbol: '🛡️',
+        reading: 'Take care of yourself. Only a nourished body can hold long stretches of focus.' } },
+    { symbol: '🛡️',
       zh: { name: '皇帝', keywords: '秩序 · 掌控 · 责任',
         reading: '今天适合建立结构。列一份清单，排出优先级，把混乱的事情归位。秩序不是束缚，而是让你更省力地前进。' },
       en: { name: 'The Emperor', keywords: 'Order · Control · Responsibility',
-        reading: 'Build structure today. Make a list, set priorities, put messy things back in order. Structure frees you up rather than tying you down.' }
-    },
-    {
-      symbol: '💞',
+        reading: 'Build structure today. Structure frees you up rather than tying you down.' } },
+    { symbol: '💞',
       zh: { name: '恋人', keywords: '选择 · 结合 · 价值',
         reading: '今天可能会面对一个选择。别只看哪个更容易，问问自己更在意什么。诚实的选择，后面走起来才不会拧巴。' },
       en: { name: 'The Lovers', keywords: 'Choice · Union · Values',
-        reading: "A choice might come up. Don't just pick the easier one—ask what you actually care about. An honest choice is easier to walk with later." }
-    },
-    {
-      symbol: '🏎️',
+        reading: "A choice might come up. Don't just pick the easier one—ask what you actually care about." } },
+    { symbol: '🏎️',
       zh: { name: '战车', keywords: '意志 · 前进 · 胜利',
         reading: '今天适合推进。把注意力收拢到一件事上，哪怕只做 25 分钟，也比同时开五个头强。方向对了，速度自然会上来。' },
       en: { name: 'The Chariot', keywords: 'Willpower · Progress · Victory',
-        reading: 'A day to push forward. Narrow your attention to one thing. Even 25 minutes beats starting five things at once. With direction, speed will follow.' }
-    },
-    {
-      symbol: '🦁',
+        reading: 'A day to push forward. With direction, speed will follow.' } },
+    { symbol: '🦁',
       zh: { name: '力量', keywords: '勇气 · 耐心 · 温柔',
         reading: '真正的力量不一定是硬扛。今天试着用更温和的方式对待自己的拖延和情绪，先接纳，再一点点往前挪。' },
       en: { name: 'Strength', keywords: 'Courage · Patience · Gentleness',
-        reading: "Real strength isn't always about pushing hard. Be gentler with your procrastination and feelings—first accept, then nudge forward." }
-    },
-    {
-      symbol: '🏔️',
+        reading: 'Be gentler with your procrastination and feelings—first accept, then nudge forward.' } },
+    { symbol: '🏔️',
       zh: { name: '隐士', keywords: '独处 · 反思 · 指引',
         reading: '今天适合关掉一些噪音。少刷一会儿，多留一点独处的时间。你会更容易听清自己真正想做的下一步。' },
       en: { name: 'The Hermit', keywords: 'Solitude · Reflection · Guidance',
-        reading: "Turn down the noise today. Scroll less, give yourself some alone time. You'll hear your true next step more clearly." }
-    },
-    {
-      symbol: '🎡',
+        reading: "Turn down the noise today. You'll hear your true next step more clearly." } },
+    { symbol: '🎡',
       zh: { name: '命运之轮', keywords: '转机 · 周期 · 机遇',
         reading: '事情正在转动。可能有计划外的变化，也可能是一个小小的机会。保持开放，别因为和预期不一样就急着否定。' },
       en: { name: 'Wheel of Fortune', keywords: 'Turning Point · Cycles · Opportunity',
-        reading: "Things are turning. There may be unexpected changes, or a small opportunity. Stay open—don't dismiss things just because they differ from what you expected." }
-    },
-    {
-      symbol: '⭐',
+        reading: "Things are turning. Stay open—don't dismiss things just because they differ from what you expected." } },
+    { symbol: '⭐',
       zh: { name: '星星', keywords: '希望 · 疗愈 · 灵感',
         reading: '今天适合做一点让自己恢复的事。喝口水、走两步、看看窗外。灵感往往在放松之后才来，而不是在硬撑的时候。' },
       en: { name: 'The Star', keywords: 'Hope · Healing · Inspiration',
-        reading: "Do something restorative today. Drink water, take a short walk, look out the window. Inspiration usually comes after rest, not while you're grinding." }
-    },
-    {
-      symbol: '🌊',
+        reading: "Do something restorative today. Inspiration usually comes after rest, not while you're grinding." } },
+    { symbol: '🌊',
       zh: { name: '月亮', keywords: '潜意识 · 迷雾 · 情绪',
         reading: '今天的情绪可能有点起伏，别急着下结论。给不确定留一点空间，等雾散一点再看，会比现在清楚得多。' },
       en: { name: 'The Moon', keywords: 'Subconscious · Mystery · Emotion',
-        reading: "Your feelings may swing a bit today—don't jump to conclusions. Give uncertainty some space. It'll be clearer once the fog lifts." }
-    },
-    {
-      symbol: '☀️',
+        reading: "Your feelings may swing a bit today—don't jump to conclusions. It'll be clearer once the fog lifts." } },
+    { symbol: '☀️',
       zh: { name: '太阳', keywords: '活力 · 成功 · 清晰',
         reading: '状态不错的一天。适合把最重要的事放在前面做，也适合把开心分享给别人。好状态值得被好好利用。' },
       en: { name: 'The Sun', keywords: 'Vitality · Success · Clarity',
-        reading: 'A good-energy day. Put the most important thing first, and share your joy with others. Good states deserve to be used well.' }
-    },
-    {
-      symbol: '🌍',
+        reading: 'A good-energy day. Put the most important thing first, and share your joy with others.' } },
+    { symbol: '🌍',
       zh: { name: '世界', keywords: '完成 · 圆满 · 旅程',
         reading: '适合收尾。把拖着没结束的小事做完，给自己一个明确的结束感。完成本身，就是最好的奖励。' },
       en: { name: 'The World', keywords: 'Completion · Fulfillment · Journey',
-        reading: "A day for closure. Finish small tasks you've been putting off, and give yourself a clear sense of ending. Completion itself is the reward." }
-    }
+        reading: 'A day for closure. Completion itself is the reward.' } }
   ];
 
-  /* ---------- 首页概况 ---------- */
-  function renderHome() {
-    var today = todayStr();
+  /* ---------- 首页 ---------- */
+  function updateHero() {
+    var now = new Date();
+    var h = now.getHours();
 
+    var greetKey = 'greetingMorning';
+    if (h >= 12 && h < 18) greetKey = 'greetingAfternoon';
+    else if (h >= 18 || h < 5) greetKey = 'greetingEvening';
+
+    var greetEl = document.getElementById('hero-greeting');
+    if (greetEl) greetEl.textContent = t(greetKey);
+
+    var dayEl = document.getElementById('hero-day');
+    var monthEl = document.getElementById('hero-month');
+    if (dayEl) dayEl.textContent = now.getDate();
+
+    if (monthEl) {
+      if (lang === 'zh') {
+        var zhDay = ['日', '一', '二', '三', '四', '五', '六'][now.getDay()];
+        monthEl.textContent = t('monthWeekTpl').replace('{m}', now.getMonth() + 1).replace('{d}', zhDay);
+      } else {
+        var enMonth = now.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+        var enDay = now.toLocaleString('en-US', { weekday: 'short' }).toUpperCase();
+        monthEl.textContent = enMonth + ' · ' + enDay;
+      }
+    }
+  }
+
+  function calcStreak() {
+    // 从今天开始往前数有记录的天数；今天如果还没记录就从昨天开始
+    var count = 0;
+    var cursor = new Date();
+    if (!focusRecords.some(function (r) { return r.date === dateStr(cursor); })) {
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    while (true) {
+      var ds = dateStr(cursor);
+      var has = focusRecords.some(function (r) { return r.date === ds; });
+      if (!has) break;
+      count++;
+      cursor.setDate(cursor.getDate() - 1);
+      if (count > 3650) break;
+    }
+    return count;
+  }
+
+  function calcWeekData() {
+    // 返回 [{label, minutes, isToday}] 共 7 天，从 6 天前到今天
+    var arr = [];
+    var weekLabelsZh = ['日', '一', '二', '三', '四', '五', '六'];
+    var weekLabelsEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var labels = lang === 'en' ? weekLabelsEn : weekLabelsZh;
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date();
+      d.setDate(d.getDate() - i);
+      var ds = dateStr(d);
+      var minutes = focusRecords
+        .filter(function (r) { return r.date === ds; })
+        .reduce(function (s, r) { return s + (Number(r.minutes) || 0); }, 0);
+      arr.push({ minutes: minutes, isToday: i === 0, label: labels[d.getDay()] });
+    }
+    return arr;
+  }
+
+  function renderWeek() {
+    var weekData = calcWeekData();
+    var totalMin = 0, totalTomato = 0;
+    weekData.forEach(function (v) {
+      totalMin += v.minutes;
+      if (v.minutes > 0) totalTomato += 1; // 简化：有记录的算一个番茄日
+    });
+
+    // 更精确的：本周番茄数 = 本周所有记录条数
+    var today = new Date();
+    var weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - 6);
+    weekStart.setHours(0,0,0,0);
+    var todayTomato = focusRecords.filter(function (r) {
+      // 从 6 天前到今天
+      for (var i = 0; i < 7; i++) {
+        var d = new Date();
+        d.setDate(d.getDate() - i);
+        if (r.date === dateStr(d)) return true;
+      }
+      return false;
+    }).length;
+
+    countUp(document.getElementById('week-streak'), calcStreak());
+    countUp(document.getElementById('week-total'), totalMin);
+    countUp(document.getElementById('week-tomato'), todayTomato);
+
+    var chart = document.getElementById('week-chart');
+    if (!chart) return;
+    chart.innerHTML = '';
+    var max = Math.max.apply(null, weekData.map(function (v) { return v.minutes; }).concat([1]));
+    weekData.forEach(function (v) {
+      var wrap = document.createElement('div');
+      wrap.className = 'week-bar-wrap';
+      var bar = document.createElement('div');
+      bar.className = 'week-bar' + (v.isToday ? ' today' : '');
+      bar.style.height = '0%';
+      wrap.appendChild(bar);
+      chart.appendChild(wrap);
+      requestAnimationFrame(function () {
+        bar.style.height = Math.max(6, Math.round(v.minutes / max * 100)) + '%';
+      });
+    });
+  }
+
+  function renderHome() {
+    updateHero();
+
+    var today = todayStr();
     var todayRecords = focusRecords.filter(function (r) { return r.date === today; });
-    var todayMinutes = todayRecords.reduce(function (s, r) {
-      return s + (Number(r.minutes) || 0);
-    }, 0);
+    var todayMinutes = todayRecords.reduce(function (s, r) { return s + (Number(r.minutes) || 0); }, 0);
 
     countUp(document.getElementById('ov-tomatoes'), todayRecords.length);
     countUp(document.getElementById('ov-minutes'), todayMinutes);
@@ -1926,8 +1844,7 @@
     var metaEl = document.getElementById('ov-todo-meta');
     if (metaEl) {
       metaEl.textContent = t('ovTodoMetaTpl')
-        .replace('{d}', doneCount)
-        .replace('{t}', todos.length);
+        .replace('{d}', doneCount).replace('{t}', todos.length);
     }
 
     if (dailyTarot && TAROT[dailyTarot.index]) {
@@ -1943,6 +1860,7 @@
     }
 
     renderMiniChart();
+    renderWeek();
   }
 
   function renderMiniChart() {
@@ -1968,7 +1886,7 @@
     });
   }
 
-  /* ---------- 待办清单 ---------- */
+  /* ---------- 待办 ---------- */
   function renderTodos() {
     var list = document.getElementById('todo-list');
     var empty = document.getElementById('todo-empty');
@@ -2030,13 +1948,11 @@
   document.getElementById('todo-list').addEventListener('click', function (e) {
     var check = e.target.closest('.todo-check');
     var del = e.target.closest('.todo-del');
-
     if (check) {
       var id = Number(check.dataset.id);
       var td = todos.find(function (x) { return x.id === id; });
       if (td) { td.done = !td.done; saveTodos(); renderTodos(); }
     }
-
     if (del) {
       var did = Number(del.dataset.id);
       todos = todos.filter(function (x) { return x.id !== did; });
@@ -2047,12 +1963,11 @@
 
   /* ---------- 番茄钟 ---------- */
   var MODES = {
-    focus: { minutes: durations.focus, labelKey: 'timerFocusing', color: '#E6A15C' },
-    short: { minutes: durations.short, labelKey: 'timerShortBreak', color: '#6FBF8E' },
-    long:  { minutes: durations.long,  labelKey: 'timerLongBreak',  color: '#A78BFA' }
+    focus: { minutes: durations.focus, labelKey: 'timerFocusing', color: '#E8834E' },
+    short: { minutes: durations.short, labelKey: 'timerShortBreak', color: '#5BA88A' },
+    long:  { minutes: durations.long,  labelKey: 'timerLongBreak',  color: '#8B7BC7' }
   };
   var CIRCUMFERENCE = 565.49;
-
   var mode = 'focus';
   var totalSeconds = MODES.focus.minutes * 60;
   var remaining = totalSeconds;
@@ -2065,19 +1980,13 @@
   var ringEl = document.getElementById('ring-fg');
   var startBtn = document.getElementById('btn-start');
 
-  function updateStartBtn() {
-    startBtn.textContent = t(startBtnState);
-  }
-  function setStartBtn(state) {
-    startBtnState = state;
-    updateStartBtn();
-  }
+  function updateStartBtn() { startBtn.textContent = t(startBtnState); }
+  function setStartBtn(state) { startBtnState = state; updateStartBtn(); }
 
   function updateTimerUI() {
     var m = Math.floor(remaining / 60);
     var s = remaining % 60;
-    displayEl.textContent =
-      String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    displayEl.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
     var ratio = totalSeconds > 0 ? remaining / totalSeconds : 0;
     ringEl.style.strokeDashoffset = CIRCUMFERENCE * (1 - ratio);
     ringEl.style.stroke = MODES[mode].color;
@@ -2101,14 +2010,8 @@
     timerId = null;
     running = false;
     setStartBtn('start');
-
-    if (mode === 'focus') {
-      addFocusRecord();
-      toast(t('focusDoneToast'));
-    } else {
-      toast(t('breakDoneToast'));
-    }
-
+    if (mode === 'focus') { addFocusRecord(); toast(t('focusDoneToast')); }
+    else { toast(t('breakDoneToast')); }
     remaining = totalSeconds;
     updateTimerUI();
   }
@@ -2116,7 +2019,6 @@
   function addFocusRecord() {
     var select = document.getElementById('todo-select');
     var todoId = select.value ? Number(select.value) : null;
-
     focusRecords.push({
       id: Date.now(),
       date: todayStr(),
@@ -2124,12 +2026,10 @@
       todoId: todoId
     });
     saveRecords();
-
     if (todoId) {
       var td = todos.find(function (x) { return x.id === todoId; });
       if (td) { td.tomatoes = (td.tomatoes || 0) + 1; saveTodos(); }
     }
-
     renderTodos();
     renderStats();
     renderHome();
@@ -2159,9 +2059,7 @@
     }
   });
 
-  document.getElementById('btn-reset').addEventListener('click', function () {
-    stopAndResetTimer();
-  });
+  document.getElementById('btn-reset').addEventListener('click', stopAndResetTimer);
 
   document.querySelectorAll('.mode-tab').forEach(function (tab) {
     tab.addEventListener('click', function () {
@@ -2177,7 +2075,6 @@
     });
   });
 
-  /* ---------- 自定义时长 ---------- */
   var durFocusEl = document.getElementById('dur-focus');
   var durShortEl = document.getElementById('dur-short');
   var durLongEl = document.getElementById('dur-long');
@@ -2198,43 +2095,33 @@
     var f = clamp(Number(durFocusEl.value) || DEFAULT_DURATIONS.focus, 1, 180);
     var s = clamp(Number(durShortEl.value) || DEFAULT_DURATIONS.short, 1, 60);
     var l = clamp(Number(durLongEl.value) || DEFAULT_DURATIONS.long, 1, 60);
-
     durations = { focus: f, short: s, long: l };
     saveDurations();
     applyDurationsToModes();
     syncDurationInputs();
     stopAndResetTimer();
-
     toast(t('settingsSavedToast'));
   });
 
   document.getElementById('btn-reset-duration').addEventListener('click', function () {
-    durations = {
-      focus: DEFAULT_DURATIONS.focus,
-      short: DEFAULT_DURATIONS.short,
-      long: DEFAULT_DURATIONS.long
-    };
+    durations = { focus: 25, short: 5, long: 15 };
     saveDurations();
     applyDurationsToModes();
     syncDurationInputs();
     stopAndResetTimer();
-
     toast(t('defaultsRestoredToast'));
   });
 
   /* ---------- 塔罗 ---------- */
   function hasDrawnToday() {
-    return dailyTarot && dailyTarot.date === todayStr() &&
-      typeof dailyTarot.index === 'number';
+    return dailyTarot && dailyTarot.date === todayStr() && typeof dailyTarot.index === 'number';
   }
-
   function ensureDailyTarotFresh() {
     if (dailyTarot && dailyTarot.date !== todayStr()) {
       dailyTarot = null;
       localStorage.removeItem(DAILY_TAROT_KEY);
     }
   }
-
   function renderTarotCard(card) {
     var data = card[lang] || card.zh;
     document.getElementById('tarot-symbol').textContent = card.symbol;
@@ -2243,7 +2130,6 @@
     document.getElementById('tarot-keywords').textContent = data.keywords;
     document.getElementById('tarot-reading').textContent = data.reading;
   }
-
   function updateDrawBtn() {
     var btn = document.getElementById('btn-draw');
     var hint = document.getElementById('tarot-daily-hint');
@@ -2258,12 +2144,10 @@
       hint.hidden = true;
     }
   }
-
   function syncFortunePage() {
     var cardEl = document.getElementById('tarot-card');
     var keywordsEl = document.getElementById('tarot-keywords');
     var readingEl = document.getElementById('tarot-reading');
-
     if (!hasDrawnToday()) {
       cardEl.classList.remove('flipped');
       updateDrawBtn();
@@ -2271,46 +2155,30 @@
       readingEl.textContent = '';
       return;
     }
-
     var card = TAROT[dailyTarot.index];
     if (!card) return;
-
     renderTarotCard(card);
     updateDrawBtn();
-
-    setTimeout(function () {
-      cardEl.classList.add('flipped');
-    }, 120);
+    setTimeout(function () { cardEl.classList.add('flipped'); }, 120);
   }
 
   var drawing = false;
-
   document.getElementById('btn-draw').addEventListener('click', function () {
     if (drawing) return;
-
-    if (hasDrawnToday()) {
-      toast(t('alreadyDrawnToast'));
-      return;
-    }
-
+    if (hasDrawnToday()) { toast(t('alreadyDrawnToast')); return; }
     drawing = true;
     var cardEl = document.getElementById('tarot-card');
     var btn = document.getElementById('btn-draw');
     var wasFlipped = cardEl.classList.contains('flipped');
-
     cardEl.classList.remove('flipped');
     btn.disabled = true;
-
     setTimeout(function () {
       var index = Math.floor(Math.random() * TAROT.length);
       var card = TAROT[index];
-
       dailyTarot = { date: todayStr(), index: index };
       saveDailyTarot();
-
       renderTarotCard(card);
       cardEl.classList.add('flipped');
-
       updateDrawBtn();
       drawing = false;
       renderHome();
@@ -2321,94 +2189,71 @@
   function renderStats() {
     var today = todayStr();
     var todayRecords = focusRecords.filter(function (r) { return r.date === today; });
-    var todayMinutes = todayRecords.reduce(function (sum, r) {
-      return sum + (Number(r.minutes) || 0);
-    }, 0);
-
+    var todayMinutes = todayRecords.reduce(function (s, r) { return s + (Number(r.minutes) || 0); }, 0);
     countUp(document.getElementById('stat-minutes'), todayMinutes);
     countUp(document.getElementById('stat-tomatoes'), todayRecords.length);
-
     var doneCount = todos.filter(function (x) { return x.done; }).length;
     var rate = todos.length ? Math.round(doneCount / todos.length * 100) : 0;
     countUp(document.getElementById('stat-rate'), rate);
-
     var donut = document.getElementById('donut-rate');
     donut.style.setProperty('--p', rate);
     document.getElementById('donut-rate-text').textContent = rate + '%';
-
     var tc = document.getElementById('today-count');
     if (tc) tc.textContent = todayRecords.length;
-
     renderBarChart();
   }
 
   function renderBarChart() {
     var chart = document.getElementById('bar-chart');
     chart.innerHTML = '';
-
     var weekLabels = lang === 'en'
       ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
       : ['日', '一', '二', '三', '四', '五', '六'];
-
     var values = [];
-
     for (var i = 6; i >= 0; i--) {
       var d = new Date();
       d.setDate(d.getDate() - i);
       var ds = dateStr(d);
       var minutes = focusRecords
         .filter(function (r) { return r.date === ds; })
-        .reduce(function (sum, r) { return sum + (Number(r.minutes) || 0); }, 0);
+        .reduce(function (s, r) { return s + (Number(r.minutes) || 0); }, 0);
       values.push({ label: weekLabels[d.getDay()], minutes: minutes });
     }
-
-    var max = Math.max.apply(null, values.map(function (v) {
-      return v.minutes;
-    }).concat([1]));
-
+    var max = Math.max.apply(null, values.map(function (v) { return v.minutes; }).concat([1]));
     values.forEach(function (v) {
       var item = document.createElement('div');
       item.className = 'bar-item';
-
       var track = document.createElement('div');
       track.className = 'bar-track';
-
       var fill = document.createElement('div');
       fill.className = 'bar-fill';
       fill.style.height = '0%';
       track.appendChild(fill);
-
       var label = document.createElement('span');
       label.className = 'bar-label';
       label.textContent = v.label;
-
       item.appendChild(track);
       item.appendChild(label);
       chart.appendChild(item);
-
       requestAnimationFrame(function () {
         fill.style.height = (v.minutes / max * 100) + '%';
       });
     });
   }
 
-  /* ---------- 语言应用 ---------- */
+  /* ---------- 语言 ---------- */
   function applyLang() {
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
     document.title = t('docTitle');
-
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       var val = I18N[lang][el.dataset.i18n];
       if (val != null) el.textContent = val;
     });
-
     document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
       var val = I18N[lang][el.dataset.i18nPlaceholder];
       if (val != null) el.placeholder = val;
     });
-
     document.getElementById('lang-toggle').textContent = t('langBtnText');
-
     updateStartBtn();
     updateTimerUI();
     renderTodos();
@@ -2424,7 +2269,6 @@
     toast(lang === 'zh' ? '切换到中文' : 'Switched to English');
   });
 
-  /* ---------- 初始化 ---------- */
   syncDurationInputs();
   syncFortunePage();
   applyLang();
