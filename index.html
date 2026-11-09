@@ -67,14 +67,12 @@
   .page { display: none; }
   .page.active { display: block; }
 
-  /* 页面进入动画 */
   @keyframes pageIn {
     from { opacity: 0; transform: translateY(14px) scale(.995); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
   }
   .page.active { animation: pageIn .38s cubic-bezier(.22,.9,.3,1) both; }
 
-  /* 卡片交错入场 */
   @keyframes cardIn {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -120,6 +118,21 @@
   }
   .field-label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
   .hint { font-size: 13px; color: var(--muted); margin-top: 14px; }
+
+  /* ---------- 自定义时长 ---------- */
+  .duration-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 520px) {
+    .duration-grid { grid-template-columns: 1fr; }
+  }
+  .duration-actions {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .duration-actions .btn { flex: 1; min-width: 120px; }
 
   /* ---------- 首页概览卡片 ---------- */
   .overview-grid {
@@ -504,6 +517,8 @@
     .ov-tarot-symbol { width: 60px; height: 60px; font-size: 34px; }
     .ov-mini-chart { height: 64px; }
 
+    .duration-grid { gap: 20px; }
+
     .mode-tabs { margin-bottom: 28px; }
     .mode-tab { font-size: 15px; padding: 11px 0; }
     .timer-wrap { width: 300px; margin-bottom: 28px; }
@@ -528,7 +543,6 @@
     .donut-inner { width: 130px; height: 130px; font-size: 26px; }
   }
 
-  /* 减少动态偏好 */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: .001ms !important;
@@ -554,7 +568,7 @@
 
 <main class="app">
 
-  <!-- ========== 首页：四板块概况 ========== -->
+  <!-- ========== 首页 ========== -->
   <section id="home" class="page active">
     <div class="page-head">
       <h1>今天也专注一点</h1>
@@ -562,8 +576,6 @@
     </div>
 
     <div class="overview-grid">
-
-      <!-- 番茄钟概况 -->
       <button class="overview-card" data-page="pomodoro">
         <div class="ov-head">
           <span class="ov-icon">🍅</span>
@@ -576,7 +588,6 @@
         </div>
       </button>
 
-      <!-- 今日运势概况 -->
       <button class="overview-card" data-page="fortune">
         <div class="ov-head">
           <span class="ov-icon">🔮</span>
@@ -594,7 +605,6 @@
         </div>
       </button>
 
-      <!-- 待办概况 -->
       <button class="overview-card" data-page="todos">
         <div class="ov-head">
           <span class="ov-icon">✅</span>
@@ -608,7 +618,6 @@
         </div>
       </button>
 
-      <!-- 统计概况 -->
       <button class="overview-card" data-page="stats">
         <div class="ov-head">
           <span class="ov-icon">📊</span>
@@ -620,7 +629,6 @@
           <div class="ov-meta">最近 7 天专注时长</div>
         </div>
       </button>
-
     </div>
   </section>
 
@@ -628,7 +636,7 @@
   <section id="pomodoro" class="page">
     <div class="page-head">
       <h1>番茄钟</h1>
-      <p class="sub">25 分钟专注，5 分钟休息，慢慢进入状态</p>
+      <p class="sub">专注一段时间，然后好好休息</p>
     </div>
 
     <div class="grid-2">
@@ -670,6 +678,30 @@
 
         <p class="hint">专注结束后会自动记录到统计页，并给关联的待办 +1 🍅</p>
       </div>
+    </div>
+
+    <!-- 自定义时长 -->
+    <div class="card duration-card">
+      <h2>自定义时长</h2>
+      <div class="duration-grid">
+        <label>
+          <span class="field-label">专注（分钟）</span>
+          <input class="input" type="number" id="dur-focus" min="1" max="180" step="1" value="25" inputmode="numeric">
+        </label>
+        <label>
+          <span class="field-label">短休息（分钟）</span>
+          <input class="input" type="number" id="dur-short" min="1" max="60" step="1" value="5" inputmode="numeric">
+        </label>
+        <label>
+          <span class="field-label">长休息（分钟）</span>
+          <input class="input" type="number" id="dur-long" min="1" max="60" step="1" value="15" inputmode="numeric">
+        </label>
+      </div>
+      <div class="duration-actions">
+        <button class="btn" id="btn-save-duration">保存设置</button>
+        <button class="btn secondary" id="btn-reset-duration">恢复默认</button>
+      </div>
+      <p class="hint">专注范围 1–180 分钟，休息范围 1–60 分钟。保存后如果正在计时，会自动重置当前计时器。</p>
     </div>
   </section>
 
@@ -810,6 +842,10 @@
     });
   }
 
+  function clamp(n, min, max) {
+    return Math.min(max, Math.max(min, n));
+  }
+
   function countUp(el, to, duration) {
     if (!el) return;
     duration = duration || 550;
@@ -865,10 +901,14 @@
   var TODO_KEY = 'ft_todos';
   var RECORD_KEY = 'ft_records';
   var DAILY_TAROT_KEY = 'ft_daily_tarot';
+  var DURATION_KEY = 'ft_durations';
+
+  var DEFAULT_DURATIONS = { focus: 25, short: 5, long: 15 };
 
   var todos = [];
   var focusRecords = [];
   var dailyTarot = null;
+  var durations = loadDurations();
 
   try {
     todos = JSON.parse(localStorage.getItem(TODO_KEY) || '[]');
@@ -885,6 +925,24 @@
     if (!dailyTarot || dailyTarot.date !== todayStr()) dailyTarot = null;
   } catch (e) { dailyTarot = null; }
 
+  function loadDurations() {
+    try {
+      var d = JSON.parse(localStorage.getItem(DURATION_KEY) || 'null');
+      if (d && typeof d === 'object') {
+        return {
+          focus: clamp(Number(d.focus) || DEFAULT_DURATIONS.focus, 1, 180),
+          short: clamp(Number(d.short) || DEFAULT_DURATIONS.short, 1, 60),
+          long: clamp(Number(d.long) || DEFAULT_DURATIONS.long, 1, 60)
+        };
+      }
+    } catch (e) { /* ignore */ }
+    return {
+      focus: DEFAULT_DURATIONS.focus,
+      short: DEFAULT_DURATIONS.short,
+      long: DEFAULT_DURATIONS.long
+    };
+  }
+
   function saveTodos() { localStorage.setItem(TODO_KEY, JSON.stringify(todos)); }
   function saveRecords() { localStorage.setItem(RECORD_KEY, JSON.stringify(focusRecords)); }
   function saveDailyTarot() {
@@ -893,6 +951,9 @@
     } else {
       localStorage.removeItem(DAILY_TAROT_KEY);
     }
+  }
+  function saveDurations() {
+    localStorage.setItem(DURATION_KEY, JSON.stringify(durations));
   }
 
   /* ---------- 首页概况 ---------- */
@@ -1032,9 +1093,9 @@
 
   /* ---------- 番茄钟 ---------- */
   var MODES = {
-    focus: { minutes: 25, label: '专注中', color: '#E4572E' },
-    short: { minutes: 5,  label: '短休息', color: '#5B8C6E' },
-    long:  { minutes: 15, label: '长休息', color: '#6B5B95' }
+    focus: { minutes: durations.focus, label: '专注中', color: '#E4572E' },
+    short: { minutes: durations.short, label: '短休息', color: '#5B8C6E' },
+    long:  { minutes: durations.long,  label: '长休息', color: '#6B5B95' }
   };
   var CIRCUMFERENCE = 565.49;
 
@@ -1111,6 +1172,16 @@
     renderHome();
   }
 
+  function stopAndResetTimer() {
+    clearInterval(timerId);
+    timerId = null;
+    running = false;
+    startBtn.textContent = '开始';
+    totalSeconds = MODES[mode].minutes * 60;
+    remaining = totalSeconds;
+    updateTimerUI();
+  }
+
   startBtn.addEventListener('click', function () {
     if (running) {
       clearInterval(timerId);
@@ -1126,12 +1197,7 @@
   });
 
   resetBtn.addEventListener('click', function () {
-    clearInterval(timerId);
-    timerId = null;
-    running = false;
-    remaining = totalSeconds;
-    startBtn.textContent = '开始';
-    updateTimerUI();
+    stopAndResetTimer();
   });
 
   document.querySelectorAll('.mode-tab').forEach(function (tab) {
@@ -1146,6 +1212,51 @@
       startBtn.textContent = '开始';
       updateTimerUI();
     });
+  });
+
+  /* ---------- 自定义时长 ---------- */
+  var durFocusEl = document.getElementById('dur-focus');
+  var durShortEl = document.getElementById('dur-short');
+  var durLongEl = document.getElementById('dur-long');
+
+  function syncDurationInputs() {
+    durFocusEl.value = durations.focus;
+    durShortEl.value = durations.short;
+    durLongEl.value = durations.long;
+  }
+
+  function applyDurationsToModes() {
+    MODES.focus.minutes = durations.focus;
+    MODES.short.minutes = durations.short;
+    MODES.long.minutes = durations.long;
+  }
+
+  document.getElementById('btn-save-duration').addEventListener('click', function () {
+    var f = clamp(Number(durFocusEl.value) || DEFAULT_DURATIONS.focus, 1, 180);
+    var s = clamp(Number(durShortEl.value) || DEFAULT_DURATIONS.short, 1, 60);
+    var l = clamp(Number(durLongEl.value) || DEFAULT_DURATIONS.long, 1, 60);
+
+    durations = { focus: f, short: s, long: l };
+    saveDurations();
+    applyDurationsToModes();
+    syncDurationInputs();
+    stopAndResetTimer();
+
+    toast('设置已保存');
+  });
+
+  document.getElementById('btn-reset-duration').addEventListener('click', function () {
+    durations = {
+      focus: DEFAULT_DURATIONS.focus,
+      short: DEFAULT_DURATIONS.short,
+      long: DEFAULT_DURATIONS.long
+    };
+    saveDurations();
+    applyDurationsToModes();
+    syncDurationInputs();
+    stopAndResetTimer();
+
+    toast('已恢复默认时长');
   });
 
   /* ---------- 塔罗 ---------- */
@@ -1300,6 +1411,7 @@
   }
 
   /* ---------- 初始化 ---------- */
+  syncDurationInputs();
   renderTodos();
   renderStats();
   renderHome();
