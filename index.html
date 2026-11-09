@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Focus & Tarot · Focus Station</title>
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FFFFFF'/%3E%3Cstop offset='1' stop-color='%23E4E7EE'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)' stroke='%23FFFFFF' stroke-width='4'/%3E%3Cpath d='M50 18 L57 41 L81 41 L62 55 L69 77 L50 63 L31 77 L38 55 L19 41 L43 41 Z' fill='%23E8834E'/%3E%3C/svg%3E">
+
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#FFFFFF"/>
+            <stop offset="100%" stop-color="#E4E7EE"/>
+          </linearGradient>
+        </defs>
+        <rect width="100" height="100" rx="24" fill="url(#logoGrad)" stroke="#FFFFFF" stroke-width="4"/>
+        <path d="M50 18 L57 41 L81 41 L62 55 L69 77 L50 63 L31 77 L38 55 L19 41 L43 41 Z" fill="#E8834E"/>
+      </svg>
+                <span class="logo-text">Focus <span class="amp">&amp;</span> Tarot</span>
+            </div>
+            <div class="topbar-right">
+                <nav class="desktop-nav">
+                    <button data-page="home" class="active" data-i18n="navHome">🏠 Home</button>
+                    <button data-page="pomodoro" data-i18n="navPomodoro">🍅 Pomodoro</button>
+                    <button data-page="fortune" data-i18n="navFortune">🔮 Fortune</button>
+                    <button data-page="todos" data-i18n="navTodos">✅ Todos</button>
+                    <button data-page="stats" data-i18n="navStats">📊 Stats</button>
+                </nav>
+                <button class="lang-toggle" id="lang-toggle" type="button" aria-label="Switch language">中</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app">
+
+        <section id="home" class="page active">
+
+            <div class="home-hero">
+                <div class="hero-main">
+                    <p class="hero-greeting" id="hero-greeting">Good morning</p>
+                    <h1 class="hero-title" id="hero-title" data-i18n="homeTitle">Stay focused today</h1>
+                    <p class="hero-sub" data-i18n="homeSub">A quick overview of all four sections. Tap a card to open it.</p>
+                </div>
+                <div class="hero-date">
+                    <div class="hero-day" id="hero-day">10</div>
+                    <div class="hero-month" id="hero-month">NOV · MON</div>
+                </div>
+            </div>
+
+            <div class="overview-grid">
+                <button class="overview-card" data-page="pomodoro">
+        <div class="ov-head">
+          <span class="ov-icon">🍅</span>
+          <span class="ov-title" data-i18n="cardPomodoro">Pomodoro</span>
+          <span class="ov-arrow">→</span>
+        </div>
+        <div class="ov-body">
+          <div class="ov-big"><span id="ov-tomatoes">0</span><small data-i18n="tomatoCountUnit">tomatoes</small></div>
+          <div class="ov-meta"><span data-i18n="focusTodayLabel">Focus today</span> <strong id="ov-minutes">0</strong><small id="ov-minutes-unit" data-i18n="minUnit">min</small></div>
+        </div>
+      </button>
+
+                <button class="overview-card" data-page="fortune">
+        <div class="ov-head">
+          <span class="ov-icon">🔮</span>
+          <span class="ov-title" data-i18n="cardFortune">Fortune</span>
+          <span class="ov-arrow">→</span>
+        </div>
+        <div class="ov-body">
+          <div class="ov-tarot">
+            <span class="ov-tarot-symbol" id="ov-tarot-symbol">✦</span>
+            <div>
+              <div class="ov-tarot-name" id="ov-tarot-name">Not drawn yet</div>
+              <div class="ov-tarot-key" id="ov-tarot-key">Tap to draw</div>
+            </div>
+          </div>
+        </div>
+      </button>
+
+                <button class="overview-card" data-page="todos">
+        <div class="ov-head">
+          <span class="ov-icon">✅</span>
+          <span class="ov-title" data-i18n="cardTodos">Todos</span>
+          <span class="ov-arrow">→</span>
+        </div>
+        <div class="ov-body">
+          <div class="ov-big"><span id="ov-rate">0</span><small data-i18n="percentComplete">% done</small></div>
+          <div class="ov-progress"><div id="ov-progress-fill"></div></div>
+          <div class="ov-meta" id="ov-todo-meta">0 / 0 completed</div>
+        </div>
+      </button>
+
+                <button class="overview-card" data-page="stats">
+        <div class="ov-head">
+          <span class="ov-icon">📊</span>
+          <span class="ov-title" data-i18n="cardStats">Stats</span>
+          <span class="ov-arrow">→</span>
+        </div>
+        <div class="ov-body">
+          <div class="ov-mini-chart" id="ov-mini-chart"></div>
+          <div class="ov-meta" data-i18n="last7Days">Focus time in the last 7 days</div>
+        </div>
+      </button>
+            </div>
+
+            <div class="card week-card">
+                <div class="week-strip">
+                    <div class="week-stat-row">
+                        <div class="week-stat">
+                            <span class="week-stat-label" data-i18n="weekStreak">Current streak</span>
+                            <span class="week-stat-val"><span id="week-streak">0</span><small data-i18n="dayUnit">days</small></span>
+                        </div>
+                        <div class="week-stat">
+                            <span class="week-stat-label" data-i18n="weekTotal">This week</span>
+                            <span class="week-stat-val accent"><span id="week-total">0</span><small id="week-total-unit" data-i18n="minUnit">min</small></span>
+                        </div>
+                        <div class="week-stat">
+                            <span class="week-stat-label" data-i18n="weekTomato">Pomodoros</span>
+                            <span class="week-stat-val"><span id="week-tomato">0</span><small data-i18n="countUnit"></small></span>
+                        </div>
+                    </div>
+                    <div class="week-chart" id="week-chart"></div>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="pomodoro" class="page">
+            <div class="page-head">
+                <h1 data-i18n="pomodoroTitle">Pomodoro</h1>
+                <p class="sub" data-i18n="pomodoroSub">Focus for a while, then take a good break.</p>
+            </div>
+
+            <div class="grid-2">
+                <div class="card timer-card">
+                    <div class="mode-tabs">
+                        <button class="mode-tab active" data-mode="focus" data-i18n="focusMode">Focus</button>
+                        <button class="mode-tab" data-mode="short" data-i18n="shortMode">Short break</button>
+                        <button class="mode-tab" data-mode="long" data-i18n="longMode">Long break</button>
+                    </div>
+                    <div class="timer-wrap">
+                        <svg class="timer-ring" viewBox="0 0 200 200" aria-hidden="true">
+            <circle class="ring-bg" cx="100" cy="100" r="90"></circle>
+            <circle class="ring-fg" id="ring-fg" cx="100" cy="100" r="90"></circle>
+          </svg>
+                        <div class="timer-text">
+                            <div id="timer-display">25:00</div>
+                            <div id="timer-label">Focusing</div>
+                        </div>
+                    </div>
+                    <div class="timer-actions">
+                        <button class="btn" id="btn-start">Start</button>
+                        <button class="btn secondary" id="btn-reset" data-i18n="reset">Reset</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 data-i18n="currentFocus">This session</h2>
+                    <label class="field-label" for="todo-select" data-i18n="linkTodo">Link a todo (optional)</label>
+                    <select class="select" id="todo-select">
+          <option value="" data-i18n="noLink">None</option>
+        </select>
+
+                    <div class="today-pill">
+                        <span data-i18n="todayCompleted">Completed today</span>
+                        <strong><span id="today-count">0</span><span data-i18n="tomatoUnit"> tomatoes</span></strong>
+                    </div>
+
+                    <div class="sound-row">
+                        <span class="sound-label" data-i18n="soundLabel">End chime</span>
+                        <button class="sound-toggle" id="sound-toggle" type="button" aria-label="Toggle sound">
+            <span id="sound-icon">🔔</span>
+            <span id="sound-text" data-i18n="soundOn">On</span>
+          </button>
+                    </div>
+
+                    <p class="hint" data-i18n="focusHint">After a focus session, it will be recorded on the stats page and the linked todo gets +1 🍅</p>
+                </div>
+            </div>
+
+            <div class="card duration-card">
+                <h2 data-i18n="customDuration">Custom durations</h2>
+                <div class="duration-grid">
+                    <label>
+          <span class="field-label" data-i18n="durationFocus">Focus (sec)</span>
+          <input class="input" type="number" id="dur-focus" min="1" max="10800" step="1" value="1500" inputmode="numeric">
+        </label>
+                    <label>
+          <span class="field-label" data-i18n="durationShort">Short break (sec)</span>
+          <input class="input" type="number" id="dur-short" min="1" max="3600" step="1" value="300" inputmode="numeric">
+        </label>
+                    <label>
+          <span class="field-label" data-i18n="durationLong">Long break (sec)</span>
+          <input class="input" type="number" id="dur-long" min="1" max="3600" step="1" value="900" inputmode="numeric">
+        </label>
+                </div>
+                <div class="duration-actions">
+                    <button class="btn" id="btn-save-duration" data-i18n="saveSettings">Save</button>
+                    <button class="btn secondary" id="btn-reset-duration" data-i18n="resetDefault">Reset to defaults</button>
+                </div>
+                <p class="hint" data-i18n="durationHint">Focus 1–10800 sec (up to 180 min), breaks 1–3600 sec (up to 60 min). Saving will reset the current timer if it's running.</p>
+            </div>
+        </section>
+
+        <section id="fortune" class="page">
+            <div class="page-head">
+                <h1 data-i18n="fortuneTitle">Today's Fortune</h1>
+                <p class="sub" data-i18n="fortuneSub">Draw one tarot card a day to check today's energy.</p>
+            </div>
+
+            <div class="card tarot-card-wrap">
+                <div class="tarot-wrap">
+                    <div class="tarot-card" id="tarot-card">
+                        <div class="tarot-face tarot-back">
+                            <span>✦</span><span>✦</span><span>✦</span>
+                        </div>
+                        <div class="tarot-face tarot-front">
+                            <img class="tarot-img" id="tarot-img" alt="" />
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" id="btn-draw">Draw a card</button>
+                <p class="tarot-daily-hint" id="tarot-daily-hint" hidden>You've already drawn today. Come back tomorrow.</p>
+            </div>
+
+            <div class="card reading-card">
+                <h2 data-i18n="readingTitle">Interpretation</h2>
+                <p class="keywords" id="tarot-keywords">Tap the button above to draw today's card.</p>
+                <p class="reading" id="tarot-reading"></p>
+            </div>
+        </section>
+
+        <section id="todos" class="page">
+            <div class="page-head">
+                <h1 data-i18n="todosTitle">Todo List</h1>
+                <p class="sub" data-i18n="todosSub">Write down what you need to do and link it during focus.</p>
+            </div>
+
+            <div class="card">
+                <div class="todo-input-row">
+                    <input class="input" id="todo-input" type="text" maxlength="60" data-i18n-placeholder="todoPlaceholder" placeholder="What do you need to finish?">
+                    <button class="btn" id="btn-add" data-i18n="addBtn">Add</button>
+                </div>
+                <div class="progress-line">
+                    <div class="progress-track">
+                        <div class="progress-fill" id="todo-progress-fill"></div>
+                    </div>
+                    <span id="todo-progress-text">0%</span>
+                </div>
+                <ul class="todo-list" id="todo-list"></ul>
+                <p class="empty" id="todo-empty" data-i18n="emptyTodo">No todos yet. Add one to get started.</p>
+            </div>
+        </section>
+
+        <section id="stats" class="page">
+            <div class="page-head">
+                <h1 data-i18n="statsTitle">Today's Overview</h1>
+                <p class="sub" data-i18n="statsSub">A clear view of focus and completion.</p>
+            </div>
+
+            <div class="stat-grid">
+                <div class="card stat-card">
+                    <span class="stat-label" data-i18n="statFocusToday">Focus today</span>
+                    <strong><span id="stat-minutes">0</span><small id="stat-minutes-unit" data-i18n="minUnit">min</small></strong>
+                </div>
+                <div class="card stat-card">
+                    <span class="stat-label" data-i18n="statPomodorosToday">Pomodoros today</span>
+                    <strong><span id="stat-tomatoes">0</span><small data-i18n="tomatoCountUnit">tomatoes</small></strong>
+                </div>
+                <div class="card stat-card">
+                    <span class="stat-label" data-i18n="statTodoRate">Todo completion</span>
+                    <strong><span id="stat-rate">0</span><small>%</small></strong>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h2 data-i18n="statLast7">Focus in last 7 days</h2>
+                    <div class="bar-chart" id="bar-chart"></div>
+                </div>
+                <div class="card donut-card">
+                    <h2 data-i18n="statTodoStatus">Todo completion</h2>
+                    <div class="donut" id="donut-rate" style="--p:0">
+                        <div class="donut-inner" id="donut-rate-text">0%</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="mobile-nav">
+        <button data-page="home" class="active"><span class="ico">🏠</span><span data-i18n="navHomeM">Home</span></button>
+        <button data-page="pomodoro"><span class="ico">🍅</span><span data-i18n="navPomodoroM">Pomo</span></button>
+        <button data-page="fortune"><span class="ico">🔮</span><span data-i18n="navFortuneM">Tarot</span></button>
+        <button data-page="todos"><span class="ico">✅</span><span data-i18n="navTodosM">Todo</span></button>
+        <button data-page="stats"><span class="ico">📊</span><span data-i18n="navStatsM">Stats</span></button>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+    <audio id="audio-focus-end" src="./audio/focus-end.mp3" preload="auto"></audio>
+    <audio id="audio-break-end" src="./audio/break-end.mp3" preload="auto"></audio>
+
+    <script src="./js/app.js"></script>
+</body>
+
+</html>
