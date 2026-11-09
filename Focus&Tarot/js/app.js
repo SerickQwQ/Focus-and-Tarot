@@ -1,6 +1,69 @@
 (function() {
     'use strict';
 
+    /* ============ 提示音（MP3） ============ */
+    var SOUND_KEY = 'ft_sound';
+    var soundMuted = localStorage.getItem(SOUND_KEY) === 'off';
+
+    function getAudioEl(kind) {
+        return document.getElementById(kind === 'break' ? 'audio-break-end' : 'audio-focus-end');
+    }
+
+    function unlockAudio() {
+        ['audio-focus-end', 'audio-break-end'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            try {
+                el.volume = 0;
+                var p = el.play();
+                if (p && p.then) {
+                    p.then(function() {
+                        el.pause();
+                        el.currentTime = 0;
+                        el.volume = 1;
+                    }).catch(function() {
+                        el.volume = 1;
+                    });
+                } else {
+                    el.pause();
+                    el.currentTime = 0;
+                    el.volume = 1;
+                }
+            } catch (e) {
+                try { el.volume = 1; } catch (e2) {}
+            }
+        });
+    }
+
+    function playChime(kind) {
+        if (soundMuted) return;
+        var el = getAudioEl(kind);
+        if (!el) return;
+        try {
+            el.currentTime = 0;
+            el.volume = 1;
+            var p = el.play();
+            if (p && p.catch) p.catch(function() {});
+        } catch (e) {}
+    }
+
+    function updateSoundBtn() {
+        var btn = document.getElementById('sound-toggle');
+        if (!btn) return;
+        var icon = document.getElementById('sound-icon');
+        var text = document.getElementById('sound-text');
+        if (soundMuted) {
+            btn.classList.add('muted');
+            if (icon) icon.textContent = '🔕';
+            if (text) text.textContent = t('soundOff');
+        } else {
+            btn.classList.remove('muted');
+            if (icon) icon.textContent = '🔔';
+            if (text) text.textContent = t('soundOn');
+        }
+    }
+
+    /* ============ 语言包 ============ */
     var I18N = {
         zh: {
             navHome: '🏠 首页',
@@ -33,6 +96,7 @@
             tomatoCountUnit: '个番茄',
             tomatoUnit: ' 个番茄',
             minUnit: '分钟',
+            secUnit: '秒',
             percentComplete: '% 完成',
             focusTodayLabel: '今日专注',
             last7Days: '最近 7 天专注时长',
@@ -58,13 +122,19 @@
             todayCompleted: '今日已完成',
             focusHint: '专注结束后会自动记录到统计页，并给关联的待办 +1 🍅',
 
+            soundLabel: '结束提示音',
+            soundOn: '开',
+            soundOff: '关',
+            soundOnToast: '提示音已开启',
+            soundOffToast: '提示音已关闭',
+
             customDuration: '自定义时长',
-            durationFocus: '专注（分钟）',
-            durationShort: '短休息（分钟）',
-            durationLong: '长休息（分钟）',
+            durationFocus: '专注（秒）',
+            durationShort: '短休息（秒）',
+            durationLong: '长休息（秒）',
             saveSettings: '保存设置',
             resetDefault: '恢复默认',
-            durationHint: '专注范围 1–180 分钟，休息范围 1–60 分钟。保存后如果正在计时，会自动重置当前计时器。',
+            durationHint: '专注范围 1–10800 秒（最长 180 分钟），休息范围 1–3600 秒（最长 60 分钟）。保存后如果正在计时，会自动重置当前计时器。',
 
             drawCard: '抽一张牌',
             comeBackTomorrow: '明天再来',
@@ -136,6 +206,7 @@
             tomatoCountUnit: 'tomatoes',
             tomatoUnit: ' tomatoes',
             minUnit: 'min',
+            secUnit: 's',
             percentComplete: '% done',
             focusTodayLabel: 'Focus today',
             last7Days: 'Focus time in the last 7 days',
@@ -161,13 +232,19 @@
             todayCompleted: 'Completed today',
             focusHint: 'After a focus session, it will be recorded on the stats page and the linked todo gets +1 🍅',
 
+            soundLabel: 'End chime',
+            soundOn: 'On',
+            soundOff: 'Off',
+            soundOnToast: 'Sound on',
+            soundOffToast: 'Sound off',
+
             customDuration: 'Custom durations',
-            durationFocus: 'Focus (min)',
-            durationShort: 'Short break (min)',
-            durationLong: 'Long break (min)',
+            durationFocus: 'Focus (sec)',
+            durationShort: 'Short break (sec)',
+            durationLong: 'Long break (sec)',
             saveSettings: 'Save',
             resetDefault: 'Reset to defaults',
-            durationHint: "Focus 1–180 min, breaks 1–60 min. Saving will reset the current timer if it's running.",
+            durationHint: 'Focus 1–10800 sec (up to 180 min), breaks 1–3600 sec (up to 60 min). Saving will reset the current timer if it\'s running.',
 
             drawCard: 'Draw a card',
             comeBackTomorrow: 'Come back tomorrow',
@@ -211,7 +288,7 @@
     };
 
     var LANG_KEY = 'ft_lang';
-    var lang = localStorage.getItem(LANG_KEY) || 'zh';
+    var lang = localStorage.getItem(LANG_KEY) || 'en';
     if (!I18N[lang]) lang = 'zh';
 
     function t(key) { return I18N[lang][key] != null ? I18N[lang][key] : key; }
@@ -265,6 +342,19 @@
         requestAnimationFrame(step);
     }
 
+    /* 秒数格式化：<60 显示秒，>=60 显示分钟（整数） */
+    function formatDuration(seconds) {
+        var s = Math.max(0, Math.round(seconds));
+        if (s < 60) return { v: s, unitKey: 'secUnit' };
+        return { v: Math.round(s / 60), unitKey: 'minUnit' };
+    }
+
+    function recSeconds(r) {
+        if (!r) return 0;
+        if (r.seconds != null) return Number(r.seconds) || 0;
+        return (Number(r.minutes) || 0) * 60;
+    }
+
     function applyStagger(pageEl) {
         if (!pageEl) return;
         var items = pageEl.querySelectorAll('.card, .overview-card, .hero-main, .hero-date');
@@ -286,8 +376,10 @@
         if (id === 'home') renderHome();
         if (id === 'todos') renderTodos();
         if (id === 'stats') renderStats();
-        if (id === 'fortune') { ensureDailyTarotFresh();
-            syncFortunePage(); }
+        if (id === 'fortune') {
+            ensureDailyTarotFresh();
+            syncFortunePage();
+        }
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -301,8 +393,9 @@
     var TODO_KEY = 'ft_todos';
     var RECORD_KEY = 'ft_records';
     var DAILY_TAROT_KEY = 'ft_daily_tarot';
-    var DURATION_KEY = 'ft_durations';
-    var DEFAULT_DURATIONS = { focus: 25, short: 5, long: 15 };
+    var DURATION_KEY = 'ft_durations_sec';
+    /* 默认值：专注 1500 秒，短休息 300 秒，长休息 900 秒 */
+    var DEFAULT_DURATIONS = { focus: 1500, short: 300, long: 900 };
 
     var todos = [];
     var focusRecords = [];
@@ -329,9 +422,9 @@
             var d = JSON.parse(localStorage.getItem(DURATION_KEY) || 'null');
             if (d && typeof d === 'object') {
                 return {
-                    focus: clamp(Number(d.focus) || DEFAULT_DURATIONS.focus, 1, 180),
-                    short: clamp(Number(d.short) || DEFAULT_DURATIONS.short, 1, 60),
-                    long: clamp(Number(d.long) || DEFAULT_DURATIONS.long, 1, 60)
+                    focus: clamp(Math.round(Number(d.focus) || DEFAULT_DURATIONS.focus), 1, 10800),
+                    short: clamp(Math.round(Number(d.short) || DEFAULT_DURATIONS.short), 1, 3600),
+                    long: clamp(Math.round(Number(d.long) || DEFAULT_DURATIONS.long), 1, 3600)
                 };
             }
         } catch (e) {}
@@ -586,18 +679,18 @@
             var d = new Date();
             d.setDate(d.getDate() - i);
             var ds = dateStr(d);
-            var minutes = focusRecords
+            var secs = focusRecords
                 .filter(function(r) { return r.date === ds; })
-                .reduce(function(s, r) { return s + (Number(r.minutes) || 0); }, 0);
-            arr.push({ minutes: minutes, isToday: i === 0, label: labels[d.getDay()] });
+                .reduce(function(s, r) { return s + recSeconds(r); }, 0);
+            arr.push({ seconds: secs, isToday: i === 0, label: labels[d.getDay()] });
         }
         return arr;
     }
 
     function renderWeek() {
         var weekData = calcWeekData();
-        var totalMin = 0;
-        weekData.forEach(function(v) { totalMin += v.minutes; });
+        var totalSec = 0;
+        weekData.forEach(function(v) { totalSec += v.seconds; });
 
         var todayTomato = focusRecords.filter(function(r) {
             for (var i = 0; i < 7; i++) {
@@ -609,13 +702,15 @@
         }).length;
 
         countUp(document.getElementById('week-streak'), calcStreak());
-        countUp(document.getElementById('week-total'), totalMin);
+        var totalFmt = formatDuration(totalSec);
+        countUp(document.getElementById('week-total'), totalFmt.v);
+        document.getElementById('week-total-unit').textContent = t(totalFmt.unitKey);
         countUp(document.getElementById('week-tomato'), todayTomato);
 
         var chart = document.getElementById('week-chart');
         if (!chart) return;
         chart.innerHTML = '';
-        var max = Math.max.apply(null, weekData.map(function(v) { return v.minutes; }).concat([1]));
+        var max = Math.max.apply(null, weekData.map(function(v) { return v.seconds; }).concat([1]));
         weekData.forEach(function(v) {
             var wrap = document.createElement('div');
             wrap.className = 'week-bar-wrap';
@@ -625,7 +720,7 @@
             wrap.appendChild(bar);
             chart.appendChild(wrap);
             requestAnimationFrame(function() {
-                bar.style.height = Math.max(6, Math.round(v.minutes / max * 100)) + '%';
+                bar.style.height = Math.max(6, Math.round(v.seconds / max * 100)) + '%';
             });
         });
     }
@@ -635,10 +730,12 @@
 
         var today = todayStr();
         var todayRecords = focusRecords.filter(function(r) { return r.date === today; });
-        var todayMinutes = todayRecords.reduce(function(s, r) { return s + (Number(r.minutes) || 0); }, 0);
+        var todaySec = todayRecords.reduce(function(s, r) { return s + recSeconds(r); }, 0);
 
         countUp(document.getElementById('ov-tomatoes'), todayRecords.length);
-        countUp(document.getElementById('ov-minutes'), todayMinutes);
+        var fmt = formatDuration(todaySec);
+        countUp(document.getElementById('ov-minutes'), fmt.v);
+        document.getElementById('ov-minutes-unit').textContent = t(fmt.unitKey);
 
         var doneCount = todos.filter(function(x) { return x.done; }).length;
         var rate = todos.length ? Math.round(doneCount / todos.length * 100) : 0;
@@ -678,10 +775,10 @@
             var d = new Date();
             d.setDate(d.getDate() - i);
             var ds = dateStr(d);
-            var m = focusRecords
+            var secs = focusRecords
                 .filter(function(r) { return r.date === ds; })
-                .reduce(function(s, r) { return s + (Number(r.minutes) || 0); }, 0);
-            values.push(m);
+                .reduce(function(s, r) { return s + recSeconds(r); }, 0);
+            values.push(secs);
         }
         var max = Math.max.apply(null, values.concat([1]));
         values.forEach(function(v) {
@@ -737,8 +834,11 @@
     function addTodo() {
         var input = document.getElementById('todo-input');
         var text = input.value.trim();
-        if (!text) { toast(t('pleaseEnter'));
-            input.focus(); return; }
+        if (!text) {
+            toast(t('pleaseEnter'));
+            input.focus();
+            return;
+        }
         todos.push({ id: Date.now(), text: text, done: false, tomatoes: 0 });
         input.value = '';
         saveTodos();
@@ -757,9 +857,11 @@
         if (check) {
             var id = Number(check.dataset.id);
             var td = todos.find(function(x) { return x.id === id; });
-            if (td) { td.done = !td.done;
+            if (td) {
+                td.done = !td.done;
                 saveTodos();
-                renderTodos(); }
+                renderTodos();
+            }
         }
         if (del) {
             var did = Number(del.dataset.id);
@@ -769,14 +871,15 @@
         }
     });
 
+    /* ============ 番茄钟（内部按秒） ============ */
     var MODES = {
-        focus: { minutes: durations.focus, labelKey: 'timerFocusing', color: '#E8834E' },
-        short: { minutes: durations.short, labelKey: 'timerShortBreak', color: '#5BA88A' },
-        long: { minutes: durations.long, labelKey: 'timerLongBreak', color: '#8B7BC7' }
+        focus: { seconds: durations.focus, labelKey: 'timerFocusing', color: '#E8834E' },
+        short: { seconds: durations.short, labelKey: 'timerShortBreak', color: '#5BA88A' },
+        long: { seconds: durations.long, labelKey: 'timerLongBreak', color: '#8B7BC7' }
     };
     var CIRCUMFERENCE = 565.49;
     var mode = 'focus';
-    var totalSeconds = MODES.focus.minutes * 60;
+    var totalSeconds = MODES.focus.seconds;
     var remaining = totalSeconds;
     var running = false;
     var timerId = null;
@@ -789,8 +892,10 @@
 
     function updateStartBtn() { startBtn.textContent = t(startBtnState); }
 
-    function setStartBtn(state) { startBtnState = state;
-        updateStartBtn(); }
+    function setStartBtn(state) {
+        startBtnState = state;
+        updateStartBtn();
+    }
 
     function updateTimerUI() {
         var m = Math.floor(remaining / 60);
@@ -819,8 +924,16 @@
         timerId = null;
         running = false;
         setStartBtn('start');
-        if (mode === 'focus') { addFocusRecord();
-            toast(t('focusDoneToast')); } else { toast(t('breakDoneToast')); }
+
+        if (mode === 'focus') {
+            addFocusRecord();
+            playChime('focus');
+            toast(t('focusDoneToast'));
+        } else {
+            playChime('break');
+            toast(t('breakDoneToast'));
+        }
+
         remaining = totalSeconds;
         updateTimerUI();
     }
@@ -828,17 +941,21 @@
     function addFocusRecord() {
         var select = document.getElementById('todo-select');
         var todoId = select.value ? Number(select.value) : null;
+        var sec = MODES[mode].seconds;
         focusRecords.push({
             id: Date.now(),
             date: todayStr(),
-            minutes: MODES[mode].minutes,
+            seconds: sec,
+            minutes: sec / 60,
             todoId: todoId
         });
         saveRecords();
         if (todoId) {
             var td = todos.find(function(x) { return x.id === todoId; });
-            if (td) { td.tomatoes = (td.tomatoes || 0) + 1;
-                saveTodos(); }
+            if (td) {
+                td.tomatoes = (td.tomatoes || 0) + 1;
+                saveTodos();
+            }
         }
         renderTodos();
         renderStats();
@@ -850,12 +967,13 @@
         timerId = null;
         running = false;
         setStartBtn('start');
-        totalSeconds = MODES[mode].minutes * 60;
+        totalSeconds = MODES[mode].seconds;
         remaining = totalSeconds;
         updateTimerUI();
     }
 
     startBtn.addEventListener('click', function() {
+        unlockAudio();
         if (running) {
             clearInterval(timerId);
             timerId = null;
@@ -878,7 +996,7 @@
             document.querySelectorAll('.mode-tab').forEach(function(tb) {
                 tb.classList.toggle('active', tb === tab);
             });
-            totalSeconds = MODES[mode].minutes * 60;
+            totalSeconds = MODES[mode].seconds;
             remaining = totalSeconds;
             setStartBtn('start');
             updateTimerUI();
@@ -896,15 +1014,15 @@
     }
 
     function applyDurationsToModes() {
-        MODES.focus.minutes = durations.focus;
-        MODES.short.minutes = durations.short;
-        MODES.long.minutes = durations.long;
+        MODES.focus.seconds = durations.focus;
+        MODES.short.seconds = durations.short;
+        MODES.long.seconds = durations.long;
     }
 
     document.getElementById('btn-save-duration').addEventListener('click', function() {
-        var f = clamp(Number(durFocusEl.value) || DEFAULT_DURATIONS.focus, 1, 180);
-        var s = clamp(Number(durShortEl.value) || DEFAULT_DURATIONS.short, 1, 60);
-        var l = clamp(Number(durLongEl.value) || DEFAULT_DURATIONS.long, 1, 60);
+        var f = clamp(Math.round(Number(durFocusEl.value) || DEFAULT_DURATIONS.focus), 1, 10800);
+        var s = clamp(Math.round(Number(durShortEl.value) || DEFAULT_DURATIONS.short), 1, 3600);
+        var l = clamp(Math.round(Number(durLongEl.value) || DEFAULT_DURATIONS.long), 1, 3600);
         durations = { focus: f, short: s, long: l };
         saveDurations();
         applyDurationsToModes();
@@ -914,7 +1032,7 @@
     });
 
     document.getElementById('btn-reset-duration').addEventListener('click', function() {
-        durations = { focus: 25, short: 5, long: 15 };
+        durations = { focus: DEFAULT_DURATIONS.focus, short: DEFAULT_DURATIONS.short, long: DEFAULT_DURATIONS.long };
         saveDurations();
         applyDurationsToModes();
         syncDurationInputs();
@@ -922,6 +1040,7 @@
         toast(t('defaultsRestoredToast'));
     });
 
+    /* ============ 塔罗 ============ */
     function hasDrawnToday() {
         return dailyTarot && dailyTarot.date === todayStr() && typeof dailyTarot.index === 'number';
     }
@@ -998,40 +1117,47 @@
         }, wasFlipped ? 720 : 120);
     });
 
+    /* ============ 统计 ============ */
     function renderStats() {
         var today = todayStr();
         var todayRecords = focusRecords.filter(function(r) { return r.date === today; });
-        var todayMinutes = todayRecords.reduce(function(s, r) { return s + (Number(r.minutes) || 0); }, 0);
-        countUp(document.getElementById('stat-minutes'), todayMinutes);
+        var todaySec = todayRecords.reduce(function(s, r) { return s + recSeconds(r); }, 0);
+
+        var fmt = formatDuration(todaySec);
+        countUp(document.getElementById('stat-minutes'), fmt.v);
+        document.getElementById('stat-minutes-unit').textContent = t(fmt.unitKey);
+
         countUp(document.getElementById('stat-tomatoes'), todayRecords.length);
+
         var doneCount = todos.filter(function(x) { return x.done; }).length;
         var rate = todos.length ? Math.round(doneCount / todos.length * 100) : 0;
         countUp(document.getElementById('stat-rate'), rate);
+
         var donut = document.getElementById('donut-rate');
         donut.style.setProperty('--p', rate);
         document.getElementById('donut-rate-text').textContent = rate + '%';
+
         var tc = document.getElementById('today-count');
         if (tc) tc.textContent = todayRecords.length;
+
         renderBarChart();
     }
 
     function renderBarChart() {
         var chart = document.getElementById('bar-chart');
         chart.innerHTML = '';
-        var weekLabels = lang === 'en' ?
-            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] :
-            ['日', '一', '二', '三', '四', '五', '六'];
+        var weekLabels = lang === 'en' ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : ['日', '一', '二', '三', '四', '五', '六'];
         var values = [];
         for (var i = 6; i >= 0; i--) {
             var d = new Date();
             d.setDate(d.getDate() - i);
             var ds = dateStr(d);
-            var minutes = focusRecords
+            var secs = focusRecords
                 .filter(function(r) { return r.date === ds; })
-                .reduce(function(s, r) { return s + (Number(r.minutes) || 0); }, 0);
-            values.push({ label: weekLabels[d.getDay()], minutes: minutes });
+                .reduce(function(s, r) { return s + recSeconds(r); }, 0);
+            values.push({ label: weekLabels[d.getDay()], seconds: secs });
         }
-        var max = Math.max.apply(null, values.map(function(v) { return v.minutes; }).concat([1]));
+        var max = Math.max.apply(null, values.map(function(v) { return v.seconds; }).concat([1]));
         values.forEach(function(v) {
             var item = document.createElement('div');
             item.className = 'bar-item';
@@ -1048,11 +1174,12 @@
             item.appendChild(label);
             chart.appendChild(item);
             requestAnimationFrame(function() {
-                fill.style.height = (v.minutes / max * 100) + '%';
+                fill.style.height = (v.seconds / max * 100) + '%';
             });
         });
     }
 
+    /* ============ 语言 ============ */
     function applyLang() {
         document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
         document.title = t('docTitle');
@@ -1071,6 +1198,7 @@
         renderStats();
         renderHome();
         syncFortunePage();
+        updateSoundBtn();
     }
 
     document.getElementById('lang-toggle').addEventListener('click', function() {
@@ -1079,6 +1207,22 @@
         applyLang();
         toast(lang === 'zh' ? '切换到中文' : 'Switched to English');
     });
+
+    var soundBtn = document.getElementById('sound-toggle');
+    if (soundBtn) {
+        soundBtn.addEventListener('click', function() {
+            soundMuted = !soundMuted;
+            localStorage.setItem(SOUND_KEY, soundMuted ? 'off' : 'on');
+            updateSoundBtn();
+            if (!soundMuted) {
+                unlockAudio();
+                playChime('focus');
+                toast(t('soundOnToast'));
+            } else {
+                toast(t('soundOffToast'));
+            }
+        });
+    }
 
     syncDurationInputs();
     syncFortunePage();

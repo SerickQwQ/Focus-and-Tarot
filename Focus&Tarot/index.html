@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Focus & Tarot · 专注小站</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Focus & Tarot · 专注小站</title>
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FFFFFF'/%3E%3Cstop offset='1' stop-color='%23E4E7EE'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)' stroke='%23FFFFFF' stroke-width='4'/%3E%3Cpath d='M50 18 L57 41 L81 41 L62 55 L69 77 L50 63 L31 77 L38 55 L19 41 L43 41 Z' fill='%23E8834E'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FFFFFF'/%3E%3Cstop offset='1' stop-color='%23E4E7EE'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)' stroke='%23FFFFFF' stroke-width='4'/%3E%3Cpath d='M50 18 L57 41 L81 41 L62 55 L69 77 L50 63 L31 77 L38 55 L19 41 L43 41 Z' fill='%23E8834E'/%3E%3C/svg%3E">
 
-<link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body>
 
-<header class="topbar">
-  <div class="topbar-inner">
-    <div class="logo">
-      <svg class="logo-icon" viewBox="0 0 100 100" aria-hidden="true">
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 100 100" aria-hidden="true">
         <defs>
           <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="#FFFFFF"/>
@@ -24,38 +26,38 @@
         <rect width="100" height="100" rx="24" fill="url(#logoGrad)" stroke="#FFFFFF" stroke-width="4"/>
         <path d="M50 18 L57 41 L81 41 L62 55 L69 77 L50 63 L31 77 L38 55 L19 41 L43 41 Z" fill="#E8834E"/>
       </svg>
-      <span class="logo-text">Focus <span class="amp">&amp;</span> Tarot</span>
-    </div>
-    <div class="topbar-right">
-      <nav class="desktop-nav">
-        <button data-page="home" class="active" data-i18n="navHome">🏠 首页</button>
-        <button data-page="pomodoro" data-i18n="navPomodoro">🍅 番茄钟</button>
-        <button data-page="fortune" data-i18n="navFortune">🔮 今日运势</button>
-        <button data-page="todos" data-i18n="navTodos">✅ 待办</button>
-        <button data-page="stats" data-i18n="navStats">📊 统计</button>
-      </nav>
-      <button class="lang-toggle" id="lang-toggle" type="button" aria-label="Switch language">EN</button>
-    </div>
-  </div>
-</header>
+                <span class="logo-text">Focus <span class="amp">&amp;</span> Tarot</span>
+            </div>
+            <div class="topbar-right">
+                <nav class="desktop-nav">
+                    <button data-page="home" class="active" data-i18n="navHome">🏠 首页</button>
+                    <button data-page="pomodoro" data-i18n="navPomodoro">🍅 番茄钟</button>
+                    <button data-page="fortune" data-i18n="navFortune">🔮 今日运势</button>
+                    <button data-page="todos" data-i18n="navTodos">✅ 待办</button>
+                    <button data-page="stats" data-i18n="navStats">📊 统计</button>
+                </nav>
+                <button class="lang-toggle" id="lang-toggle" type="button" aria-label="Switch language">EN</button>
+            </div>
+        </div>
+    </header>
 
-<main class="app">
+    <main class="app">
 
-  <section id="home" class="page active">
-    <div class="home-hero">
-      <div class="hero-main">
-        <p class="hero-greeting" id="hero-greeting">早上好</p>
-        <h1 class="hero-title" id="hero-title" data-i18n="homeTitle">今天也专注一点</h1>
-        <p class="hero-sub" data-i18n="homeSub">四个板块的概况，点卡片进入详情</p>
-      </div>
-      <div class="hero-date">
-        <div class="hero-day" id="hero-day">10</div>
-        <div class="hero-month" id="hero-month">NOV · MON</div>
-      </div>
-    </div>
+        <section id="home" class="page active">
+            <div class="home-hero">
+                <div class="hero-main">
+                    <p class="hero-greeting" id="hero-greeting">早上好</p>
+                    <h1 class="hero-title" id="hero-title" data-i18n="homeTitle">今天也专注一点</h1>
+                    <p class="hero-sub" data-i18n="homeSub">四个板块的概况，点卡片进入详情</p>
+                </div>
+                <div class="hero-date">
+                    <div class="hero-day" id="hero-day">10</div>
+                    <div class="hero-month" id="hero-month">NOV · MON</div>
+                </div>
+            </div>
 
-    <div class="overview-grid">
-      <button class="overview-card" data-page="pomodoro">
+            <div class="overview-grid">
+                <button class="overview-card" data-page="pomodoro">
         <div class="ov-head">
           <span class="ov-icon">🍅</span>
           <span class="ov-title" data-i18n="cardPomodoro">番茄钟</span>
@@ -63,11 +65,11 @@
         </div>
         <div class="ov-body">
           <div class="ov-big"><span id="ov-tomatoes">0</span><small data-i18n="tomatoCountUnit">个番茄</small></div>
-          <div class="ov-meta"><span data-i18n="focusTodayLabel">今日专注</span> <strong id="ov-minutes">0</strong><small data-i18n="minUnit">分钟</small></div>
+          <div class="ov-meta"><span data-i18n="focusTodayLabel">今日专注</span> <strong id="ov-minutes">0</strong><small id="ov-minutes-unit" data-i18n="minUnit">分钟</small></div>
         </div>
       </button>
 
-      <button class="overview-card" data-page="fortune">
+                <button class="overview-card" data-page="fortune">
         <div class="ov-head">
           <span class="ov-icon">🔮</span>
           <span class="ov-title" data-i18n="cardFortune">今日运势</span>
@@ -84,7 +86,7 @@
         </div>
       </button>
 
-      <button class="overview-card" data-page="todos">
+                <button class="overview-card" data-page="todos">
         <div class="ov-head">
           <span class="ov-icon">✅</span>
           <span class="ov-title" data-i18n="cardTodos">待办清单</span>
@@ -97,7 +99,7 @@
         </div>
       </button>
 
-      <button class="overview-card" data-page="stats">
+                <button class="overview-card" data-page="stats">
         <div class="ov-head">
           <span class="ov-icon">📊</span>
           <span class="ov-title" data-i18n="cardStats">统计看板</span>
@@ -108,195 +110,209 @@
           <div class="ov-meta" data-i18n="last7Days">最近 7 天专注时长</div>
         </div>
       </button>
-    </div>
+            </div>
 
-    <div class="card week-card">
-      <div class="week-strip">
-        <div class="week-stat-row">
-          <div class="week-stat">
-            <span class="week-stat-label" data-i18n="weekStreak">连续专注</span>
-            <span class="week-stat-val"><span id="week-streak">0</span><small data-i18n="dayUnit">天</small></span>
-          </div>
-          <div class="week-stat">
-            <span class="week-stat-label" data-i18n="weekTotal">本周专注</span>
-            <span class="week-stat-val accent"><span id="week-total">0</span><small data-i18n="minUnit">分钟</small></span>
-          </div>
-          <div class="week-stat">
-            <span class="week-stat-label" data-i18n="weekTomato">本周番茄</span>
-            <span class="week-stat-val"><span id="week-tomato">0</span><small data-i18n="countUnit">个</small></span>
-          </div>
-        </div>
-        <div class="week-chart" id="week-chart"></div>
-      </div>
-    </div>
-  </section>
+            <div class="card week-card">
+                <div class="week-strip">
+                    <div class="week-stat-row">
+                        <div class="week-stat">
+                            <span class="week-stat-label" data-i18n="weekStreak">连续专注</span>
+                            <span class="week-stat-val"><span id="week-streak">0</span><small data-i18n="dayUnit">天</small></span>
+                        </div>
+                        <div class="week-stat">
+                            <span class="week-stat-label" data-i18n="weekTotal">本周专注</span>
+                            <span class="week-stat-val accent"><span id="week-total">0</span><small id="week-total-unit" data-i18n="minUnit">分钟</small></span>
+                        </div>
+                        <div class="week-stat">
+                            <span class="week-stat-label" data-i18n="weekTomato">本周番茄</span>
+                            <span class="week-stat-val"><span id="week-tomato">0</span><small data-i18n="countUnit">个</small></span>
+                        </div>
+                    </div>
+                    <div class="week-chart" id="week-chart"></div>
+                </div>
+            </div>
+        </section>
 
-  <section id="pomodoro" class="page">
-    <div class="page-head">
-      <h1 data-i18n="pomodoroTitle">番茄钟</h1>
-      <p class="sub" data-i18n="pomodoroSub">专注一段时间，然后好好休息</p>
-    </div>
+        <section id="pomodoro" class="page">
+            <div class="page-head">
+                <h1 data-i18n="pomodoroTitle">番茄钟</h1>
+                <p class="sub" data-i18n="pomodoroSub">专注一段时间，然后好好休息</p>
+            </div>
 
-    <div class="grid-2">
-      <div class="card timer-card">
-        <div class="mode-tabs">
-          <button class="mode-tab active" data-mode="focus" data-i18n="focusMode">专注</button>
-          <button class="mode-tab" data-mode="short" data-i18n="shortMode">短休息</button>
-          <button class="mode-tab" data-mode="long" data-i18n="longMode">长休息</button>
-        </div>
-        <div class="timer-wrap">
-          <svg class="timer-ring" viewBox="0 0 200 200" aria-hidden="true">
+            <div class="grid-2">
+                <div class="card timer-card">
+                    <div class="mode-tabs">
+                        <button class="mode-tab active" data-mode="focus" data-i18n="focusMode">专注</button>
+                        <button class="mode-tab" data-mode="short" data-i18n="shortMode">短休息</button>
+                        <button class="mode-tab" data-mode="long" data-i18n="longMode">长休息</button>
+                    </div>
+                    <div class="timer-wrap">
+                        <svg class="timer-ring" viewBox="0 0 200 200" aria-hidden="true">
             <circle class="ring-bg" cx="100" cy="100" r="90"></circle>
             <circle class="ring-fg" id="ring-fg" cx="100" cy="100" r="90"></circle>
           </svg>
-          <div class="timer-text">
-            <div id="timer-display">25:00</div>
-            <div id="timer-label">专注中</div>
-          </div>
-        </div>
-        <div class="timer-actions">
-          <button class="btn" id="btn-start">开始</button>
-          <button class="btn secondary" id="btn-reset" data-i18n="reset">重置</button>
-        </div>
-      </div>
+                        <div class="timer-text">
+                            <div id="timer-display">25:00</div>
+                            <div id="timer-label">专注中</div>
+                        </div>
+                    </div>
+                    <div class="timer-actions">
+                        <button class="btn" id="btn-start">开始</button>
+                        <button class="btn secondary" id="btn-reset" data-i18n="reset">重置</button>
+                    </div>
+                </div>
 
-      <div class="card">
-        <h2 data-i18n="currentFocus">本次专注</h2>
-        <label class="field-label" for="todo-select" data-i18n="linkTodo">关联待办（可选）</label>
-        <select class="select" id="todo-select">
+                <div class="card">
+                    <h2 data-i18n="currentFocus">本次专注</h2>
+                    <label class="field-label" for="todo-select" data-i18n="linkTodo">关联待办（可选）</label>
+                    <select class="select" id="todo-select">
           <option value="" data-i18n="noLink">不关联</option>
         </select>
-        <div class="today-pill">
-          <span data-i18n="todayCompleted">今日已完成</span>
-          <strong><span id="today-count">0</span><span data-i18n="tomatoUnit"> 个番茄</span></strong>
-        </div>
-        <p class="hint" data-i18n="focusHint">专注结束后会自动记录到统计页，并给关联的待办 +1 🍅</p>
-      </div>
-    </div>
 
-    <div class="card duration-card">
-      <h2 data-i18n="customDuration">自定义时长</h2>
-      <div class="duration-grid">
-        <label>
-          <span class="field-label" data-i18n="durationFocus">专注（分钟）</span>
-          <input class="input" type="number" id="dur-focus" min="1" max="180" step="1" value="25" inputmode="numeric">
+                    <div class="today-pill">
+                        <span data-i18n="todayCompleted">今日已完成</span>
+                        <strong><span id="today-count">0</span><span data-i18n="tomatoUnit"> 个番茄</span></strong>
+                    </div>
+
+                    <div class="sound-row">
+                        <span class="sound-label" data-i18n="soundLabel">结束提示音</span>
+                        <button class="sound-toggle" id="sound-toggle" type="button" aria-label="Toggle sound">
+            <span id="sound-icon">🔔</span>
+            <span id="sound-text" data-i18n="soundOn">开</span>
+          </button>
+                    </div>
+
+                    <p class="hint" data-i18n="focusHint">专注结束后会自动记录到统计页，并给关联的待办 +1 🍅</p>
+                </div>
+            </div>
+
+            <div class="card duration-card">
+                <h2 data-i18n="customDuration">自定义时长</h2>
+                <div class="duration-grid">
+                    <label>
+          <span class="field-label" data-i18n="durationFocus">专注（秒）</span>
+          <input class="input" type="number" id="dur-focus" min="1" max="10800" step="1" value="1500" inputmode="numeric">
         </label>
-        <label>
-          <span class="field-label" data-i18n="durationShort">短休息（分钟）</span>
-          <input class="input" type="number" id="dur-short" min="1" max="60" step="1" value="5" inputmode="numeric">
+                    <label>
+          <span class="field-label" data-i18n="durationShort">短休息（秒）</span>
+          <input class="input" type="number" id="dur-short" min="1" max="3600" step="1" value="300" inputmode="numeric">
         </label>
-        <label>
-          <span class="field-label" data-i18n="durationLong">长休息（分钟）</span>
-          <input class="input" type="number" id="dur-long" min="1" max="60" step="1" value="15" inputmode="numeric">
+                    <label>
+          <span class="field-label" data-i18n="durationLong">长休息（秒）</span>
+          <input class="input" type="number" id="dur-long" min="1" max="3600" step="1" value="900" inputmode="numeric">
         </label>
-      </div>
-      <div class="duration-actions">
-        <button class="btn" id="btn-save-duration" data-i18n="saveSettings">保存设置</button>
-        <button class="btn secondary" id="btn-reset-duration" data-i18n="resetDefault">恢复默认</button>
-      </div>
-      <p class="hint" data-i18n="durationHint">专注范围 1–180 分钟，休息范围 1–60 分钟。保存后如果正在计时，会自动重置当前计时器。</p>
-    </div>
-  </section>
+                </div>
+                <div class="duration-actions">
+                    <button class="btn" id="btn-save-duration" data-i18n="saveSettings">保存设置</button>
+                    <button class="btn secondary" id="btn-reset-duration" data-i18n="resetDefault">恢复默认</button>
+                </div>
+                <p class="hint" data-i18n="durationHint">专注范围 1–10800 秒（最长 180 分钟），休息范围 1–3600 秒（最长 60 分钟）。保存后如果正在计时，会自动重置当前计时器。</p>
+            </div>
+        </section>
 
-  <section id="fortune" class="page">
-    <div class="page-head">
-      <h1 data-i18n="fortuneTitle">今日运势</h1>
-      <p class="sub" data-i18n="fortuneSub">每天抽一张塔罗牌，看看今天的能量</p>
-    </div>
+        <section id="fortune" class="page">
+            <div class="page-head">
+                <h1 data-i18n="fortuneTitle">今日运势</h1>
+                <p class="sub" data-i18n="fortuneSub">每天抽一张塔罗牌，看看今天的能量</p>
+            </div>
 
-    <div class="card tarot-card-wrap">
-      <div class="tarot-wrap">
-        <div class="tarot-card" id="tarot-card">
-          <div class="tarot-face tarot-back">
-            <span>✦</span><span>✦</span><span>✦</span>
-          </div>
-          <div class="tarot-face tarot-front">
-            <div class="tarot-symbol" id="tarot-symbol">🔮</div>
-            <div class="tarot-front-name" id="tarot-name">—</div>
-            <div class="tarot-front-en" id="tarot-en"></div>
-          </div>
-        </div>
-      </div>
-      <button class="btn" id="btn-draw">抽一张牌</button>
-      <p class="tarot-daily-hint" id="tarot-daily-hint" hidden>今天已经抽过啦，明天再来吧</p>
-    </div>
+            <div class="card tarot-card-wrap">
+                <div class="tarot-wrap">
+                    <div class="tarot-card" id="tarot-card">
+                        <div class="tarot-face tarot-back">
+                            <span>✦</span><span>✦</span><span>✦</span>
+                        </div>
+                        <div class="tarot-face tarot-front">
+                            <div class="tarot-symbol" id="tarot-symbol">🔮</div>
+                            <div class="tarot-front-name" id="tarot-name">—</div>
+                            <div class="tarot-front-en" id="tarot-en"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" id="btn-draw">抽一张牌</button>
+                <p class="tarot-daily-hint" id="tarot-daily-hint" hidden>今天已经抽过啦，明天再来吧</p>
+            </div>
 
-    <div class="card reading-card">
-      <h2 data-i18n="readingTitle">牌义解读</h2>
-      <p class="keywords" id="tarot-keywords">点击上方按钮，抽一张属于今天的牌</p>
-      <p class="reading" id="tarot-reading"></p>
-    </div>
-  </section>
+            <div class="card reading-card">
+                <h2 data-i18n="readingTitle">牌义解读</h2>
+                <p class="keywords" id="tarot-keywords">点击上方按钮，抽一张属于今天的牌</p>
+                <p class="reading" id="tarot-reading"></p>
+            </div>
+        </section>
 
-  <section id="todos" class="page">
-    <div class="page-head">
-      <h1 data-i18n="todosTitle">待办清单</h1>
-      <p class="sub" data-i18n="todosSub">把要做的事写下来，专注时关联它</p>
-    </div>
+        <section id="todos" class="page">
+            <div class="page-head">
+                <h1 data-i18n="todosTitle">待办清单</h1>
+                <p class="sub" data-i18n="todosSub">把要做的事写下来，专注时关联它</p>
+            </div>
 
-    <div class="card">
-      <div class="todo-input-row">
-        <input class="input" id="todo-input" type="text" maxlength="60" data-i18n-placeholder="todoPlaceholder" placeholder="写一件要完成的事…">
-        <button class="btn" id="btn-add" data-i18n="addBtn">添加</button>
-      </div>
-      <div class="progress-line">
-        <div class="progress-track">
-          <div class="progress-fill" id="todo-progress-fill"></div>
-        </div>
-        <span id="todo-progress-text">0%</span>
-      </div>
-      <ul class="todo-list" id="todo-list"></ul>
-      <p class="empty" id="todo-empty" data-i18n="emptyTodo">还没有待办，先添加一条吧。</p>
-    </div>
-  </section>
+            <div class="card">
+                <div class="todo-input-row">
+                    <input class="input" id="todo-input" type="text" maxlength="60" data-i18n-placeholder="todoPlaceholder" placeholder="写一件要完成的事…">
+                    <button class="btn" id="btn-add" data-i18n="addBtn">添加</button>
+                </div>
+                <div class="progress-line">
+                    <div class="progress-track">
+                        <div class="progress-fill" id="todo-progress-fill"></div>
+                    </div>
+                    <span id="todo-progress-text">0%</span>
+                </div>
+                <ul class="todo-list" id="todo-list"></ul>
+                <p class="empty" id="todo-empty" data-i18n="emptyTodo">还没有待办，先添加一条吧。</p>
+            </div>
+        </section>
 
-  <section id="stats" class="page">
-    <div class="page-head">
-      <h1 data-i18n="statsTitle">今日概览</h1>
-      <p class="sub" data-i18n="statsSub">专注与完成情况一目了然</p>
-    </div>
+        <section id="stats" class="page">
+            <div class="page-head">
+                <h1 data-i18n="statsTitle">今日概览</h1>
+                <p class="sub" data-i18n="statsSub">专注与完成情况一目了然</p>
+            </div>
 
-    <div class="stat-grid">
-      <div class="card stat-card">
-        <span class="stat-label" data-i18n="statFocusToday">今日专注</span>
-        <strong><span id="stat-minutes">0</span><small data-i18n="minUnit">分钟</small></strong>
-      </div>
-      <div class="card stat-card">
-        <span class="stat-label" data-i18n="statPomodorosToday">今日番茄</span>
-        <strong><span id="stat-tomatoes">0</span><small data-i18n="tomatoCountUnit">个</small></strong>
-      </div>
-      <div class="card stat-card">
-        <span class="stat-label" data-i18n="statTodoRate">待办完成率</span>
-        <strong><span id="stat-rate">0</span><small>%</small></strong>
-      </div>
-    </div>
+            <div class="stat-grid">
+                <div class="card stat-card">
+                    <span class="stat-label" data-i18n="statFocusToday">今日专注</span>
+                    <strong><span id="stat-minutes">0</span><small id="stat-minutes-unit" data-i18n="minUnit">分钟</small></strong>
+                </div>
+                <div class="card stat-card">
+                    <span class="stat-label" data-i18n="statPomodorosToday">今日番茄</span>
+                    <strong><span id="stat-tomatoes">0</span><small data-i18n="tomatoCountUnit">个</small></strong>
+                </div>
+                <div class="card stat-card">
+                    <span class="stat-label" data-i18n="statTodoRate">待办完成率</span>
+                    <strong><span id="stat-rate">0</span><small>%</small></strong>
+                </div>
+            </div>
 
-    <div class="grid-2">
-      <div class="card">
-        <h2 data-i18n="statLast7">最近 7 天专注</h2>
-        <div class="bar-chart" id="bar-chart"></div>
-      </div>
-      <div class="card donut-card">
-        <h2 data-i18n="statTodoStatus">待办完成情况</h2>
-        <div class="donut" id="donut-rate" style="--p:0">
-          <div class="donut-inner" id="donut-rate-text">0%</div>
-        </div>
-      </div>
-    </div>
-  </section>
+            <div class="grid-2">
+                <div class="card">
+                    <h2 data-i18n="statLast7">最近 7 天专注</h2>
+                    <div class="bar-chart" id="bar-chart"></div>
+                </div>
+                <div class="card donut-card">
+                    <h2 data-i18n="statTodoStatus">待办完成情况</h2>
+                    <div class="donut" id="donut-rate" style="--p:0">
+                        <div class="donut-inner" id="donut-rate-text">0%</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-</main>
+    </main>
 
-<nav class="mobile-nav">
-  <button data-page="home" class="active"><span class="ico">🏠</span><span data-i18n="navHomeM">首页</span></button>
-  <button data-page="pomodoro"><span class="ico">🍅</span><span data-i18n="navPomodoroM">番茄</span></button>
-  <button data-page="fortune"><span class="ico">🔮</span><span data-i18n="navFortuneM">运势</span></button>
-  <button data-page="todos"><span class="ico">✅</span><span data-i18n="navTodosM">待办</span></button>
-  <button data-page="stats"><span class="ico">📊</span><span data-i18n="navStatsM">统计</span></button>
-</nav>
+    <nav class="mobile-nav">
+        <button data-page="home" class="active"><span class="ico">🏠</span><span data-i18n="navHomeM">首页</span></button>
+        <button data-page="pomodoro"><span class="ico">🍅</span><span data-i18n="navPomodoroM">番茄</span></button>
+        <button data-page="fortune"><span class="ico">🔮</span><span data-i18n="navFortuneM">运势</span></button>
+        <button data-page="todos"><span class="ico">✅</span><span data-i18n="navTodosM">待办</span></button>
+        <button data-page="stats"><span class="ico">📊</span><span data-i18n="navStatsM">统计</span></button>
+    </nav>
 
-<div class="toast" id="toast"></div>
+    <div class="toast" id="toast"></div>
 
-<script src="./js/app.js"></script>
+    <audio id="audio-focus-end" src="./audio/focus-end.mp3" preload="auto"></audio>
+    <audio id="audio-break-end" src="./audio/break-end.mp3" preload="auto"></audio>
+
+    <script src="./js/app.js"></script>
 </body>
+
 </html>
